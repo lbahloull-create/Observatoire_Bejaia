@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Territoire et Aménagement - Research Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .detail-page {
+            padding-top: 120px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .indicator-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .indicator-num {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav>
+        <div class="logo">BAHLOUL-RD</div>
+        <ul class="nav-links" style="display: flex;">
+            <li><a href="../index.html">Accueil</a></li>
+        </ul>
+    </nav>
+
+    <header class="dimension-header">
+        <div class="container">
+            <a href="../index.html" class="back-link"
+                style="color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; border-radius: 12px; background: rgba(0,0,0,0.2);">←
+                Retour à l'accueil</a>
+            <h1 style="color: white; margin-top: 2rem; background: none; -webkit-text-fill-color: initial;">Territoire
+                et Aménagement</h1>
+            <p class="subtitle" style="color: rgba(255,255,255,0.9); margin: 0 auto; max-width: 800px;">
+                Gestion de l'espace et potentiel agricole. L'analyse de la **Surface Agricole Utile (SAU)** montre
+                l'impact déterminant de la topographie sur le développement.
+            </p>
+        </div>
+    </header>
+
+    <main class="detail-page" style="padding-top: 4rem;">
+
+        <div class="glass-card" style="margin-bottom: 3rem;">
+            <h3>Indicateurs Territoriaux (Ind. 55)</h3>
+            <div class="indicator-grid">
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 55</span>
+                    <h4>SAU (Superficie Agricole)</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Disponibilité des terres pour l'agriculture,
+                        moteur de la sécurité alimentaire et de l'économie rurale.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">ADMIN</span>
+                    <h4>Structure Administrative</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Organisation en 52 communes et 19 daïras,
+                        cadre de mise en œuvre des politiques publiques.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">TOPOG</span>
+                    <h4>Contraintes de Relief</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Impact des zones montagneuses (plus de 80%
+                        dans certaines communes) sur l'aménagement.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">PLAN</span>
+                    <h4>Vallée de la Soummam</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Zone de plaine la mieux appréciée pour sa SAU
+                        et son potentiel de développement intégré.</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="content" style="padding: 0; margin-bottom: 5rem;">
+            <div class="glass-card"
+                style="margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--accent-blue);">Contraintes
+                    Géographiques</h3>
+                <canvas id="territoryChart"></canvas>
+            </div>
+            <h2 style="margin-bottom: 2rem;">Cartographie Technique & SIG</h2>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+                <div class="glass-card" style="padding: 1rem;">
+                    <img src="/images/ppt/image17.png" alt="Couverture Réseau Mobilis"
+                        style="width: 100%; border-radius: 12px; margin-bottom: 1rem;">
+                    <p style="font-size: 0.85rem; text-align: center; color: var(--text-dim);">Analyse de la couverture
+                        réseau (Mobilis) - Impact de l'enclavement.</p>
+                </div>
+                <div class="glass-card" style="padding: 1rem;">
+                    <img src="/images/ppt/image21.png" alt="Cartographie SIG"
+                        style="width: 100%; border-radius: 12px; margin-bottom: 1rem;">
+                    <p style="font-size: 0.85rem; text-align: center; color: var(--text-dim);">Modélisation SIG des
+                        disparités territoriales.</p>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 2rem;">Le Relief comme Déterminant</h2>
+            <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                La topographie de la wilaya, dominée par le relief montagneux (3/4 du territoire), impose des
+                contraintes sévères à l'aménagement. L'étude de la SAU révèle que les communes côtières et montagneuses
+                disposent de très peu de terres arables exploitables. La **vallée de la Soummam** apparaît comme le
+                poumon agricole et économique, nécessitant une protection rigoureuse de ses sols fertiles contre
+                l'urbanisation galopante.
+            </p>
+        </section>
+
+        <script>
+            const ctx = document.getElementById('territoryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Zone de Plaine', 'Zone de Montagne', 'Zones Urbaines'],
+                    datasets: [{
+                        data: [15, 75, 10],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(6, 182, 212, 0.6)'
+                        ],
+                        borderColor: 'var(--glass-border)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#fff', padding: 20 }
+                        }
+                    }
+                }
+            });
+        </script>
+    </main>
+
+    <footer
+        style="text-align: center; padding: 4rem; color: var(--text-dim); border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 BAHLOUL-RD. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>

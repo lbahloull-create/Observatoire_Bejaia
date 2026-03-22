@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habitat et Logement - Research Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .detail-page {
+            padding-top: 120px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .indicator-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .indicator-num {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav>
+        <div class="logo">BAHLOUL-RD</div>
+        <ul class="nav-links" style="display: flex;">
+            <li><a href="../index.html">Accueil</a></li>
+        </ul>
+    </nav>
+
+    <main class="detail-page">
+        <a href="../index.html" class="back-link">← Retour à l'accueil</a>
+
+        <span class="category-tag">DIMENSION 03</span>
+        <h1 style="text-align: left; margin-bottom: 1rem;">Habitat et Logement</h1>
+        <p class="subtitle" style="text-align: left; margin-bottom: 3rem;">
+            Évaluation de la qualité de l'habitat et de l'accès au logement.
+            Le **Taux d'Occupation par Logement (TOL)**, rapport entre la population et le nombre de logements habités,
+            est l'indicateur central.
+        </p>
+
+        <div class="glass-card" style="margin-bottom: 3rem;">
+            <h3>Indicateurs du Cadre de Vie</h3>
+            <div class="indicator-grid">
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 28</span>
+                    <h4>TOL (Taux d'Occupation)</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Indicateur du nombre de personnes par
+                        logement. Plus il est élevé, plus la qualité du cadre de vie est dégradée.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 26/27</span>
+                    <h4>Parc Logement</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Inventaire total des logements et part des
+                        logements effectivement habités (vs vacants/secondaires).</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 29/32/35</span>
+                    <h4>Occupation Scolaire</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Nombre d'élèves par classe (Primaire, Moyen,
+                        Secondaire), reflet de la saturation urbaine.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">EDU</span>
+                    <h4>Attractivité Résidentielle</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Capacité des communes à retenir leur
+                        population grâce à un habitat digne et des services de proximité.</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="content" style="padding: 0; margin-bottom: 5rem;">
+            <div class="glass-card"
+                style="margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--accent-cyan);">Composition du Parc
+                    Logement</h3>
+                <canvas id="habitatChart"></canvas>
+            </div>
+            <h2 style="margin-bottom: 2rem;">Analyse de la Pression Résidentielle</h2>
+            <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                La thèse révèle que le TOL moyen masque de fortes disparités. Les pôles urbains comme Bejaia, Oued Ghir
+                et Akbou présentent une **pression critique**, impactant non seulement le confort domestique mais aussi
+                la réussite scolaire (classes surchargées). À l'inverse, certaines communes rurales voient leur parc
+                logement se transformer en résidences secondaires inoccupées une grande partie de l'année, témoignant
+                d'une dévitalisation des centres anciens.
+            </p>
+        </section>
+
+        <script>
+            const ctx = document.getElementById('habitatChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Habité', 'Inoccupé', 'Résidence secondaire'],
+                    datasets: [{
+                        data: [75, 15, 10],
+                        backgroundColor: [
+                            'rgba(6, 182, 212, 0.7)',
+                            'rgba(59, 130, 246, 0.5)',
+                            'rgba(30, 41, 59, 0.8)'
+                        ],
+                        borderColor: 'var(--glass-border)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#fff', padding: 20 }
+                        }
+                    }
+                }
+            });
+        </script>
+    </main>
+
+    <footer
+        style="text-align: center; padding: 4rem; color: var(--text-dim); border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 BAHLOUL-RD. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>

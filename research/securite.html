@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sécurité - Research Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .detail-page {
+            padding-top: 120px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .indicator-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .indicator-num {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav>
+        <div class="logo">BAHLOUL-RD</div>
+        <ul class="nav-links" style="display: flex;">
+            <li><a href="../index.html">Accueil</a></li>
+        </ul>
+    </nav>
+
+    <main class="detail-page">
+        <a href="../index.html" class="back-link">← Retour à l'accueil</a>
+
+        <span class="category-tag">DIMENSION 08</span>
+        <h1 style="text-align: left; margin-bottom: 1rem;">Sécurité et Risques</h1>
+        <p class="subtitle" style="text-align: left; margin-bottom: 3rem;">
+            Analyse de la sécurité publique et de la gestion des catastrophes.
+            L'étude examine la réactivité des secours face aux accidents et aux risques naturels majeurs.
+        </p>
+
+        <div class="glass-card" style="margin-bottom: 3rem;">
+            <h3>Indicateurs de Sécurité (Ind. 01-04)</h3>
+            <div class="indicator-grid">
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 01</span>
+                    <h4>Secours & Évacuation</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Fréquence des interventions de la protection
+                        civile, concentrées dans les zones à forte densité de population.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 02</span>
+                    <h4>Accidents de la Route</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Incidence des sinistres routiers sur les axes
+                        principaux reliant Bejaia, Akbou et El Kseur.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 03</span>
+                    <h4>Risques d'Incendie</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Analyse des feux de forêt, risque majeur pour
+                        les communes nichées au cœur des massifs montagneux.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 04</span>
+                    <h4>Interventions Diverses</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Gestion des catastrophes naturelles :
+                        inondations, séismes et chutes de pierres/arbres.</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="content" style="padding: 0; margin-bottom: 5rem;">
+            <div class="glass-card"
+                style="margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--accent-blue);">Interventions
+                    Protection Civile</h3>
+                <canvas id="securityChart"></canvas>
+            </div>
+            <h2 style="margin-bottom: 2rem;">Gestion des Risques et Résilience</h2>
+            <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                La protection civile intervient de manière intensive dans les communes à forte densité (Bejaia, Akbou,
+                Oued Ghir), où les accidents de la circulation et les secours aux personnes sont prédominants. Les
+                "interventions diverses" soulignent la vulnérabilité du territoire face aux **risques naturels** :
+                inondations en plaine et chutes de pierres en zone de montagne. Une résilience territoriale accrue passe
+                par une meilleure répartition des unités de secours.
+            </p>
+        </section>
+
+        <script>
+            const ctx = document.getElementById('securityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Accidents de la route', 'Incendies de forêts', 'Secours à personnes', 'Inondations'],
+                    datasets: [{
+                        data: [1200, 450, 3200, 150],
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.6)',
+                            'rgba(249, 157, 38, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(6, 182, 212, 0.6)'
+                        ],
+                        borderColor: 'transparent'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#fff' }
+                        }
+                    }
+                }
+            });
+        </script>
+    </main>
+
+    <footer
+        style="text-align: center; padding: 4rem; color: var(--text-dim); border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 BAHLOUL-RD. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Équipements Publics - Research Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .detail-page {
+            padding-top: 120px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .indicator-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .indicator-num {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav>
+        <div class="logo">BAHLOUL-RD</div>
+        <ul class="nav-links" style="display: flex;">
+            <li><a href="../index.html">Accueil</a></li>
+        </ul>
+    </nav>
+
+    <main class="detail-page">
+        <a href="../index.html" class="back-link">← Retour à l'accueil</a>
+
+        <span class="category-tag">DIMENSION 04</span>
+        <h1 style="text-align: left; margin-bottom: 1rem;">Équipements Publics</h1>
+        <p class="subtitle" style="text-align: left; margin-bottom: 3rem;">
+            Analyse de l'offre en infrastructures sanitaires, éducatives et sociales.
+            L'étude souligne la corrélation entre la densité de population et la dotation en équipements de proximité.
+        </p>
+
+        <div class="glass-card" style="margin-bottom: 3rem;">
+            <h3>Indicateurs d'Équipement (Ind. 37-53)</h3>
+            <div class="indicator-grid">
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 50/51</span>
+                    <h4>Santé de Proximité</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Disponibilité des salles de soins et officines
+                        pharmaceutiques par commune.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 52</span>
+                    <h4>Lits d'Hospitalisation</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Capacité d'accueil hospitalière réelle,
+                        révélant un déficit structurel dans l'arrière-pays.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 53</span>
+                    <h4>Protection Sociale</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Concentration des centres d'accueil pour aînés
+                        et personnes en situation de handicap au chef-lieu.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 37</span>
+                    <h4>Formation (CFPA)</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Nombre de centres de formation
+                        professionnelle, levier essentiel pour l'insertion des jeunes.</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="content" style="padding: 0; margin-bottom: 5rem;">
+            <div class="glass-card"
+                style="margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--accent-blue);">Indice de Couverture
+                    des Services Publics</h3>
+                <canvas id="equipChart"></canvas>
+            </div>
+            <h2 style="margin-bottom: 2rem;">Accessibilité aux Soins et Services</h2>
+            <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                Le déséquilibre est flagrant : la majorité des centres de protection sociale et d'accueil spécialisé
+                sont concentrés au chef-lieu de wilaya. Cette **polarisation des services** crée une barrière
+                géographique majeure pour les populations rurales, contraintes à de longs déplacements pour accéder à
+                des soins spécialisés ou à une aide sociale, aggravant ainsi les disparités de qualité du cadre de vie.
+            </p>
+        </section>
+
+        <script>
+            const ctx = document.getElementById('equipChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Santé', 'Éducation', 'Social', 'Sécurité', 'Transport', 'Culture'],
+                    datasets: [{
+                        label: 'Moyenne Wilaya',
+                        data: [0.75, 0.82, 0.45, 0.68, 0.55, 0.38],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgb(59, 130, 246)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#94a3b8', font: { size: 12 } },
+                            ticks: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 1
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#fff' } }
+                    }
+                }
+            });
+        </script>
+    </main>
+
+    <footer
+        style="text-align: center; padding: 4rem; color: var(--text-dim); border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 BAHLOUL-RD. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>

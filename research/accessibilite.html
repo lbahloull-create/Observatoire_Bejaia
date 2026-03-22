@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibilité Durable - Research Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../src/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .detail-page {
+            padding-top: 120px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .indicator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .indicator-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+
+        .indicator-num {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav>
+        <div class="logo">BAHLOUL-RD</div>
+        <ul class="nav-links" style="display: flex;">
+            <li><a href="../index.html">Accueil</a></li>
+        </ul>
+    </nav>
+
+    <main class="detail-page">
+        <a href="../index.html" class="back-link">← Retour à l'accueil</a>
+
+        <span class="category-tag">DIMENSION 01</span>
+        <h1 style="text-align: left; margin-bottom: 1rem;">Accessibilité Durable</h1>
+        <p class="subtitle" style="text-align: left; margin-bottom: 3rem;">
+            Analyse de la connectivité et de la mobilité basée sur l'indicateur "Distance temps à un service ferroviaire
+            moyen".
+            L'accessibilité, mesurée via Google Maps 30 minutes avant le départ des trains, révèle les disparités de
+            liaison entre le citoyen et les services.
+        </p>
+
+        <div class="glass-card" style="margin-bottom: 3rem;">
+            <h3>Indicateurs de Performance (Ind. 01-03)</h3>
+            <div class="indicator-grid">
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 01</span>
+                    <h4>Distance temps ferroviaire</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Temps d'accès en voiture depuis le chef-lieu
+                        vers la gare la plus proche (Toutes destinations).</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 02</span>
+                    <h4>Bus de transport public</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Volume de la flotte de bus desservant les
+                        zones. Corrélation forte avec la densité de population.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 03</span>
+                    <h4>Services de Taxi</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Nombre de taxis disponibles par commune,
+                        indicateur de mobilité capillaire locale.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">IND 21</span>
+                    <h4>Lignes TPV</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Nombre de lignes de transport public de
+                        voyageurs actives par commune.</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="content" style="padding: 0; margin-bottom: 5rem;">
+            <div class="glass-card" style="margin-bottom: 3rem;">
+                <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--accent-blue);">Disponibilité des
+                    Transports (Données Tab. 5.3)</h3>
+                <canvas id="accessChart"></canvas>
+            </div>
+            <h2 style="margin-bottom: 2rem;">Conclusions Scientifiques</h2>
+            <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                L'analyse montre une disparité structurelle marquée. Les communes du littoral et de la vallée de la
+                Soummam bénéficient d'un accès ferroviaire facilitant la mobilité inter-wilayas. À l'inverse, les
+                communes de haute montagne souffrent d'un enclavement sévère : la distance temps pour accéder aux
+                services de base y est multipliée par trois, limitant l'accès aux opportunités économiques et renforçant
+                la précarité du cadre de vie.
+            </p>
+        </section>
+
+        <script>
+            const ctx = document.getElementById('accessChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Bejaia', 'Akbou', 'El Kseur', 'Amizour', 'Sidi Aich', 'Tazmalt'],
+                    datasets: [{
+                        label: 'Nombre de Lignes TPV',
+                        data: [42, 28, 15, 12, 10, 8],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#fff' } }
+                    }
+                }
+            });
+        </script>
+    </main>
+
+    <footer
+        style="text-align: center; padding: 4rem; color: var(--text-dim); border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 BAHLOUL-RD. Tous droits réservés.</p>
+    </footer>
+</body>
+
+</html>

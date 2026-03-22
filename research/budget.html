@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finances Locales - Research Portal</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <nav id="navbar">
+        <div class="logo">BAHLOUL-RD</div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Accueil</a></li>
+        </ul>
+    </nav>
+
+    <header class="dimension-header">
+        <div class="container">
+            <a href="../index.html" class="back-link"
+                style="color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; border-radius: 12px; background: rgba(0,0,0,0.2); text-decoration: none; display: inline-block; margin-bottom: 2rem;">←
+                Retour à l'accueil</a>
+            <h1 style="color: white; background: none; -webkit-text-fill-color: initial;">Finances Locales & Budgets
+            </h1>
+            <p class="subtitle" style="color: rgba(255,255,255,0.9); margin: 0 auto; max-width: 800px;">
+                Analyse de l'autonomie financière et de la structure des dépenses des 52 communes de la wilaya de
+                Bejaia. L'étude révèle une dépendance structurelle vis-à-vis des dotations de l'État.
+            </p>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 4rem;">
+
+        <div class="glass-card" style="margin-bottom: 3rem;">
+            <h3>Enjeux Financiers (Chapitre VI)</h3>
+            <div class="indicator-grid">
+                <div class="indicator-card">
+                    <span class="indicator-num">REV</span>
+                    <h4>Structure des Recettes</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">65% proviennent de la fiscalité locale et 30%
+                        de la péréquation (CSGCL).</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">EXP</span>
+                    <h4>Dépenses de Personnel</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Elles absorbent plus de 50% du budget de
+                        fonctionnement, limitant l'investissement.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">INV</span>
+                    <h4>Effort d'Équipement</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Baisse tendancielle des ressources
+                        d'équipement entre 2016 et 2020.</p>
+                </div>
+                <div class="indicator-card">
+                    <span class="indicator-num">AUT</span>
+                    <h4>Autonomie Réelle</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-dim);">Faible implication de la commune dans la
+                        création de richesses domaniales.</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="content" style="padding: 0; margin-bottom: 5rem;">
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--accent-blue);">Origine des
+                        Recettes</h3>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--accent-cyan);">Poids des Dépenses
+                        (Fonctionnement)</h3>
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 2rem; margin-top: 4rem;">Analyse Documentaire</h2>
+            <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                Le bilan des budgets de fonctionnement sur la période 2016-2020 montre que la majorité des communes
+                dégagent un excédent, mais celui-ci est fragile. Des déficits ponctuels ont été observés dans des
+                communes comme **Leflaye**, **Timezrit**, ou **El Kseur**, souvent liés à une hausse imprévue des
+                charges ou une baisse des dotations.
+            </p>
+            <div class="glass-card" style="margin-top: 4rem; border-left: 4px solid var(--accent-blue);">
+                <h3>Origine & Fiabilité des Données (SI-SBFCL)</h3>
+                <p style="color: var(--text-dim); line-height: 1.8; margin-top: 1rem;">
+                    Les données financières présentées sont issues du **Système d'Information de la Wilaya de Bejaia
+                    (SI-SBFCL)**, couvrant la période **2016-2020**. Le processus d'extraction a suivi un protocole
+                    rigoureux :
+                </p>
+                <ul style="color: var(--text-dim); margin-top: 1rem; padding-left: 1.5rem; line-height: 1.8;">
+                    <li><strong>Extraction DAL :</strong> Accès autorisé par la Direction de l'Administration Locale de
+                        Bejaia.</li>
+                    <li><strong>Contrôle Qualité :</strong> Double vérification des budgets d'équipement et de
+                        fonctionnement par le service d'animation et les systèmes informatiques.</li>
+                    <li><strong>Validation :</strong> Consolidation des données budgétaires brutes en une base de
+                        données structurée pour l'analyse statistique multidimensionnelle.</li>
+                </ul>
+            </div>
+            <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                La thèsé souligne que **95% des ressources** sont octroyées sans implication directe de la commune, ce
+                qui pose la question de l'autonomie décisionnelle réelle. Les dépenses de personnel, en se maintenant à
+                des niveaux très élevés, réduisent la marge de manœuvre pour l'entretien du cadre de vie (voirie,
+                espaces verts, éclairage public).
+            </p>
+        </section>
+
+        <footer
+            style="text-align: center; padding: 4rem 0; color: var(--text-dim); border-top: 1px solid var(--glass-border);">
+            <p>&copy; 2026 BAHLOUL-RD. Tous droits réservés.</p>
+        </footer>
+    </main>
+
+    <script>
+        const ctxRev = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctxRev, {
+            type: 'pie',
+            data: {
+                labels: ['Fiscalité Locale', 'Péréquation (CSGCL)', 'Autres Recettes'],
+                datasets: [{
+                    data: [65, 30, 5],
+                    backgroundColor: ['#3b82f6', '#06b6d4', '#1e293b'],
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#94a3b8' } }
+                }
+            }
+        });
+
+        const ctxExp = document.getElementById('expenseChart').getContext('2d');
+        new Chart(ctxExp, {
+            type: 'bar',
+            data: {
+                labels: ['Frais Personnel', 'Fonctionnement Services', 'Prélèvements Équipement', 'Autres'],
+                datasets: [{
+                    label: '% des dépenses totales',
+                    data: [52, 25, 12, 11],
+                    backgroundColor: '#06b6d4'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        ticks: { color: '#94a3b8' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

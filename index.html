@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Observatoire Territorial - Wilaya de Béjaïa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="logo-section" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <!-- University & Lab & Laboratory Logos -->
+            <div id="logo-university" class="logo-placeholder" title="Université de Béjaïa">
+              <img src="./logo_univ.png" alt="Université de Béjaïa" style="height: 40px;" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/4/4b/Univ_Bejaia_Logo.png'; this.onerror=null;">
+            </div>
+            <div id="logo-labo" class="logo-placeholder" title="Labo LED">
+              <img src="./logo_led.png" alt="LED Laboratoire" style="height: 40px;" onerror="this.parentElement.innerHTML='<small>Labo LED</small>'">
+            </div>
+            <div id="logo-bconsult" class="logo-placeholder" title="Bahloul-RD BCONSULT">
+              <img src="./logo_bconsult.png" alt="BCONSULT" style="height: 40px;" onerror="this.parentElement.innerHTML='<small>BCONSULT</small>'">
+            </div>
+            <div style="border-left: 1px solid rgba(255,255,255,0.3); height: 40px; margin: 0 10px;"></div>
+            <div>
+              <h2 style="font-size: 1.1rem; margin: 0; line-height: 1.2;">Observatoire des Disparités et du Cadre de Vie</h2>
+              <p style="font-size: 0.8rem; opacity: 0.9; margin: 0;">Wilaya de Béjaïa — Travaux du Dr. Lotfi Bahloul</p>
+            </div>
+          </div>
+        </div>
+        <nav>
+          <a href="#home" class="active">Accueil</a>
+          <a href="#diagnostic">Diagnostic</a>
+          <a href="#dimensions">8 Dimensions</a>
+          <a href="#dashboard">Dashboard Élus</a>
+          <a href="#recommendations">Recommandations</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="app">
+      <!-- Content will be injected by main.js -->
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2026 Observatoire Territorial de la Wilaya de Béjaïa. Tous droits réservés.</p>
+        <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.7;">Outil d'aide à la décision basé sur les travaux du Dr. Lotfi Bahloul</p>
+      </div>
+    </footer>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
