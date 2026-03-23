@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const renderHome = () => {
+    const base = import.meta.env.BASE_URL;
     app.innerHTML = `
       <section id="home" class="hero">
         <div class="container">
@@ -154,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4 style="font-size: 1rem; color: var(--primary-blue); font-weight: 700;">Accessibilité Ferroviaire</h4>
                     <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">Distance moyenne à une gare par commune</p>
                   </div>
-                  <img src="./sig_mapinfo_transport.png" alt="Carte accessibilité ferroviaire - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
+                  <img src="${base}sig_mapinfo_transport.png" alt="Carte accessibilité ferroviaire - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
                   <div style="padding: 10px 15px; background: #f8f9fa;">
                     <p style="font-size: 0.75rem; color: var(--text-light); font-style: italic;">Source : Établi par l'auteur à l'aide du logiciel Mapinfo. Thèse de doctorat, Université de Béjaïa.</p>
                   </div>
@@ -166,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4 style="font-size: 1rem; color: #e65100; font-weight: 700;">Emploi &amp; Tissu Économique</h4>
                     <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">Emploi généré &amp; nombre de PME par commune</p>
                   </div>
-                  <img src="./sig_mapinfo_emploi.png" alt="Carte emploi et PME - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
+                  <img src="${base}sig_mapinfo_emploi.png" alt="Carte emploi et PME - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
                   <div style="padding: 10px 15px; background: #f8f9fa;">
                     <p style="font-size: 0.75rem; color: var(--text-light); font-style: italic;">Source : Établi par l'auteur à l'aide du logiciel Mapinfo. Thèse de doctorat, Université de Béjaïa.</p>
                   </div>
@@ -178,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4 style="font-size: 1rem; color: var(--primary-green); font-weight: 700;">Scolarisation des 6-10 ans</h4>
                     <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">Taux de scolarisation des enfants de 6 à 10 ans</p>
                   </div>
-                  <img src="./sig_mapinfo_enfants.png" alt="Carte scolarisation 6-10 ans - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
+                  <img src="${base}sig_mapinfo_enfants.png" alt="Carte scolarisation 6-10 ans - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
                   <div style="padding: 10px 15px; background: #f8f9fa;">
                     <p style="font-size: 0.75rem; color: var(--text-light); font-style: italic;">Source : Établi par l'auteur à l'aide du logiciel Mapinfo. Thèse de doctorat, Université de Béjaïa, p. 152-153.</p>
                   </div>
@@ -190,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4 style="font-size: 1rem; color: #7b1fa2; font-weight: 700;">Occupation des Classes Primaires</h4>
                     <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">Taux d'occupation des classes de l'enseignement primaire</p>
                   </div>
-                  <img src="./sig_mapinfo_scolarisation.png" alt="Carte occupation classes primaires - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
+                  <img src="${base}sig_mapinfo_scolarisation.png" alt="Carte occupation classes primaires - Mapinfo" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
                   <div style="padding: 10px 15px; background: #f8f9fa;">
                     <p style="font-size: 0.75rem; color: var(--text-light); font-style: italic;">Source : Établi par l'auteur à l'aide du logiciel Mapinfo. Thèse de doctorat, Université de Béjaïa.</p>
                   </div>
@@ -202,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4 style="font-size: 1rem; color: #0288d1; font-weight: 700;">Taux d'Accès à l'Eau Potable</h4>
                     <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">Taux de raccordement au réseau d'alimentation en eau</p>
                   </div>
-                  <img src="./sig_map_water.png" alt="Carte Eau Potable" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
+                  <img src="${base}sig_map_water.png" alt="Carte Eau Potable" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
                   <div style="padding: 10px 15px; background: #f8f9fa;">
                     <p style="font-size: 0.75rem; color: var(--text-light); font-style: italic;">Source : Données ADE/Direction Hydraulique de la Wilaya de Béjaïa. Analyse spatiale, Thèse de doctorat, p. 220.</p>
                   </div>
