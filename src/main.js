@@ -649,10 +649,11 @@ document.addEventListener('DOMContentLoaded', () => {
     L.control.layers(baseMaps, overlays, { position: 'topright', collapsed: false }).addTo(leafletMap);
 
     // Load all data
+    const base = import.meta.env.BASE_URL;
     Promise.all([
-      fetch('bejaia_communes.json').then(r => r.json()),
-      fetch('bejaia_communes_polygons.json').then(r => r.json()),
-      fetch('bejaia_wilaya.json').then(r => r.json()),
+      fetch(`${base}bejaia_communes.json`).then(r => r.json()),
+      fetch(`${base}bejaia_communes_polygons.json`).then(r => r.json()),
+      fetch(`${base}bejaia_wilaya.json`).then(r => r.json()),
     ]).then(([points, polygons, wilaya]) => {
       bejaiaGeoData = points;
       communePolygonData = polygons;

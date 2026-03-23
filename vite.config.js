@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/disparites-eco/',
+  base: '/',
   build: {
     outDir: 'dist',
   }
