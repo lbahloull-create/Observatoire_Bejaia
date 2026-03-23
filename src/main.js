@@ -209,17 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   </div>
                 </div>
 
-                <div class="card" style="padding: 0; overflow: hidden;">
-                  <div style="padding: 16px 20px; border-bottom: 3px solid #0288d1; background: #e1f5fe;">
-                    <p style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #0288d1; margin-bottom: 3px;">Dimension Eau &amp; Assainissement</p>
-                    <h4 style="font-size: 1rem; color: #0288d1; font-weight: 700;">Taux d'Assainissement</h4>
-                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">Taux de raccordement au réseau d'assainissement</p>
-                  </div>
-                  <img src="${base}sig_map_sanitation.png" alt="Carte Taux d'Assainissement" style="width: 100%; display: block; cursor: zoom-in;" onclick="window.open(this.src)">
-                  <div style="padding: 10px 15px; background: #f8f9fa;">
-                    <p style="font-size: 0.75rem; color: var(--text-light); font-style: italic;">Source : Services Techniques (2023). Analyse spatiale, Thèse de doctorat.</p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
