@@ -40,8 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="kpi-item"><h3>${(regionalStats.population / 1000).toFixed(0)}k</h3><p>Habitants</p></div>
             <div class="kpi-item"><h3>${regionalStats.area}</h3><p>km²</p></div>
           </div>
-          <div style="margin-top: 40px;">
+          <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
             <a href="#dashboard" class="btn btn-primary">Consulter le diagnostic de ma commune</a>
+            <div style="background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 8px; font-size: 0.9rem; border: 1px solid rgba(212,175,55,0.4); max-width: 600px; backdrop-filter: blur(5px);">
+              <i class="fas fa-lock" style="color: #d4af37; margin-right: 8px;"></i>
+              <strong>Espace Élus :</strong> Des données financières et cartographiques approfondies sont disponibles en accès restreint.
+            </div>
           </div>
         </div>
       </section>
@@ -130,13 +134,15 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
 
-            <h3 class="section-subtitle" style="margin-top: 40px; text-align: left; color: var(--primary-blue);">Finances Locales (Millions DA)</h3>
-            <div class="dashboard-grid">
-              <div class="chart-panel">
-                <canvas id="financeChart"></canvas>
-              </div>
-              <div class="stats-panel" id="finance-details">
-                <!-- Finance details injected here -->
+            <div id="finances-section" style="position: relative; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e8edf2;">
+              <h3 class="section-subtitle" style="text-align: left; color: var(--primary-blue); margin-top: 0;">Finances Locales (Millions DA)</h3>
+              <div class="dashboard-grid">
+                <div class="chart-panel">
+                  <canvas id="financeChart"></canvas>
+                </div>
+                <div class="stats-panel" id="finance-details">
+                  <!-- Finance details injected here -->
+                </div>
               </div>
             </div>
 
@@ -1034,24 +1040,24 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const updateDashboardAccess = () => {
-    const dashboardSection = document.getElementById('dashboard');
-    if (!dashboardSection) return;
+    const financesSection = document.getElementById('finances-section');
+    if (!financesSection) return;
 
     // Remove any existing lock notice
-    const existingNotice = dashboardSection.querySelector('.dashboard-lock-notice');
+    const existingNotice = financesSection.querySelector('.dashboard-lock-notice');
     if (existingNotice) existingNotice.remove();
-    dashboardSection.classList.remove('dashboard-lock-overlay');
+    financesSection.classList.remove('dashboard-lock-overlay');
 
     if (!isAuthenticated()) {
-      dashboardSection.classList.add('dashboard-lock-overlay');
-      dashboardSection.style.position = 'relative';
+      financesSection.classList.add('dashboard-lock-overlay');
+      financesSection.style.position = 'relative';
 
       const lockNotice = document.createElement('div');
       lockNotice.className = 'dashboard-lock-notice';
       lockNotice.innerHTML = `
         <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
         <h4>Accès Réservé aux Élus</h4>
-        <p>Ce tableau de bord contient des données financières et analytiques confidentielles réservées aux élus et responsables de la Wilaya.</p>
+        <p>Ce volet contient des données financières confidentielles réservées aux élus et responsables territoriaux.</p>
         <button onclick="document.getElementById('nav-elus-access').click()" 
           style="background: linear-gradient(135deg, #d4af37, #b8960c); color: #1a1a1a; border: none; padding: 12px 28px; border-radius: 25px; font-weight: 700; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 20px rgba(212,175,55,0.35); transition: all 0.3s;"
           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(212,175,55,0.5)'"
@@ -1059,7 +1065,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>Se connecter
         </button>
       `;
-      dashboardSection.appendChild(lockNotice);
+      financesSection.appendChild(lockNotice);
     }
 
     // Show/hide the élus map metric selector bar (above the map) and the thesis SIG maps
