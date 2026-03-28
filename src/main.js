@@ -273,6 +273,33 @@ document.addEventListener('DOMContentLoaded', () => {
       </section>
 
 
+      <section id="recherche" style="background: var(--bg-color); padding: 80px 0;">
+        <div class="container">
+          <h2 class="section-title">Articles et Travaux de Recherche</h2>
+          <p class="section-subtitle">Publications et contributions scientifiques du Dr. Lotfi Bahloul sur la Wilaya de Béjaïa.</p>
+          <div class="card-grid">
+            <div class="card" style="text-align: left; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='...';">
+              <div style="color: var(--primary-blue); font-size: 2rem; margin-bottom: 15px;"><i class="fas fa-book-open"></i></div>
+              <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary-blue);">Thèse de Doctorat</h3>
+              <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">Analyse spatiale des disparités socio-économiques et du cadre de vie dans la Wilaya de Béjaïa. Proposition d'un SIG décisionnel.</p>
+              <span style="font-size: 0.75rem; background: #e1f5fe; color: #0288d1; padding: 5px 10px; border-radius: 12px; font-weight: bold;">Université Abderrahmane Mira (2023)</span>
+            </div>
+            <div class="card" style="text-align: left; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='...';">
+              <div style="color: var(--primary-green); font-size: 2rem; margin-bottom: 15px;"><i class="fas fa-file-alt"></i></div>
+              <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary-green);">Article : Disparités Territoriales</h3>
+              <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">Étude analytique sur les déséquilibres de développement entre les zones urbaines et rurales de la région par approche multicritère.</p>
+              <span style="font-size: 0.75rem; background: #e8f5e9; color: #388e3c; padding: 5px 10px; border-radius: 12px; font-weight: bold;">Revue Scientifique LED</span>
+            </div>
+            <div class="card" style="text-align: left; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='...';">
+              <div style="color: #d4af37; font-size: 2rem; margin-bottom: 15px;"><i class="fas fa-project-diagram"></i></div>
+              <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #ba9624;">Méthodologie Typologique</h3>
+              <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">Classification et typologie des 52 communes selon les 8 dimensions fondamentales du cadre de vie local.</p>
+              <span style="font-size: 0.75rem; background: #fff8e1; color: #fbc02d; padding: 5px 10px; border-radius: 12px; font-weight: bold;">Méthodologie BCONSULT</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="recommendations">
         <div class="container">
           <h2 class="section-title">Recommandations & Gouvernance</h2>
