@@ -8561,28 +8561,28 @@ export const communeData = [
 export const clusters = [
     {
         "id": 1,
-        "name": "Pôles Urbains et Industriels",
-        "description": "Haute performance économique. Stratégie : Consolidation et optimisation des infrastructures."
+        "name": "Forte dynamique économique et sociale",
+        "description": "Comprend des communes comme Bejaia, Aokas et Taourirt Ighil, caractérisées par une forte dynamique économique et sociale."
     },
     {
         "id": 2,
-        "name": "Centres de Services Intermédiaires",
-        "description": "Couverture de base stable. Stratégie : Renforcement de la qualité de service et diversification."
+        "name": "Accessibilité durable et aspect pratique",
+        "description": "Comprend des communes comme Seddouk, Beni Djellil, Chellata, Akfadou, Tizi n'berber, Akbou et Feraoun, caractérisées par leur accessibilité durable et leur aspect pratique."
     },
     {
         "id": 3,
-        "name": "Zones de Montagne Résilientes",
-        "description": "Fort potentiel écologique. Stratégie : Désenclavement et tourisme durable."
+        "name": "Forte identité locale",
+        "description": "Comprend des communes comme Ait Smail, Amalou, Barbacha, Boudjellil, Bouhamza et Tala Hamza, caractérisées par leur forte identité locale."
     },
     {
         "id": 4,
-        "name": "Communes Rurales en Développement",
-        "description": "Besoin d'investissements. Stratégie : Plan d'urgence pour les infrastructures de base."
+        "name": "Propreté et aménagement territorial soigné",
+        "description": "Comprend des communes comme Beni K'sila, Kherrata, Sidi Aich, Tazmalt, Tifra, Timezrit et Tinebdhar, caractérisées par leur propreté et leur aménagement territorial soigné."
     },
     {
         "id": 5,
-        "name": "Zones en Mutation Spatiale",
-        "description": "Pressions démographiques. Stratégie : Maîtrise de l'urbanisation et services de proximité."
+        "name": "Sécurité et gestion des risques",
+        "description": "Comprend des communes comme M'cisna, Ouzellaguen et Sidi Ayad, caractérisées par leur engagement envers la sécurité des habitants et la gestion des risques."
     },
     {
         "id": 6,
