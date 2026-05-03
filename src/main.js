@@ -103,37 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </section>
 
-      <section id="dairas" style="background: var(--light-blue); padding: 80px 0;">
-        <div class="container">
-          <h2 class="section-title">Répartition par Daïra</h2>
-          <p class="section-subtitle">Aperçu démographique et géographique des 19 Daïras de la Wilaya de Béjaïa.</p>
-          <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;">
-              <thead>
-                <tr style="background: var(--primary-blue); color: white;">
-                  <th style="padding: 12px;">Daïra</th>
-                  <th style="padding: 12px; text-align: center;">Nombre de communes</th>
-                  <th style="padding: 12px;">Communes</th>
-                  <th style="padding: 12px; text-align: right;">Superficie (km²)</th>
-                  <th style="padding: 12px; text-align: right;">Population (hab.)</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${dairaData.map(d => `
-                  <tr style="border-bottom: 1px solid #eee; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
-                    <td style="padding: 12px; font-weight: bold; color: var(--primary-blue);">${d.daira}</td>
-                    <td style="padding: 12px; text-align: center;">${d.communes.length}</td>
-                    <td style="padding: 12px; color: var(--text-light); font-size: 0.9rem;">${d.communes.join(', ')}</td>
-                    <td style="padding: 12px; text-align: right; color: var(--primary-green); font-weight: 500;">${d.superficie.toLocaleString('fr-FR')}</td>
-                    <td style="padding: 12px; text-align: right; font-weight: 600;">${d.population.toLocaleString('fr-FR')}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
       <section id="dashboard">
         <div class="container">
           <h2 class="section-title">Tableau de Bord des Élus</h2>
@@ -174,6 +143,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="stats-panel" id="finance-details">
                   <!-- Finance details injected here -->
                 </div>
+              </div>
+            </div>
+
+            <div id="dairas-section" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e8edf2;">
+              <h3 class="section-subtitle" style="text-align: left; color: var(--primary-blue); margin-top: 0;">Répartition par Daïra</h3>
+              <p style="text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light);">Aperçu démographique et géographique des 19 Daïras de la Wilaya de Béjaïa.</p>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;">
+                  <thead>
+                    <tr style="background: var(--primary-blue); color: white;">
+                      <th style="padding: 12px;">Daïra</th>
+                      <th style="padding: 12px; text-align: center;">Nombre de communes</th>
+                      <th style="padding: 12px;">Communes</th>
+                      <th style="padding: 12px; text-align: right;">Superficie (km²)</th>
+                      <th style="padding: 12px; text-align: right;">Population (hab.)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${dairaData.map(d => `
+                      <tr style="border-bottom: 1px solid #eee; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                        <td style="padding: 12px; font-weight: bold; color: var(--primary-blue);">${d.daira}</td>
+                        <td style="padding: 12px; text-align: center;">${d.communes.length}</td>
+                        <td style="padding: 12px; color: var(--text-light); font-size: 0.9rem;">${d.communes.join(', ')}</td>
+                        <td style="padding: 12px; text-align: right; color: var(--primary-green); font-weight: 500;">${d.superficie.toLocaleString('fr-FR')}</td>
+                        <td style="padding: 12px; text-align: right; font-weight: 600;">${d.population.toLocaleString('fr-FR')}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
               </div>
             </div>
 
