@@ -118,11 +118,20 @@ document.addEventListener('DOMContentLoaded', () => {
               <button class="tab-btn" data-year="2020">2020</button>
             </div>
 
-            <div class="dashboard-controls" style="display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);">
-              <label for="commune-select" style="font-weight: 600; color: var(--primary-blue);">📍 Sélectionner une commune :</label>
-              <select id="commune-select" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #d4af37; background: white; font-weight: 600; color: #1a3a5f; cursor: pointer; flex: 1;">
-                ${[...communeData].sort((a, b) => a.name.localeCompare(b.name)).map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-              </select>
+            <div class="dashboard-controls" style="display: flex; flex-wrap: wrap; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 250px;">
+                <label for="daira-select" style="font-weight: 600; color: var(--primary-blue); white-space: nowrap;">📂 Daïra :</label>
+                <select id="daira-select" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #d4af37; background: white; font-weight: 600; color: #1a3a5f; cursor: pointer; width: 100%;">
+                  <option value="Toutes">Toutes les Daïras</option>
+                  ${[...new Set(communeData.map(c => c.daira))].sort().map(d => `<option value="${d}">${d}</option>`).join('')}
+                </select>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 250px;">
+                <label for="commune-select" style="font-weight: 600; color: var(--primary-blue); white-space: nowrap;">📍 Commune :</label>
+                <select id="commune-select" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #d4af37; background: white; font-weight: 600; color: #1a3a5f; cursor: pointer; width: 100%;">
+                  ${[...communeData].sort((a, b) => a.name.localeCompare(b.name)).map(c => `<option value="${c.id}" data-daira="${c.daira}">${c.name}</option>`).join('')}
+                </select>
+              </div>
             </div>
 
             <div class="dashboard-grid">
@@ -947,6 +956,32 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     select.addEventListener('change', (e) => updateUI(e.target.value, currentYear));
+
+    const dairaSelect = document.getElementById('daira-select');
+    if (dairaSelect) {
+      dairaSelect.addEventListener('change', (e) => {
+        const dairaValue = e.target.value;
+        const options = Array.from(select.options);
+        
+        // Filter commune options safely
+        options.forEach(opt => {
+          if (dairaValue === 'Toutes' || opt.dataset.daira === dairaValue) {
+            opt.style.display = '';
+            opt.disabled = false;
+          } else {
+            opt.style.display = 'none';
+            opt.disabled = true;
+          }
+        });
+        
+        // Auto-select first visible and non-disabled option
+        const firstVisible = options.find(opt => !opt.disabled);
+        if (firstVisible) {
+          select.value = firstVisible.value;
+          select.dispatchEvent(new Event('change'));
+        }
+      });
+    }
 
     // Tab Logic
     document.querySelectorAll('.tab-btn').forEach(btn => {
