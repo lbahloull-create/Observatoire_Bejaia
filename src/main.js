@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters } from './data/communeData';
+import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData } from './data/communeData';
 
 // Fix Leaflet marker icon path issue with Vite
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -99,6 +99,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               </div>
             `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section id="dairas" style="background: var(--light-blue); padding: 80px 0;">
+        <div class="container">
+          <h2 class="section-title">Répartition par Daïra</h2>
+          <p class="section-subtitle">Aperçu démographique et géographique des 19 Daïras de la Wilaya de Béjaïa.</p>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;">
+              <thead>
+                <tr style="background: var(--primary-blue); color: white;">
+                  <th style="padding: 12px;">Daïra</th>
+                  <th style="padding: 12px; text-align: center;">Nombre de communes</th>
+                  <th style="padding: 12px;">Communes</th>
+                  <th style="padding: 12px; text-align: right;">Superficie (km²)</th>
+                  <th style="padding: 12px; text-align: right;">Population (hab.)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${dairaData.map(d => `
+                  <tr style="border-bottom: 1px solid #eee; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                    <td style="padding: 12px; font-weight: bold; color: var(--primary-blue);">${d.daira}</td>
+                    <td style="padding: 12px; text-align: center;">${d.communes.length}</td>
+                    <td style="padding: 12px; color: var(--text-light); font-size: 0.9rem;">${d.communes.join(', ')}</td>
+                    <td style="padding: 12px; text-align: right; color: var(--primary-green); font-weight: 500;">${d.superficie.toLocaleString('fr-FR')}</td>
+                    <td style="padding: 12px; text-align: right; font-weight: 600;">${d.population.toLocaleString('fr-FR')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
