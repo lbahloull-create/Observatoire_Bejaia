@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figures Scientifiques - Observatoire de Béjaïa</title>
+    <link rel="stylesheet" href="../src/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+    <style>
+        .figure-container {
+            margin-bottom: 60px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary-blue);
+        }
+        .figure-title {
+            color: var(--primary-blue);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .figure-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .mermaid {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        img.figure-img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .back-nav {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h2>Observatoire Territorial de la Wilaya de Béjaïa</h2>
+            <p>Documentation Scientifique & Architecture du Système</p>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 40px;">
+        <div class="back-nav">
+            <a href="../index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Retour à l'accueil</a>
+        </div>
+
+        <h1 class="section-title">Figures de Référence de l'Observatoire</h1>
+        <p class="section-subtitle">Ces schémas et illustrations décrivent le fonctionnement technique et la structure analytique du projet de recherche.</p>
+
+        <!-- Figure 1 -->
+        <div class="figure-container">
+            <div class="figure-title">Figure 1 : Schéma de l'architecture logicielle globale</div>
+            <div class="figure-desc">
+                Illustration des flux de données entre la collecte (sources hétérogènes), le moteur de traitement (normalisation et scoring) et l'interface utilisateur (visualisation interactive).
+            </div>
+            <div class="mermaid">
+                graph TD
+                    subgraph Collecte ["1. Collecte & Sources"]
+                        A[Données Statistiques - ONS/DPSB] --> D
+                        B[Données Géographiques - GeoJSON] --> D
+                        C[Données Financières - Budgets Communaux] --> D
+                    end
+
+                    subgraph Moteur ["2. Moteur de Traitement (JS)"]
+                        D[Normalisation des Indicateurs 0-100] --> E[Calcul des 8 Dimensions]
+                        E --> F[Algorithme de Clustering Typologique]
+                        F --> G[Agrégation Territoriale]
+                    end
+
+                    subgraph Interface ["3. Interface Utilisateur (UI)"]
+                        G --> H[Tableau de Bord - Chart.js]
+                        G --> I[Cartographie SIG - Leaflet]
+                        G --> J[Diagnostic par Commune]
+                    end
+            </div>
+        </div>
+
+        <!-- Figure 2 -->
+        <div class="figure-container">
+            <div class="figure-title">Figure 2 : Diagramme fonctionnel de la matrice de données</div>
+            <div class="figure-desc">
+                Interaction entre les indicateurs économiques (PME, emploi), sociaux (éducation, santé) et environnementaux (eau, assainissement) pour la production de l'indice de qualité de vie.
+            </div>
+            <div class="mermaid">
+                graph LR
+                    subgraph Matrice ["Matrice Multidimensionnelle"]
+                        E[Économie: Fiscalité, Emploi]
+                        S[Social: Éducation, Santé]
+                        Env[Environnement: Eau, Territoire]
+                    end
+
+                    E <--> S
+                    S <--> Env
+                    Env <--> E
+
+                    E & S & Env --> IDV[Indice Qualité de Vie]
+                    IDV --> DEC[Aide à la Décision]
+            </div>
+        </div>
+
+        <!-- Figure 3 -->
+        <div class="figure-container">
+            <div class="figure-title">Figure 3 : Cartographie dynamique des disparités spatiales</div>
+            <div class="figure-desc">
+                Représentation graphique (modèle de type SIG) produite par le système, montrant les disparités de développement au sein des 52 communes de la Wilaya de Béjaïa.
+            </div>
+            <img src="../fig3_cartographie_disparites.png" alt="Cartographie des disparités" class="figure-img">
+        </div>
+
+        <!-- Figure 4 -->
+        <div class="figure-container">
+            <div class="figure-title">Figure 4 : Logigramme de l'algorithme de corrélation</div>
+            <div class="figure-desc">
+                Processus de transformation des données brutes en indices de qualité de vie et de développement durable via la normalisation et la pondération multidimensionnelle.
+            </div>
+            <div class="mermaid">
+                flowchart TD
+                    Start([Données Brutes]) --> Norm[Normalisation Min-Max]
+                    Norm --> Weight[Pondération des 8 Dimensions]
+                    
+                    subgraph Piliers ["8 Piliers du Cadre de Vie"]
+                        D1[Transport]
+                        D2[Economie]
+                        D3[Education]
+                        D4[Santé]
+                        D5[Eau & Assainissement]
+                        D6[Habitat]
+                        D7[Culture]
+                        D8[Sécurité]
+                    end
+                    
+                    Weight --> D1 & D2 & D3 & D4 & D5 & D6 & D7 & D8
+                    
+                    D1 & D2 & D3 & D4 & D5 & D6 & D7 & D8 --> Sum[Somme Pondérée]
+                    Sum --> IDD[Indice de Développement]
+                    IDD --> Cluster[Typologie des Communes]
+            </div>
+        </div>
+
+        <!-- Figure 5 -->
+        <div class="figure-container">
+            <div class="figure-title">Figure 5 : Interface du tableau de bord de monitoring</div>
+            <div class="figure-desc">
+                Aperçu de l'interface utilisateur montrant les outils de visualisation (graphiques radar, cartes thématiques et indicateurs clés) destinés aux décideurs locaux.
+            </div>
+            <img src="../fig5_interface_dashboard.png" alt="Dashboard Monitoring" class="figure-img">
+        </div>
+
+    </main>
+
+    <footer style="margin-top: 100px;">
+        <div class="container">
+            <p>&copy; 2026 Observatoire Territorial de la Wilaya de Béjaïa. Travaux du Dr. Lotfi Bahloul.</p>
+        </div>
+    </footer>
+</body>
+</html>

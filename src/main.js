@@ -329,10 +329,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <span style="font-size: 0.75rem; background: #e8f5e9; color: #388e3c; padding: 5px 10px; border-radius: 12px; font-weight: bold;">Revue Scientifique LED</span>
             </div>
             <div class="card" style="text-align: left; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='...';">
-              <div style="color: #d4af37; font-size: 2rem; margin-bottom: 15px;"><i class="fas fa-project-diagram"></i></div>
-              <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #ba9624;">Méthodologie Typologique</h3>
-              <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">Classification et typologie des 52 communes selon les 8 dimensions fondamentales du cadre de vie local.</p>
-              <span style="font-size: 0.75rem; background: #fff8e1; color: #fbc02d; padding: 5px 10px; border-radius: 12px; font-weight: bold;">Méthodologie BCONSULT</span>
+              <div style="color: #6a994e; font-size: 2rem; margin-bottom: 15px;"><i class="fas fa-project-diagram"></i></div>
+              <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #6a994e;">Schémas & Figures</h3>
+              <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">Architecture logicielle, diagrammes fonctionnels et cartographies de référence du système d'information.</p>
+              <a href="./research/figures.html" class="btn btn-outline" style="font-size: 0.75rem; padding: 5px 12px;">Consulter les figures</a>
             </div>
           </div>
         </div>
