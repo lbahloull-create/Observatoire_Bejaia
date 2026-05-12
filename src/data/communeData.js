@@ -8586,8 +8586,8 @@ export const clusters = [
     },
     {
         "id": 6,
-        "name": "Zones à Potentiel et Risques Spécifiques",
-        "description": "Communes comme Amizour et Draâ El-Kaïd. Stratégie : Investissement différencié et gestion des risques prioritaires."
+        "name": "Uniques et spécifiques",
+        "description": "Comprend des communes comme Amizour et Draa El Caïd, caractérisées par leurs profils uniques et spécifiques."
     }
 ];
 
