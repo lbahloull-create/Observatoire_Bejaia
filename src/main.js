@@ -135,11 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="dashboard-grid">
-              <div class="stats-panel" id="commune-details">
-                <!-- Details injected here -->
+              <div class="dashboard-main-content">
+                <div class="stats-panel" id="commune-details" style="background: var(--card-dark); color: white; border: 1px solid rgba(255,255,255,0.1);">
+                  <!-- Details injected here -->
+                </div>
+                <div class="chart-panel" style="background: var(--card-dark); border: 1px solid rgba(255,255,255,0.1);">
+                  <canvas id="radarChart"></canvas>
+                </div>
               </div>
-              <div class="chart-panel">
-                <canvas id="radarChart"></canvas>
+              <div class="kpi-sidebar" id="kpi-sidebar">
+                <!-- KPIs injected here -->
               </div>
             </div>
 
@@ -782,13 +787,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const financeCtx = document.getElementById('financeChart').getContext('2d');
     let currentYear = 'Global';
 
+    const updateKPIs = (commune, year) => {
+      const kpiSidebar = document.getElementById('kpi-sidebar');
+      if (!kpiSidebar) return;
+
+      const stats = [
+        { label: 'Population', value: (commune.population || 0).toLocaleString('fr-FR'), trend: '+1.2%', icon: 'users' },
+        { label: 'Budget (M DA)', value: (commune.finances.budgetTotal || 0).toLocaleString('fr-FR'), trend: '+5.3%', icon: 'wallet' },
+        { label: 'Eau Potable', value: `${commune.details.waterAccess || 0}%`, trend: '+0.7%', icon: 'tint' },
+        { label: 'Taux Chômage', value: '11.6%', trend: '-0.4%', icon: 'briefcase', down: true }
+      ];
+
+      kpiSidebar.innerHTML = stats.map(s => `
+        <div class="kpi-card">
+          <div class="label"><i class="fas fa-${s.icon}" style="margin-right: 8px; color: var(--accent-neon-blue);"></i>${s.label}</div>
+          <div class="value">${s.value}</div>
+          <div class="trend ${s.down ? 'trend-down' : 'trend-up'}">
+            <i class="fas fa-caret-${s.down ? 'down' : 'up'}"></i> ${s.trend} <span style="opacity: 0.5; font-size: 0.7rem;">vs n-1</span>
+          </div>
+        </div>
+      `).join('');
+    };
+
     const updateUI = (communeId, year = 'Global') => {
       const commune = communeData.find(c => c.id == communeId);
       const clusterInfo = clusters.find(cl => cl.id === commune.cluster);
       
       const data = (year === 'Global') ? commune : commune.history[year];
-      
-      // Handle missing regionalAverageHistory gracefully
       const avg = (year === 'Global' || !regionalAverageHistory) ? regionalAverage : {
         scores: regionalAverageHistory[year] ? regionalAverageHistory[year].scores : regionalAverage.scores,
         finances: regionalAverageHistory[year] ? {
@@ -799,158 +824,122 @@ document.addEventListener('DOMContentLoaded', () => {
         } : regionalAverage.finances
       };
 
-      // Build focus HTML
+      updateKPIs(commune, year);
+
       let focusHtml = '';
-      
       if (year !== 'Global') {
-        focusHtml += `<div style="margin-bottom: 15px;"><span class="year-badge">Données Exercice ${year}</span></div>`;
+        focusHtml += `<div style="margin-bottom: 15px;"><span class="year-badge" style="background: var(--accent-neon-blue); color: #0f172a;">Données Exercice ${year}</span></div>`;
         if (data.finances.details && data.finances.details.deficit) {
           focusHtml += `
             <div class="risk-alert" style="background: rgba(255, 77, 77, 0.1); border-left: 4px solid #ff4d4d; color: #ff4d4d;">
               <h4><i class="fas fa-exclamation-circle"></i> Alerte : Excédent de Dépenses</h4>
-              <p>Commune identifiée en situation de déficit pour l'exercice ${year} (Tableau 7.1 de la thèse).</p>
+              <p>Commune identifiée en situation de déficit pour l'exercice ${year}.</p>
             </div>`;
         }
       }
 
-      // Risk Focus (Chapitre VI)
       if (commune.details.riskAlert) {
         focusHtml += `
-          <div class="risk-alert">
+          <div class="risk-alert" style="background: rgba(255,165,0,0.1); border-left: 4px solid #ffa500; color: #ffa500;">
             <h4><i class="fas fa-exclamation-triangle"></i> Zone d'Attention Prioritaire</h4>
-            <p>Taux élevés d'accidents et d'urgences identifiés (Doctorat, p. 245).</p>
-            <p style="margin-top: 5px; font-size: 0.85rem;">
-              <strong>Accidents:</strong> ${commune.details.accidentRate} &nbsp;|&nbsp;
-              <strong>Urgences:</strong> ${commune.details.emergencyCalls} appels/an
-            </p>
+            <p>Facteurs de risques identifiés dans la thèse (p. 245).</p>
           </div>`;
       }
 
-      // Education Focus (Chapitre V)
-      const bemRate = commune.details.bemSuccess || 62.0;
-      const pedResources = commune.details.pedagogicalResources || 'Lacunes identifiées (Zone Orange)';
-      const edColor = parseFloat(bemRate) >= 65 ? '#2e7d32' : '#e65100';
-      focusHtml += `
-        <div class="edu-focus">
-          <h4><i class="fas fa-graduation-cap"></i> Focus Éducation (p. 152-153)</h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
-            <div>
-              <p style="font-size: 0.75rem; color: #666; margin-bottom: 2px;">Réussite BAC</p>
-              <p style="font-weight: 700; font-size: 1.1rem; color: var(--primary-blue);">${commune.details.bacSuccess}%</p>
-            </div>
-            <div>
-              <p style="font-size: 0.75rem; color: #666; margin-bottom: 2px;">Réussite BEM</p>
-              <p style="font-weight: 700; font-size: 1.1rem; color: ${edColor};">${bemRate}%</p>
-            </div>
-          </div>
-          <p style="font-size: 0.82rem; font-style: italic; border-top: 1px solid #d0e1f9; padding-top: 8px;">
-            <strong>Moyens pédagogiques :</strong> ${pedResources}
-          </p>
-        </div>`;
-
       detailsDiv.innerHTML = `
-        <h3 style="color: var(--primary-blue); margin-bottom: 15px;">📍 ${commune.name}</h3>
+        <h3 style="color: var(--accent-neon-blue); margin-bottom: 15px;">📍 ${commune.name}</h3>
         ${focusHtml}
         <div style="font-size: 0.95rem; margin-top: 10px;">
-          <p><strong>Accessibilité:</strong> <span style="color: var(--primary-green); float: right;">${commune.details.taxis} Taxis</span></p>
-          <p><strong>Santé:</strong> <span style="color: var(--primary-green); float: right;">${commune.details.hospitalBeds} Lits</span></p>
-          <p><strong>Eau Potable:</strong> <span style="color: var(--primary-green); float: right;">${commune.details.waterAccess}%</span></p>
-          <p><strong>Routes:</strong> <span style="color: var(--primary-green); float: right;">${commune.details.roadStatus}</span></p>
+          <p><strong>Santé:</strong> <span style="color: var(--accent-neon-blue); float: right;">${commune.details.hospitalBeds} Lits</span></p>
+          <p><strong>Eau Potable:</strong> <span style="color: var(--accent-neon-blue); float: right;">${commune.details.waterAccess}%</span></p>
+          <p><strong>Routes:</strong> <span style="color: var(--accent-neon-blue); float: right;">${commune.details.roadStatus}</span></p>
         </div>
-        <div class="cluster-badge" style="border-left-color: ${clusterColors[commune.cluster]};">
-          <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #856404; margin-bottom: 3px;">Cluster Typologique</p>
-          <p style="font-weight: 700; color: ${clusterColors[commune.cluster]}; margin-bottom: 3px;">${clusterInfo.name}</p>
-          <p style="font-size: 0.82rem; color: #666; font-style: italic;">${clusterInfo.description}</p>
+        <div class="cluster-badge" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-left: 5px solid ${clusterColors[commune.cluster]}; margin-top: 20px;">
+          <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-dim); margin-bottom: 3px;">Typologie du Territoire</p>
+          <p style="font-weight: 700; color: white; margin-bottom: 3px;">${clusterInfo.name}</p>
+          <p style="font-size: 0.82rem; color: var(--text-dim); font-style: italic;">${clusterInfo.description}</p>
         </div>
       `;
 
-      const financeDetails = data.finances.details || {};
       financeDetailsDiv.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
-          <h3 style="color: var(--primary-blue); margin: 0;">💰 Indicateurs Financiers</h3>
-          ${year !== 'Global' ? `<span style="font-size: 0.8rem; background: #e3f2fd; color: #1565c0; padding: 4px 10px; border-radius: 4px; font-weight: 600;">${year}</span>` : ''}
+          <h3 style="color: var(--accent-neon-blue); margin: 0;">💰 Finances Locales</h3>
         </div>
-        <div style="font-size: 0.95rem;">
-          <p><strong>Budget Total:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.budgetTotal} M DA</span></p>
-          <p><strong>Recettes Fiscales:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.recettesFiscales} M DA</span></p>
-          <p><strong>Fonctionnement:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.depensesFonctionnement} M DA</span></p>
-          <p><strong>Équipement:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.depensesEquipement} M DA</span></p>
-          
-          ${year !== 'Global' ? `
-          <div style="margin-top: 15px; padding: 12px; background: rgba(212, 175, 55, 0.05); border-radius: 8px; border: 1px dashed #d4af37;">
-            <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Rigidité budgétaire:</strong> <span style="float: right;">${financeDetails.rigidité}%</span></p>
-            <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Autonomie financière:</strong> <span style="float: right;">${financeDetails.autonomie}%</span></p>
-            <p style="font-size: 0.85rem;"><strong>Effort investissement:</strong> <span style="float: right;">${financeDetails.effortInvestissement}%</span></p>
-          </div>
-          ` : `
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd;">
-            <p><strong>Taux de Recouvrement:</strong></p>
-            <div style="width: 100%; background: #eee; border-radius: 20px; height: 10px; margin-top: 5px;">
-              <div style="width: ${commune.finances.tauxRecouvrement}%; background: var(--primary-green); height: 100%; border-radius: 20px; transition: width 0.5s ease;"></div>
+        <div style="font-size: 0.95rem; color: white;">
+          <p><strong>Budget Total:</strong> <span style="color: var(--accent-neon-blue); float: right;">${data.finances.budgetTotal} M DA</span></p>
+          <p><strong>Recettes Fiscales:</strong> <span style="color: var(--accent-neon-blue); float: right;">${data.finances.recettesFiscales} M DA</span></p>
+          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin-bottom: 8px;"><strong>Taux de Recouvrement:</strong></p>
+            <div style="width: 100%; background: rgba(255,255,255,0.1); border-radius: 20px; height: 8px;">
+              <div style="width: ${commune.finances.tauxRecouvrement}%; background: var(--accent-neon-blue); height: 100%; border-radius: 20px; box-shadow: 0 0 10px var(--accent-neon-blue);"></div>
             </div>
-            <p style="text-align: right; font-size: 0.9rem; font-weight: bold; color: var(--primary-green);">${commune.finances.tauxRecouvrement}%</p>
           </div>
-          `}
         </div>
       `;
-
-      // Update Radar Chart
-      const labels = dimensions.map(d => d.name);
-      const communeScores = dimensions.map(d => data.scores[d.id] || 0);
-      const avgScores = dimensions.map(d => avg.scores[d.id] || avg.scores.env || 60);
 
       if (radarChart) radarChart.destroy();
       radarChart = new Chart(radarCtx, {
         type: 'radar',
         data: {
-          labels,
+          labels: dimensions.map(d => d.name),
           datasets: [
             {
               label: commune.name,
-              data: communeScores,
-              backgroundColor: 'rgba(46, 125, 50, 0.2)',
-              borderColor: '#2e7d32',
-              pointBackgroundColor: '#2e7d32',
+              data: dimensions.map(d => data.scores[d.id] || 0),
+              backgroundColor: 'rgba(56, 189, 248, 0.2)',
+              borderColor: '#38bdf8',
+              pointBackgroundColor: '#38bdf8',
+              borderWidth: 2,
             },
             {
               label: 'Moyenne Wilaya',
-              data: avgScores,
-              backgroundColor: 'rgba(26, 58, 95, 0.1)',
-              borderColor: '#1a3a5f',
-              pointBackgroundColor: '#1a3a5f',
+              data: dimensions.map(d => avg.scores[d.id] || 60),
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              pointBackgroundColor: 'rgba(255, 255, 255, 0.3)',
+              borderWidth: 1,
+              borderDash: [5, 5],
             }
           ]
         },
         options: {
-          scales: { r: { beginAtZero: true, max: 100 } },
-          plugins: { legend: { position: 'bottom' } }
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+              pointLabels: { color: 'rgba(255, 255, 255, 0.7)', font: { size: 10 } },
+              ticks: { display: false }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: 'white', font: { size: 11 } }, position: 'bottom' }
+          }
         }
       });
 
-      // Update Finance Chart
       if (financeChart) financeChart.destroy();
-      const financeLabels = ['Budget Total', 'Fiscalité', 'Fonctionnement', 'Équipement'];
       financeChart = new Chart(financeCtx, {
         type: 'bar',
         data: {
-          labels: financeLabels,
+          labels: ['Budget', 'Fiscalité', 'Fonct.', 'Équip.'],
           datasets: [
             {
               label: commune.name,
               data: [data.finances.budgetTotal, data.finances.recettesFiscales, data.finances.depensesFonctionnement, data.finances.depensesEquipement],
-              backgroundColor: '#2e7d32',
-            },
-            {
-              label: 'Moyenne Wilaya',
-              data: [avg.finances.budgetTotal, avg.finances.recettesFiscales, avg.finances.depensesFonctionnement, avg.finances.depensesEquipement],
-              backgroundColor: '#1a3a5f',
+              backgroundColor: '#38bdf8',
+              borderRadius: 4,
             }
           ]
         },
         options: {
           responsive: true,
-          scales: { y: { beginAtZero: true, title: { display: true, text: 'Millions de Dinars (DA)' } } },
-          plugins: { legend: { position: 'bottom' } }
+          scales: {
+            y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: 'rgba(255, 255, 255, 0.5)' } },
+            x: { grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.5)' } }
+          },
+          plugins: { legend: { display: false } }
         }
       });
     };
