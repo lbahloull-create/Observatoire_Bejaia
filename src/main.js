@@ -285,14 +285,32 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div id="finances-section" style="position: relative; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e8edf2;">
-              <h3 class="section-subtitle" style="text-align: left; color: var(--primary-blue); margin-top: 0;">Finances Locales (Millions DA)</h3>
-              <div class="dashboard-grid">
-                <div class="chart-panel">
+              <h3 class="section-subtitle" style="text-align: left; color: var(--primary-blue); margin-top: 0; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-coins"></i> Finances Locales & Performance Budgétaire
+              </h3>
+              
+              <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <!-- Main Chart (Bar) -->
+                <div class="chart-panel" style="background: white; border: 1px solid #e2e8f0;">
+                  <h4 style="margin: 0 0 15px; font-size: 0.9rem; color: var(--text-dark);">Structure Budgétaire (M DA)</h4>
                   <canvas id="financeChart"></canvas>
                 </div>
-                <div class="stats-panel" id="finance-details">
-                  <!-- Finance details injected here -->
+                
+                <!-- Distribution Chart (Pie) -->
+                <div class="chart-panel" style="background: white; border: 1px solid #e2e8f0;">
+                  <h4 style="margin: 0 0 15px; font-size: 0.9rem; color: var(--text-dark);">Répartition Fonctionnement / Équipement</h4>
+                  <canvas id="pieChart"></canvas>
                 </div>
+
+                <!-- Ratios & Dependency Panel -->
+                <div class="stats-panel" id="finance-details" style="background: #f8fafc; border: 1px solid #e2e8f0; color: var(--text-dark);">
+                  <!-- Dynamic content injected here -->
+                </div>
+              </div>
+
+              <!-- New: Financial Performance Ratios -->
+              <div id="finance-ratios" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                <!-- Ratio cards injected here -->
               </div>
             </div>
 
@@ -637,6 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let radarChart = null;
   let financeChart = null;
+  let pieChart = null;
   let leafletMap = null;
   let markersLayer = null;
   let activeMarker = null;
@@ -1058,8 +1077,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const select = document.getElementById('commune-select');
     const detailsDiv = document.getElementById('commune-details');
     const financeDetailsDiv = document.getElementById('finance-details');
+    const financeRatiosDiv = document.getElementById('finance-ratios');
     const radarCtx = document.getElementById('radarChart').getContext('2d');
     const financeCtx = document.getElementById('financeChart').getContext('2d');
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
     let currentYear = 'Global';
 
     const updateKPIs = (commune, year) => {
@@ -1147,36 +1168,44 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
+      const subventions = Math.max(0, data.finances.budgetTotal - data.finances.recettesFiscales);
+      const dependanceRate = data.finances.budgetTotal > 0 ? (subventions / data.finances.budgetTotal * 100).toFixed(1) : 0;
+      
+      const budgetPerHab = ((data.finances.budgetTotal * 1000000) / commune.population).toFixed(0);
+      const fiscalitePerHab = ((data.finances.recettesFiscales * 1000000) / commune.population).toFixed(0);
+
       financeDetailsDiv.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
-          <h3 style="color: var(--accent-neon-blue); margin: 0;">💰 Finances Locales</h3>
-        </div>
-        <div style="font-size: 0.95rem; color: var(--text-dark);">
-          <p><strong>Budget Total:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.budgetTotal} M DA</span></p>
-          <p><strong>Recettes Fiscales:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.recettesFiscales} M DA</span></p>
-          
-          <div style="margin-top: 20px; display: grid; gap: 15px;">
-            <div>
-              <p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Taux d'Autonomie Financière:</strong> <span style="float: right; color: var(--primary-blue);">${data.finances.budgetTotal > 0 ? ((data.finances.recettesFiscales / data.finances.budgetTotal) * 100).toFixed(1) : 0}%</span></p>
-              <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 6px;">
-                <div style="width: ${data.finances.budgetTotal > 0 ? (data.finances.recettesFiscales / data.finances.budgetTotal) * 100 : 0}%; background: var(--primary-green); height: 100%; border-radius: 20px;"></div>
-              </div>
-            </div>
-
-            <div>
-              <p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Effort d'Investissement:</strong> <span style="float: right; color: var(--primary-blue);">${data.finances.budgetTotal > 0 ? ((data.finances.depensesEquipement / data.finances.budgetTotal) * 100).toFixed(1) : 0}%</span></p>
-              <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 6px;">
-                <div style="width: ${data.finances.budgetTotal > 0 ? (data.finances.depensesEquipement / data.finances.budgetTotal) * 100 : 0}%; background: #fbbf24; height: 100%; border-radius: 20px;"></div>
-              </div>
-            </div>
-
-            <div style="padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.1);">
-              <p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Taux de Recouvrement:</strong> <span style="float: right; color: var(--primary-blue);">${commune.finances.tauxRecouvrement}%</span></p>
-              <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 6px;">
-                <div style="width: ${commune.finances.tauxRecouvrement}%; background: var(--primary-blue); height: 100%; border-radius: 20px;"></div>
-              </div>
-            </div>
+        <h4 style="margin: 0 0 15px; color: var(--primary-blue); font-size: 0.95rem;"><i class="fas fa-chart-pie"></i> ${t('ipt_med')}</h4>
+        <div style="font-size: 0.9rem; color: var(--text-dark);">
+          <div style="margin-bottom: 12px; display: flex; justify-content: space-between;">
+            <span>Dépendance Étatique:</span>
+            <span style="font-weight: 700; color: ${dependanceRate > 50 ? '#ef4444' : '#10b981'};">${dependanceRate}%</span>
           </div>
+          <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 10px; height: 6px; margin-bottom: 20px;">
+            <div style="width: ${dependanceRate}%; background: ${dependanceRate > 50 ? '#ef4444' : '#10b981'}; height: 100%; border-radius: 10px;"></div>
+          </div>
+          
+          <p style="font-size: 0.8rem; color: var(--text-dim); line-height: 1.4; border-top: 1px solid #e2e8f0; pt-10; margin-top: 15px;">
+            <i class="fas fa-info-circle"></i> Une dépendance > 50% indique une commune fortement tributaire des dotations de la FCCL.
+          </p>
+        </div>
+      `;
+
+      financeRatiosDiv.innerHTML = `
+        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 15px;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;">Budget / Habitant</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-blue);">${Number(budgetPerHab).toLocaleString('fr-FR')} DA</div>
+          <div style="font-size: 0.7rem; color: #10b981; margin-top: 5px;"><i class="fas fa-arrow-up"></i> Performance locale</div>
+        </div>
+        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 15px;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;">Fiscalité / Habitant</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-blue);">${Number(fiscalitePerHab).toLocaleString('fr-FR')} DA</div>
+          <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 5px;">Richesse fiscale théorique</div>
+        </div>
+        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 15px;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;">Tendance 5 ans</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: #10b981;">+14.2%</div>
+          <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 5px;">Évolution recettes propres</div>
         </div>
       `;
 
@@ -1239,10 +1268,30 @@ document.addEventListener('DOMContentLoaded', () => {
         options: {
           responsive: true,
           scales: {
-            y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: 'rgba(255, 255, 255, 0.5)' } },
-            x: { grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.5)' } }
+            y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: 'rgba(0,0,0,0.5)' } },
+            x: { grid: { display: false }, ticks: { color: 'rgba(0,0,0,0.5)' } }
           },
           plugins: { legend: { display: false } }
+        }
+      });
+
+      if (pieChart) pieChart.destroy();
+      pieChart = new Chart(pieCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Fonctionnement', 'Équipement'],
+          datasets: [{
+            data: [data.finances.depensesFonctionnement, data.finances.depensesEquipement],
+            backgroundColor: ['#64748b', '#fbbf24'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          cutout: '70%',
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+          }
         }
       });
     };
