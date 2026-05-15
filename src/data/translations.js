@@ -19,7 +19,7 @@ export const translations = {
         dashboard_subtitle: "Comparez la performance de votre commune par rapport à la moyenne de la Wilaya.",
         simulator_title: "Simulateur de Poids Décisionnel",
         simulator_desc: "Ajustez les coefficients pour calculer l'Indice de Performance Territoriale (IPT).",
-        ipt_label: "IPT Calculé",
+        ipt_label: "Indice de Performance Territoriale",
         export_csv: "Exporter (CSV)",
         cite_work: "Citer ce travail",
         imrad_title: "Protocole Scientifique",
@@ -41,7 +41,7 @@ export const translations = {
         ipt_med: "Performance Équilibrée (Zone stable)",
         ipt_low: "Performance Déficitaire (Zone d'intervention prioritaire)",
         sim_help_title: "Comment ça marche ?",
-        sim_help_text: "L'IPT est un score de 0 à 100. Chaque curseur représente l'importance que vous donnez à un domaine. Si vous priorisez l'Éducation, augmentez son poids. L'algorithme calcule alors un score personnalisé reflétant vos priorités politiques ou scientifiques."
+        sim_help_text: "L'indice est un score de 0 à 100. Chaque curseur représente l'importance que vous donnez à un domaine. Si vous priorisez l'Éducation, augmentez son poids. L'algorithme calcule alors un score personnalisé reflétant vos priorités politiques ou scientifiques."
     },
     en: {
         app_title: "Béjaïa Territorial Observatory",
@@ -63,7 +63,7 @@ export const translations = {
         dashboard_subtitle: "Compare your municipality's performance against the regional average.",
         simulator_title: "Decision Weighting Simulator",
         simulator_desc: "Adjust coefficients to calculate the Territorial Performance Index (TPI).",
-        ipt_label: "Calculated TPI",
+        ipt_label: "Territorial Performance Index",
         export_csv: "Export (CSV)",
         cite_work: "Cite this Work",
         imrad_title: "Scientific Protocol",
@@ -85,7 +85,7 @@ export const translations = {
         ipt_med: "Balanced Performance (Stable Zone)",
         ipt_low: "Deficient Performance (Priority Intervention Zone)",
         sim_help_title: "How does it work?",
-        sim_help_text: "The TPI is a score from 0 to 100. Each slider represents the importance you assign to a field. If you prioritize Education, increase its weight. The algorithm then calculates a custom score reflecting your political or scientific priorities."
+        sim_help_text: "The Index is a score from 0 to 100. Each slider represents the importance you assign to a field. If you prioritize Education, increase its weight. The algorithm then calculates a custom score reflecting your political or scientific priorities."
     },
     ar: {
         app_title: "مرصد إقليم ولاية بجاية",
@@ -107,7 +107,7 @@ export const translations = {
         dashboard_subtitle: "قارن أداء بلديتك بمتوسط الولاية.",
         simulator_title: "محاكي أوزان القرار",
         simulator_desc: "اضبط المعاملات لحساب مؤشر الأداء الإقليمي.",
-        ipt_label: "المؤشر المحسوب",
+        ipt_label: "مؤشر الأداء الإقليمي",
         export_csv: "تصدير (CSV)",
         cite_work: "الاستشهاد بهذا العمل",
         imrad_title: "البروتوكول العلمي",
@@ -129,6 +129,6 @@ export const translations = {
         ipt_med: "أداء متوازن (منطقة مستقرة)",
         ipt_low: "أداء ناقص (منطقة تدخل ذي أولوية)",
         sim_help_title: "كيف يعمل؟",
-        sim_help_text: "مؤشر الأداء الإقليمي هو درجة من 0 إلى 100. يمثل كل شريط تمرير الأهمية التي توليها لمجال ما. إذا كنت تعطي الأولوية للتعليم، فقم بزيادة وزنه. تقوم الخوارزمية بعد ذلك بحساب درجة مخصصة تعكس أولوياتك السياسية أو العلمية."
+        sim_help_text: "المؤشر هو درجة من 0 إلى 100. يمثل كل شريط تمرير الأهمية التي توليها لمجال ما. إذا كنت تعطي الأولوية للتعليم، فقم بزيادة وزنه. تقوم الخوارزمية بعد ذلك بحساب درجة مخصصة تعكس أولوياتك السياسية أو العلمية."
     }
 };
