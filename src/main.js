@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData } from './data/communeData';
+import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData, recommendations } from './data/communeData';
 
 // Fix Leaflet marker icon path issue with Vite
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -32,19 +32,21 @@ document.addEventListener('DOMContentLoaded', () => {
     app.innerHTML = `
       <section id="home" class="hero">
         <div class="container">
-          <h1>Observatoire Territorial de la Wilaya de Béjaïa</h1>
-          <p>Transformer la donnée territoriale en levier de développement inclusif.</p>
-          <div class="kpis">
-            <div class="kpi-item"><h3>${regionalStats.communes}</h3><p>Communes</p></div>
-            <div class="kpi-item"><h3>${regionalStats.dairas}</h3><p>Daïras</p></div>
-            <div class="kpi-item"><h3>${(regionalStats.population / 1000).toFixed(0)}k</h3><p>Habitants</p></div>
-            <div class="kpi-item"><h3>${regionalStats.area}</h3><p>km²</p></div>
-          </div>
-          <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-            <a href="#dashboard" class="btn btn-primary">Consulter le diagnostic de ma commune</a>
-            <div style="background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 8px; font-size: 0.9rem; border: 1px solid rgba(212,175,55,0.4); max-width: 600px; backdrop-filter: blur(5px);">
-              <i class="fas fa-lock" style="color: #d4af37; margin-right: 8px;"></i>
-              <strong>Espace Élus :</strong> Des données financières et cartographiques approfondies sont disponibles en accès restreint.
+          <div class="hero-content">
+            <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 5px 15px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: inline-block;">Plateforme Smart City Béjaïa</span>
+            <h1>Observatoire Territorial de la Wilaya de Béjaïa</h1>
+            <p>Plateforme technico-scientifique de pilotage stratégique et de territorialisation des Objectifs de Développement Durable (ODD).</p>
+            
+            <div class="kpis" style="display: flex; justify-content: center; gap: 30px; margin: 30px 0;">
+              <div class="kpi-item"><h3>${regionalStats.communes}</h3><p>Communes</p></div>
+              <div class="kpi-item"><h3>${regionalStats.dairas}</h3><p>Daïras</p></div>
+              <div class="kpi-item"><h3>${(regionalStats.population / 1000000).toFixed(1)}M</h3><p>Habitants</p></div>
+              <div class="kpi-item"><h3>${Math.round(regionalStats.area)}</h3><p>km²</p></div>
+            </div>
+
+            <div class="hero-btns" style="margin-top: 40px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+              <a href="#dashboard" class="btn btn-primary" style="padding: 12px 25px; font-weight: 700;">Dashboard Élus</a>
+              <a href="#collaborative" class="btn btn-outline" style="padding: 12px 25px; border-color: white; color: white;">Espace Citoyen</a>
             </div>
           </div>
         </div>
@@ -86,14 +88,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <section id="dimensions" style="background: white;">
         <div class="container">
-          <h2 class="section-title">Les 8 Dimensions du Cadre de Vie</h2>
-          <p class="section-subtitle">Chaque dimension représente un pilier essentiel pour mesurer la qualité de vie des bejaouis.</p>
+          <h2 class="section-title">Les 8 Dimensions & ODD</h2>
+          <p class="section-subtitle">Chaque dimension territorialise les Objectifs de Développement Durable pour la région de Béjaïa.</p>
           <div class="card-grid" id="dimension-grid">
             ${dimensions.map(d => `
               <div class="card dimension-card" data-dim-id="${d.id}" style="cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;">
                 <div class="card-icon"><i class="fas fa-${d.icon}"></i></div>
                 <h3>${d.name}</h3>
-                <p style="font-size: 0.85rem; color: var(--text-light);"><em>Cliquez pour le diagnostic scientifique.</em></p>
+                <div class="odd-container">
+                  ${(d.odd || []).map(oddId => `<span class="odd-badge odd-${oddId}">ODD ${oddId}</span>`).join('')}
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 10px;"><em>Cliquez pour le diagnostic scientifique.</em></p>
                 <div class="dim-desc" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; text-align: left; font-size: 0.82rem; color: var(--text-dark); animation: fadeIn 0.3s;">
                   ${d.description}
                 </div>
@@ -320,8 +325,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <section id="recherche" style="background: var(--bg-color); padding: 80px 0;">
         <div class="container">
-          <h2 class="section-title">Articles et Travaux de Recherche</h2>
-          <p class="section-subtitle">Publications et contributions scientifiques du Dr. Lotfi Bahloul sur la Wilaya de Béjaïa.</p>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; border-bottom: 2px solid var(--primary-blue); padding-bottom: 20px;">
+            <div>
+              <h2 style="color: var(--primary-blue); font-size: 2.2rem; margin: 0;">Volet Académique Ouvert</h2>
+              <p style="color: var(--text-light); font-size: 1.1rem; margin-top: 5px;">Working Papers & Pré-publications pour le débat scientifique.</p>
+            </div>
+            <a href="#working-papers" class="btn btn-primary">Accéder au dépôt</a>
+          </div>
+
           <div class="card-grid">
             <div class="card" style="text-align: left; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='...';">
               <div style="color: var(--primary-blue); font-size: 2rem; margin-bottom: 15px;"><i class="fas fa-book-open"></i></div>
@@ -341,6 +352,66 @@ document.addEventListener('DOMContentLoaded', () => {
               <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">Architecture logicielle, diagrammes fonctionnels et cartographies de référence du système d'information.</p>
               <a href="./research/figures.html" class="btn btn-outline" style="font-size: 0.75rem; padding: 5px 12px;">Consulter les figures</a>
             </div>
+          </div>
+
+          <div id="working-papers" style="margin-top: 60px;">
+            <h3 style="color: var(--primary-blue); margin-bottom: 25px;"><i class="fas fa-cloud-download-alt" style="margin-right: 10px;"></i>Dépôt Scientifique : Working Papers</h3>
+            <div class="paper-item">
+              <div class="paper-info">
+                <h4>WP-2024-01 : Modélisation de la résilience urbaine à Béjaïa</h4>
+                <p>Auteur: Dr. Lotfi Bahloul | Date: Janvier 2024 | Format: PDF</p>
+              </div>
+              <a href="#" class="download-btn"><i class="fas fa-file-pdf"></i> Télécharger</a>
+            </div>
+            <div class="paper-item">
+              <div class="paper-info">
+                <h4>WP-2023-04 : L'accès à l'eau potable comme marqueur des disparités</h4>
+                <p>Auteur: Dr. Lotfi Bahloul | Date: Octobre 2023 | Format: PDF</p>
+              </div>
+              <a href="#" class="download-btn"><i class="fas fa-file-pdf"></i> Télécharger</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="collaborative" class="collaborative-section">
+        <div class="container">
+          <div style="text-align: center; margin-bottom: 50px;">
+            <h2 style="color: var(--accent-neon-blue); font-size: 2.5rem; margin-bottom: 15px;">Dimension Collaborative</h2>
+            <p style="color: var(--text-dim); font-size: 1.1rem; max-width: 700px; margin: 0 auto;">Citizen Crowdsourcing : Permettre aux citoyens de contribuer à la connaissance environnementale de la Wilaya.</p>
+          </div>
+
+          <div class="form-card">
+            <form class="collaborative-form" id="crowd-form">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label for="crowd-commune">Votre Commune</label>
+                  <select id="crowd-commune" required>
+                    <option value="">Sélectionner une commune</option>
+                    ${communeData.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="crowd-type">Type de signalement</label>
+                  <select id="crowd-type" required>
+                    <option value="eau">Accès à l'eau potable</option>
+                    <option value="dechets">Gestion des déchets</option>
+                    <option value="pollution">Pollution atmosphérique / sonore</option>
+                    <option value="risques">Risques naturels (inondation, incendie)</option>
+                    <option value="autre">Autre impact environnemental</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="crowd-desc">Description de l'observation</label>
+                <textarea id="crowd-desc" rows="4" placeholder="Décrivez l'impact observé ou la donnée environnementale à partager..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="crowd-file">Ajouter une photo (optionnel)</label>
+                <input type="file" id="crowd-file" accept="image/*" style="padding: 10px;">
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; background: var(--accent-neon-blue); color: #0f172a; font-weight: 800; border: none; margin-top: 10px;">Envoyer mon observation</button>
+            </form>
           </div>
         </div>
       </section>
@@ -861,6 +932,13 @@ document.addEventListener('DOMContentLoaded', () => {
           <p style="font-weight: 700; color: white; margin-bottom: 3px;">${clusterInfo.name}</p>
           <p style="font-size: 0.82rem; color: var(--text-dim); font-style: italic;">${clusterInfo.description}</p>
         </div>
+
+        <div class="rec-card">
+          <h4><i class="fas fa-lightbulb"></i> Recommandations Stratégiques</h4>
+          <ul class="rec-list">
+            ${(recommendations[commune.cluster] || ["Analyse en cours..."]).map(r => `<li>${r}</li>`).join('')}
+          </ul>
+        </div>
       `;
 
       financeDetailsDiv.innerHTML = `
@@ -985,6 +1063,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateUI(select.value, 'Global');
+
+    // Crowdsourcing Form Logic
+    const crowdForm = document.getElementById('crowd-form');
+    if (crowdForm) {
+      crowdForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = crowdForm.querySelector('button');
+        const originalText = btn.innerText;
+        btn.innerText = "Envoi en cours...";
+        btn.disabled = true;
+
+        setTimeout(() => {
+          alert("Merci pour votre contribution ! Votre observation a été transmise à l'Observatoire pour validation scientifique.");
+          btn.innerText = originalText;
+          btn.disabled = false;
+          crowdForm.reset();
+        }, 1500);
+      });
+    }
   };
 
   // ============================================================

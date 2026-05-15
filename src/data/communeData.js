@@ -10,49 +10,57 @@ export const dimensions = [
         "id": "env",
         "name": "Environnement physique",
         "icon": "leaf",
-        "description": "Évaluation multicritère de la qualité environnementale combinant l'indice de pollution, la gestion des déchets solides et la préservation des écosystèmes fragiles de la Wilaya."
+        "description": "Évaluation multicritère de la qualité environnementale combinant l'indice de pollution, la gestion des déchets solides et la préservation des écosystèmes fragiles de la Wilaya.",
+        "odd": [13, 15]
     },
     {
         "id": "service",
         "name": "Services publics",
         "icon": "concierge-bell",
-        "description": "Indicateur d'accessibilité physique et fonctionnelle aux réseaux (AEP, Électricité, Gaz) et aux services de proximité, révélateur des disparités d'équipement inter-communales."
+        "description": "Indicateur d'accessibilité physique et fonctionnelle aux réseaux (AEP, Électricité, Gaz) et aux services de proximité, révélateur des disparités d'équipement inter-communales.",
+        "odd": [6, 7]
     },
     {
         "id": "safety",
         "name": "Sécurité",
         "icon": "shield-alt",
-        "description": "Variable croisée analysant la sinistralité routière (axes RN12/RN26) et la densité des services de protection civile, essentielle à la résilience territoriale."
+        "description": "Variable croisée analysant la sinistralité routière (axes RN12/RN26) et la densité des services de protection civile, essentielle à la résilience territoriale.",
+        "odd": [11]
     },
     {
         "id": "health",
         "name": "Santé",
         "icon": "heartbeat",
-        "description": "Diagnostic de l'offre de soins (lits d'hospitalisation, points de garde) rapporté à la population, soulignant les zones d'ombre médicales en milieu rural."
+        "description": "Diagnostic de l'offre de soins (lits d'hospitalisation, points de garde) rapporté à la population, soulignant les zones d'ombre médicales en milieu rural.",
+        "odd": [3]
     },
     {
         "id": "edu",
         "name": "Éducation",
         "icon": "graduation-cap",
-        "description": "Indice de performance scolaire (baccalauréat/BEM) corrélé à la qualité des infrastructures et aux ressources pédagogiques disponibles par bassin de vie."
+        "description": "Indice de performance scolaire (baccalauréat/BEM) corrélé à la qualité des infrastructures et aux ressources pédagogiques disponibles par bassin de vie.",
+        "odd": [4]
     },
     {
         "id": "culture",
         "name": "Culture",
         "icon": "masks-theater",
-        "description": "Cartographie de la vitalité associative et de l'accès au patrimoine, facteur clé de cohésion sociale et de rayonnement culturel local."
+        "description": "Cartographie de la vitalité associative et de l'accès au patrimoine, facteur clé de cohésion sociale et de rayonnement culturel local.",
+        "odd": [11]
     },
     {
         "id": "social",
         "name": "Participation sociale",
         "icon": "users",
-        "description": "Mesure du capital social et de l'implication citoyenne dans la gestion des affaires locales, pilier de la gouvernance démocratique territoriale."
+        "description": "Mesure du capital social et de l'implication citoyenne dans la gestion des affaires locales, pilier de la gouvernance démocratique territoriale.",
+        "odd": [16]
     },
     {
         "id": "econ",
         "name": "Dynamique économique",
         "icon": "chart-line",
-        "description": "Modélisation de l'attractivité fiscale (recettes propres) et de la structure de l'emploi, différenciant les pôles industriels des zones agricoles."
+        "description": "Modélisation de l'attractivité fiscale (recettes propres) et de la structure de l'emploi, différenciant les pôles industriels des zones agricoles.",
+        "odd": [8, 9]
     }
 ];
 
@@ -8639,9 +8647,18 @@ export const clusters = [
     {
         "id": 6,
         "name": "Uniques et spécifiques",
-        "description": "Comprend des communes comme Amizour et Draa El Caïd, caractérisées par leurs profils uniques et spécifiques."
+        "description": "Communes possédant des caractéristiques singulières (frontalières, zones industrielles isolées ou enclaves géographiques) nécessitant des politiques d'aménagement sur-mesure et une attention particulière aux risques spécifiques."
     }
 ];
+
+export const recommendations = {
+    1: ["Renforcement de l'attractivité tertiaire métropolitaine.", "Optimisation de la gestion des flux de transport pendulaires.", "Développement d'un pôle d'innovation numérique regional."],
+    2: ["Diversification économique pour sortir du 'tout-industrie'.", "Mise à niveau environnementale des zones d'activités.", "Soutien à la formation professionnelle technique."],
+    3: ["Désenclavement numérique et routier prioritaire.", "Soutien à l'agriculture de montagne et à l'agro-industrie.", "Déploiement de services publics mobiles."],
+    4: ["Amélioration radicale de l'AEP et de l'assainissement.", "Programmes spécifiques de lutte contre l'abandon scolaire.", "Incentives pour l'installation de personnel de santé."],
+    5: ["Consolidation des services de proximité urbains.", "Réhabilitation des quartiers d'habitat ancien.", "Développement de zones franches urbaines."],
+    6: ["Diagnostics de vulnérabilité spécifiques.", "Projets d'aménagement 'Couture' adaptés au relief.", "Renforcement de la résilience aux risques majeurs."]
+};
 
 
 export const dairaData = [
