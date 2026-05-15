@@ -996,3 +996,128 @@ footer {
   left: 0;
   color: var(--accent-neon-blue);
 }
+
+/* ============================================================
+   SCIENTIFIC PORTAL & SOFTWARE EXTENSIONS (DGRSDT / INAPI)
+   ============================================================ */
+
+/* IMRAD Section Styles */
+.imrad-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.imrad-card {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  border-top: 5px solid var(--primary-blue);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.imrad-card h4 {
+  color: var(--primary-blue);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.imrad-card p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+/* Citation Engine */
+.citation-box {
+  background: #f8f9fa;
+  border: 1px dashed #cbd5e1;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+  position: relative;
+}
+
+.citation-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  color: #334155;
+  word-break: break-all;
+}
+
+.copy-citation {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+/* Decision Simulator (Software logic) */
+.simulator-container {
+  background: var(--bg-dark-deep);
+  color: white;
+  padding: 40px;
+  border-radius: var(--radius);
+  margin-top: 50px;
+  border: 1px solid var(--accent-neon-blue);
+}
+
+.weight-slider-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.weight-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weight-slider label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.weight-slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent-neon-blue);
+}
+
+.simulator-result {
+  text-align: center;
+  padding: 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+}
+
+/* Data Export Button */
+.export-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.export-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}

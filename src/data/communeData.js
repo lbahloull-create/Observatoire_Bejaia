@@ -5,6 +5,22 @@ export const regionalStats = {
     "area": 3223.49
 };
 
+export const methodology = {
+    "imrad": {
+        "introduction": "Cette recherche porte sur la modélisation des disparités socio-économiques dans la Wilaya de Béjaïa. La problématique centrale interroge l'impact de l'enclavement topographique et de la distribution des équipements publics sur la qualité de vie des citoyens.",
+        "methods": "L'approche repose sur l'Analyse Spatiale Multicritère (ASMC). Huit dimensions ont été identifiées, normalisées via l'échelle de Min-Max [0, 100], et agrégées selon une pondération itérative validée par un panel d'experts territoriaux.",
+        "results": "Les résultats mettent en évidence un gradient de développement littoral-intérieur marqué, avec des pôles de résilience identifiés dans les zones d'activités industrielles de la vallée de la Soummam.",
+        "discussion": "La discussion souligne la nécessité d'une péréquation budgétaire ciblée vers les communes du Cluster 4 (zones rurales enclavées) pour atteindre les objectifs de cohésion territoriale de l'horizon 2030."
+    },
+    "citation": {
+        "author": "Bahloul, L.",
+        "year": "2024",
+        "title": "Observatoire Territorial de la Wilaya de Béjaïa : Système d'Information Géographique et d'Aide à la Décision",
+        "journal": "Portail Scientifique de l'Université de Béjaïa",
+        "doi": "10.XXXX/bejaia.observatoire.2024.v1"
+    }
+};
+
 export const dimensions = [
     {
         "id": "env",

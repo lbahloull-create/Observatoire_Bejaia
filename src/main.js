@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData, recommendations } from './data/communeData';
+import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData, recommendations, methodology } from './data/communeData';
 
 // Fix Leaflet marker icon path issue with Vite
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   ${[...communeData].sort((a, b) => a.name.localeCompare(b.name)).map(c => `<option value="${c.id}" data-daira="${c.daira}">${c.name}</option>`).join('')}
                 </select>
               </div>
+              <button id="export-csv" class="export-btn"><i class="fas fa-file-csv"></i> Exporter (CSV)</button>
             </div>
 
             <div class="dashboard-grid">
@@ -162,6 +163,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="stats-panel" id="finance-details">
                   <!-- Finance details injected here -->
                 </div>
+              </div>
+            </div>
+
+            <div id="simulator-section" class="simulator-container">
+              <h3 style="color: var(--accent-neon-blue); margin-bottom: 10px;"><i class="fas fa-microchip"></i> Simulateur de Poids Décisionnel (Outil INAPI v1.0)</h3>
+              <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px;">Ajustez les coefficients de pondération pour simuler différents scénarios de développement et calculer l'Indice de Performance Territoriale (IPT) personnalisé.</p>
+              
+              <div class="weight-slider-group">
+                ${dimensions.map(d => `
+                  <div class="weight-slider">
+                    <label>${d.name}</label>
+                    <input type="range" class="weight-input" data-dim="${d.id}" min="0" max="10" value="5">
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="simulator-result">
+                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);">Indice de Performance Territoriale (IPT) Calculé</p>
+                <div id="ipt-value" style="font-size: 3rem; font-weight: 800; color: var(--accent-neon-blue);">--</div>
+                <p id="ipt-comment" style="font-size: 0.85rem; font-style: italic; color: var(--text-dim); margin-top: 10px;"></p>
               </div>
             </div>
 
@@ -351,6 +372,39 @@ document.addEventListener('DOMContentLoaded', () => {
               <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: #6a994e;">Schémas & Figures</h3>
               <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; line-height: 1.5;">Architecture logicielle, diagrammes fonctionnels et cartographies de référence du système d'information.</p>
               <a href="./research/figures.html" class="btn btn-outline" style="font-size: 0.75rem; padding: 5px 12px;">Consulter les figures</a>
+            </div>
+          </div>
+
+          <div id="imrad-section" style="margin-top: 60px;">
+            <h3 style="color: var(--primary-blue); border-left: 5px solid var(--primary-blue); padding-left: 15px; margin-bottom: 25px;">Protocole Scientifique (Structure IMRAD)</h3>
+            <div class="imrad-container">
+              <div class="imrad-card">
+                <h4>Introduction</h4>
+                <p>${methodology.imrad.introduction}</p>
+              </div>
+              <div class="imrad-card">
+                <h4>Méthodologie</h4>
+                <p>${methodology.imrad.methods}</p>
+              </div>
+              <div class="imrad-card">
+                <h4>Résultats</h4>
+                <p>${methodology.imrad.results}</p>
+              </div>
+              <div class="imrad-card">
+                <h4>Discussion</h4>
+                <p>${methodology.imrad.discussion}</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="citation-section" style="margin-top: 60px;">
+            <h3 style="color: var(--primary-blue); margin-bottom: 15px;"><i class="fas fa-quote-right" style="margin-right: 10px;"></i>Citer ce travail</h3>
+            <p style="font-size: 0.9rem; color: var(--text-light);">Utilisez le format suivant pour vos références académiques :</p>
+            <div class="citation-box">
+              <button class="copy-citation" onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); alert('Citation copiée !')">Copier</button>
+              <div class="citation-text">
+                ${methodology.citation.author} (${methodology.citation.year}). ${methodology.citation.title}. ${methodology.citation.journal}. DOI: ${methodology.citation.doi}
+              </div>
             </div>
           </div>
 
@@ -1024,7 +1078,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     };
 
-    select.addEventListener('change', (e) => updateUI(e.target.value, currentYear));
+    select.addEventListener('change', (e) => {
+      updateUI(e.target.value, currentYear);
+      calculateIPT();
+    });
 
     const dairaSelect = document.getElementById('daira-select');
     if (dairaSelect) {
@@ -1063,6 +1120,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateUI(select.value, 'Global');
+    calculateIPT();
+
+    // Decision Simulator Logic
+    const calculateIPT = () => {
+      const commune = communeData.find(c => c.id == select.value);
+      const inputs = document.querySelectorAll('.weight-input');
+      let totalWeightedScore = 0;
+      let totalWeights = 0;
+
+      inputs.forEach(input => {
+        const dimId = input.dataset.dim;
+        const weight = parseInt(input.value);
+        const score = commune.scores[dimId] || 0;
+        totalWeightedScore += (score * weight);
+        totalWeights += weight;
+      });
+
+      const ipt = totalWeights > 0 ? (totalWeightedScore / totalWeights).toFixed(1) : 0;
+      const iptDisplay = document.getElementById('ipt-value');
+      if (iptDisplay) {
+        iptDisplay.innerText = ipt;
+        const comment = document.getElementById('ipt-comment');
+        if (ipt > 75) comment.innerText = "Performance Excédentaire (Zone Résiliente)";
+        else if (ipt > 50) comment.innerText = "Performance Équilibrée (Zone stable)";
+        else comment.innerText = "Performance Déficitaire (Zone d'intervention prioritaire)";
+      }
+    };
+
+    document.querySelectorAll('.weight-input').forEach(input => {
+      input.addEventListener('input', calculateIPT);
+    });
+
+    // Data Export Logic
+    const exportBtn = document.getElementById('export-csv');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        const commune = communeData.find(c => c.id == select.value);
+        let csv = "Indicateur,Valeur\n";
+        csv += `Commune,${commune.name}\n`;
+        csv += `Daira,${commune.daira}\n`;
+        csv += `Population,${commune.population}\n`;
+        dimensions.forEach(d => {
+          csv += `${d.name},${commune.scores[d.id] || 0}\n`;
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', `data_${commune.name.replace(/ /g, '_')}.csv`);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+    }
 
     // Crowdsourcing Form Logic
     const crowdForm = document.getElementById('crowd-form');
