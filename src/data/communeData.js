@@ -1,8 +1,8 @@
 export const regionalStats = {
     "communes": 52,
     "dairas": 19,
-    "population": 950000,
-    "area": 3268
+    "population": 1002050,
+    "area": 3223.49
 };
 
 export const dimensions = [
@@ -118,6 +118,7 @@ export const communeData = [
     {
         "id": 1,
         "name": "Béjaïa",
+        "population": 195447,
         "daira": "Béjaïa",
         "cluster": 1,
         "scores": {
@@ -280,6 +281,7 @@ export const communeData = [
     {
         "id": 2,
         "name": "Oued Ghir",
+        "population": 21247,
         "daira": "Béjaïa",
         "cluster": 5,
         "scores": {
@@ -442,6 +444,7 @@ export const communeData = [
     {
         "id": 3,
         "name": "Amizour",
+        "population": 41244,
         "daira": "Amizour",
         "cluster": 6,
         "scores": {
@@ -609,6 +612,7 @@ export const communeData = [
     {
         "id": 4,
         "name": "Beni Djellil",
+        "population": 8560,
         "daira": "Amizour",
         "cluster": 3,
         "scores": {
@@ -771,6 +775,7 @@ export const communeData = [
     {
         "id": 5,
         "name": "Semaoun",
+        "population": 14961,
         "daira": "Amizour",
         "cluster": 3,
         "scores": {
@@ -933,6 +938,7 @@ export const communeData = [
     {
         "id": 6,
         "name": "Ferraoun",
+        "population": 17006,
         "daira": "Amizour",
         "cluster": 3,
         "scores": {
@@ -1095,6 +1101,7 @@ export const communeData = [
     {
         "id": 7,
         "name": "Akbou",
+        "population": 58505,
         "daira": "Akbou",
         "cluster": 1,
         "scores": {
@@ -1257,6 +1264,7 @@ export const communeData = [
     {
         "id": 8,
         "name": "Chellata",
+        "population": 10730,
         "daira": "Akbou",
         "cluster": 3,
         "scores": {
@@ -1419,6 +1427,7 @@ export const communeData = [
     {
         "id": 9,
         "name": "Ighram",
+        "population": 13596,
         "daira": "Akbou",
         "cluster": 2,
         "scores": {
@@ -1581,6 +1590,7 @@ export const communeData = [
     {
         "id": 10,
         "name": "Tamokra",
+        "population": 4408,
         "daira": "Akbou",
         "cluster": 3,
         "scores": {
@@ -1743,6 +1753,7 @@ export const communeData = [
     {
         "id": 11,
         "name": "Adekar",
+        "population": 14349,
         "daira": "Adekar",
         "cluster": 3,
         "scores": {
@@ -1905,6 +1916,7 @@ export const communeData = [
     {
         "id": 12,
         "name": "Taourirt Ighil",
+        "population": 7304,
         "daira": "Adekar",
         "cluster": 3,
         "scores": {
@@ -2067,6 +2079,7 @@ export const communeData = [
     {
         "id": 13,
         "name": "Beni Ksila",
+        "population": 4812,
         "daira": "Adekar",
         "cluster": 6,
         "scores": {
@@ -2229,6 +2242,7 @@ export const communeData = [
     {
         "id": 14,
         "name": "Sidi Aïch",
+        "population": 15128,
         "daira": "Sidi-Aïch",
         "cluster": 2,
         "scores": {
@@ -2396,6 +2410,7 @@ export const communeData = [
     {
         "id": 15,
         "name": "Leflaye",
+        "population": 7065,
         "daira": "Sidi-Aïch",
         "cluster": 2,
         "scores": {
@@ -2558,6 +2573,7 @@ export const communeData = [
     {
         "id": 16,
         "name": "Tinabdher",
+        "population": 6390,
         "daira": "Sidi-Aïch",
         "cluster": 4,
         "scores": {
@@ -2720,6 +2736,7 @@ export const communeData = [
     {
         "id": 17,
         "name": "Tifra",
+        "population": 9225,
         "daira": "Sidi-Aïch",
         "cluster": 3,
         "scores": {
@@ -2882,6 +2899,7 @@ export const communeData = [
     {
         "id": 18,
         "name": "Sidi Ayad",
+        "population": 5944,
         "daira": "Sidi-Aïch",
         "cluster": 4,
         "scores": {
@@ -3044,6 +3062,7 @@ export const communeData = [
     {
         "id": 19,
         "name": "Kherrata",
+        "population": 38514,
         "daira": "Kherrata",
         "cluster": 3,
         "scores": {
@@ -3206,6 +3225,7 @@ export const communeData = [
     {
         "id": 20,
         "name": "Draâ El-Kaïd",
+        "population": 32081,
         "daira": "Kherrata",
         "cluster": 6,
         "scores": {
@@ -3370,6 +3390,7 @@ export const communeData = [
     {
         "id": 21,
         "name": "Aokas",
+        "population": 17551,
         "daira": "Aokas",
         "cluster": 6,
         "scores": {
@@ -3532,6 +3553,7 @@ export const communeData = [
     {
         "id": 22,
         "name": "Tizi N'Berber",
+        "population": 13866,
         "daira": "Aokas",
         "cluster": 3,
         "scores": {
@@ -3694,6 +3716,7 @@ export const communeData = [
     {
         "id": 23,
         "name": "Barbacha",
+        "population": 18553,
         "daira": "Barbacha",
         "cluster": 3,
         "scores": {
@@ -3856,6 +3879,7 @@ export const communeData = [
     {
         "id": 24,
         "name": "Kendira",
+        "population": 5887,
         "daira": "Barbacha",
         "cluster": 3,
         "scores": {
@@ -4018,6 +4042,7 @@ export const communeData = [
     {
         "id": 25,
         "name": "Beni Maouche",
+        "population": 14738,
         "daira": "Beni Maouche",
         "cluster": 4,
         "scores": {
@@ -4180,6 +4205,7 @@ export const communeData = [
     {
         "id": 26,
         "name": "Chemini",
+        "population": 16773,
         "daira": "Chemini",
         "cluster": 3,
         "scores": {
@@ -4342,6 +4368,7 @@ export const communeData = [
     {
         "id": 27,
         "name": "Tibane",
+        "population": 5565,
         "daira": "Chemini",
         "cluster": 3,
         "scores": {
@@ -4504,6 +4531,7 @@ export const communeData = [
     {
         "id": 28,
         "name": "Souk-Oufella",
+        "population": 9806,
         "daira": "Chemini",
         "cluster": 3,
         "scores": {
@@ -4666,6 +4694,7 @@ export const communeData = [
     {
         "id": 29,
         "name": "Akfadou",
+        "population": 8072,
         "daira": "Chemini",
         "cluster": 3,
         "scores": {
@@ -4828,6 +4857,7 @@ export const communeData = [
     {
         "id": 30,
         "name": "Darguina",
+        "population": 15537,
         "daira": "Darguina",
         "cluster": 6,
         "scores": {
@@ -4990,6 +5020,7 @@ export const communeData = [
     {
         "id": 31,
         "name": "Aït-Smail",
+        "population": 12931,
         "daira": "Darguina",
         "cluster": 3,
         "scores": {
@@ -5152,6 +5183,7 @@ export const communeData = [
     {
         "id": 32,
         "name": "Taskriout",
+        "population": 17728,
         "daira": "Darguina",
         "cluster": 6,
         "scores": {
@@ -5314,6 +5346,7 @@ export const communeData = [
     {
         "id": 33,
         "name": "El Kseur",
+        "population": 32761,
         "daira": "El Kseur",
         "cluster": 2,
         "scores": {
@@ -5481,6 +5514,7 @@ export const communeData = [
     {
         "id": 34,
         "name": "Fenaïa Ilmaten",
+        "population": 12988,
         "daira": "El Kseur",
         "cluster": 4,
         "scores": {
@@ -5643,6 +5677,7 @@ export const communeData = [
     {
         "id": 35,
         "name": "Toudja",
+        "population": 10792,
         "daira": "El Kseur",
         "cluster": 6,
         "scores": {
@@ -5805,6 +5840,7 @@ export const communeData = [
     {
         "id": 36,
         "name": "Ighil Ali",
+        "population": 10460,
         "daira": "Ighil Ali",
         "cluster": 3,
         "scores": {
@@ -5967,6 +6003,7 @@ export const communeData = [
     {
         "id": 37,
         "name": "Aït-R'zine",
+        "population": 15989,
         "daira": "Ighil Ali",
         "cluster": 4,
         "scores": {
@@ -6129,6 +6166,7 @@ export const communeData = [
     {
         "id": 38,
         "name": "Ouzellaguen",
+        "population": 24944,
         "daira": "Ouzellaguen",
         "cluster": 1,
         "scores": {
@@ -6291,6 +6329,7 @@ export const communeData = [
     {
         "id": 39,
         "name": "Amalou",
+        "population": 9443,
         "daira": "Seddouk",
         "cluster": 4,
         "scores": {
@@ -6453,6 +6492,7 @@ export const communeData = [
     {
         "id": 40,
         "name": "M'cisna",
+        "population": 8716,
         "daira": "Seddouk",
         "cluster": 4,
         "scores": {
@@ -6615,6 +6655,7 @@ export const communeData = [
     {
         "id": 41,
         "name": "Bouhamza",
+        "population": 10019,
         "daira": "Seddouk",
         "cluster": 4,
         "scores": {
@@ -6777,6 +6818,7 @@ export const communeData = [
     {
         "id": 42,
         "name": "Seddouk",
+        "population": 22576,
         "daira": "Seddouk",
         "cluster": 2,
         "scores": {
@@ -6939,6 +6981,7 @@ export const communeData = [
     {
         "id": 43,
         "name": "Melbou",
+        "population": 12506,
         "daira": "Souk El-Ténine",
         "cluster": 6,
         "scores": {
@@ -7101,6 +7144,7 @@ export const communeData = [
     {
         "id": 44,
         "name": "Souk El Ténine",
+        "population": 15423,
         "daira": "Souk El-Ténine",
         "cluster": 6,
         "scores": {
@@ -7263,6 +7307,7 @@ export const communeData = [
     {
         "id": 45,
         "name": "Tamridjet",
+        "population": 9240,
         "daira": "Souk El-Ténine",
         "cluster": 3,
         "scores": {
@@ -7425,6 +7470,7 @@ export const communeData = [
     {
         "id": 46,
         "name": "Tazmalt",
+        "population": 31728,
         "daira": "Tazmalt",
         "cluster": 1,
         "scores": {
@@ -7587,6 +7633,7 @@ export const communeData = [
     {
         "id": 47,
         "name": "Beni Mellikeche",
+        "population": 9333,
         "daira": "Tazmalt",
         "cluster": 3,
         "scores": {
@@ -7749,6 +7796,7 @@ export const communeData = [
     {
         "id": 48,
         "name": "Boudjellil",
+        "population": 12614,
         "daira": "Tazmalt",
         "cluster": 4,
         "scores": {
@@ -7911,6 +7959,7 @@ export const communeData = [
     {
         "id": 49,
         "name": "Boukhelifa",
+        "population": 9619,
         "daira": "Tichy",
         "cluster": 6,
         "scores": {
@@ -8073,6 +8122,7 @@ export const communeData = [
     {
         "id": 50,
         "name": "Tichy",
+        "population": 18169,
         "daira": "Tichy",
         "cluster": 6,
         "scores": {
@@ -8235,6 +8285,7 @@ export const communeData = [
     {
         "id": 51,
         "name": "Tala Hamza",
+        "population": 12817,
         "daira": "Tichy",
         "cluster": 5,
         "scores": {
@@ -8397,6 +8448,7 @@ export const communeData = [
     {
         "id": 52,
         "name": "Timezrit",
+        "population": 28390,
         "daira": "Timezrit",
         "cluster": 3,
         "scores": {
@@ -8601,7 +8653,7 @@ export const dairaData = [
             "Beni Ksila"
         ],
         "superficie": 363.1,
-        "population": 24105
+        "population": 26465
     },
     {
         "daira": "Akbou",
@@ -8612,7 +8664,7 @@ export const dairaData = [
             "Tamokra"
         ],
         "superficie": 212.29,
-        "population": 78454
+        "population": 87239
     },
     {
         "daira": "Amizour",
@@ -8622,8 +8674,8 @@ export const dairaData = [
             "Semaoun",
             "Ferraoun"
         ],
-        "superficie": 212.88,
-        "population": 74455
+        "superficie": 213.18,
+        "population": 81771
     },
     {
         "daira": "Aokas",
@@ -8632,7 +8684,7 @@ export const dairaData = [
             "Tizi N'Berber"
         ],
         "superficie": 80.63,
-        "population": 28613
+        "population": 31417
     },
     {
         "daira": "Barbacha",
@@ -8641,7 +8693,7 @@ export const dairaData = [
             "Kendira"
         ],
         "superficie": 129.33,
-        "population": 22265
+        "population": 24440
     },
     {
         "daira": "Béjaïa",
@@ -8649,8 +8701,8 @@ export const dairaData = [
             "Béjaïa",
             "Oued Ghir"
         ],
-        "superficie": 168.15,
-        "population": 197333
+        "superficie": 166.54,
+        "population": 216694
     },
     {
         "daira": "Beni Maouche",
@@ -8658,7 +8710,7 @@ export const dairaData = [
             "Beni Maouche"
         ],
         "superficie": 94.86,
-        "population": 13412
+        "population": 14738
     },
     {
         "daira": "Chemini",
@@ -8669,7 +8721,7 @@ export const dairaData = [
             "Akfadou"
         ],
         "superficie": 100.27,
-        "population": 36766
+        "population": 40216
     },
     {
         "daira": "Darguina",
@@ -8679,7 +8731,7 @@ export const dairaData = [
             "Taskriout"
         ],
         "superficie": 140.67,
-        "population": 32582
+        "population": 46196
     },
     {
         "daira": "El Kseur",
@@ -8689,7 +8741,7 @@ export const dairaData = [
             "Toudja"
         ],
         "superficie": 306.4,
-        "population": 49496
+        "population": 56541
     },
     {
         "daira": "Ighil Ali",
@@ -8698,7 +8750,7 @@ export const dairaData = [
             "Aït-R'zine"
         ],
         "superficie": 269.93,
-        "population": 24089
+        "population": 26449
     },
     {
         "daira": "Kherrata",
@@ -8706,8 +8758,8 @@ export const dairaData = [
             "Kherrata",
             "Draâ El-Kaïd"
         ],
-        "superficie": 217.85,
-        "population": 81265
+        "superficie": 221.03,
+        "population": 70595
     },
     {
         "daira": "Ouzellaguen",
@@ -8715,7 +8767,7 @@ export const dairaData = [
             "Ouzellaguen"
         ],
         "superficie": 61.4,
-        "population": 22719
+        "population": 24944
     },
     {
         "daira": "Seddouk",
@@ -8725,8 +8777,8 @@ export const dairaData = [
             "Bouhamza",
             "Seddouk"
         ],
-        "superficie": 266.54,
-        "population": 64296
+        "superficie": 228.54,
+        "population": 50754
     },
     {
         "daira": "Sidi-Aïch",
@@ -8738,7 +8790,7 @@ export const dairaData = [
             "Sidi Ayad"
         ],
         "superficie": 81.69,
-        "population": 39839
+        "population": 43752
     },
     {
         "daira": "Souk El-Ténine",
@@ -8748,7 +8800,7 @@ export const dairaData = [
             "Tamridjet"
         ],
         "superficie": 127.02,
-        "population": 33854
+        "population": 37169
     },
     {
         "daira": "Tazmalt",
@@ -8757,8 +8809,8 @@ export const dairaData = [
             "Beni Mellikeche",
             "Boudjellil"
         ],
-        "superficie": 176.29,
-        "population": 48874
+        "superficie": 176.65,
+        "population": 53675
     },
     {
         "daira": "Tichy",
@@ -8768,7 +8820,7 @@ export const dairaData = [
             "Tala Hamza"
         ],
         "superficie": 211.87,
-        "population": 36987
+        "population": 40605
     },
     {
         "daira": "Timezrit",
@@ -8776,6 +8828,6 @@ export const dairaData = [
             "Timezrit"
         ],
         "superficie": 38.09,
-        "population": 25853
+        "population": 28390
     }
 ];
