@@ -1121,3 +1121,132 @@ footer {
   background: #059669;
   transform: translateY(-2px);
 }
+
+/* ============================================================
+   PORTAL PILLARS & RTL SUPPORT
+   ============================================================ */
+
+/* 3 Pillars Portal */
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.pillar-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid #f1f5f9;
+  text-decoration: none;
+  display: block;
+}
+
+.pillar-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 20px 40px rgba(26, 58, 95, 0.12);
+  border-color: var(--primary-blue);
+}
+
+.pillar-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--light-blue);
+  color: var(--primary-blue);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin: 0 auto 25px;
+  transition: all 0.3s;
+}
+
+.pillar-card:hover .pillar-icon {
+  background: var(--primary-blue);
+  color: white;
+  transform: rotate(10deg);
+}
+
+.pillar-card h3 {
+  color: var(--primary-blue);
+  margin-bottom: 12px;
+  font-size: 1.4rem;
+}
+
+.pillar-card p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Language Switcher */
+.lang-switcher {
+  display: flex;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.lang-btn {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.lang-btn:hover, .lang-btn.active {
+  background: white;
+  color: var(--primary-blue);
+}
+
+/* RTL Support */
+body.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+body.rtl .nav-links {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+body.rtl .lang-switcher {
+  margin-left: 0;
+  margin-right: 20px;
+}
+
+body.rtl .kpi-sidebar {
+  border-left: none;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+body.rtl .paper-item {
+  border-left: none;
+  border-right: 4px solid var(--primary-blue);
+  border-radius: 8px 0 0 8px;
+}
+
+body.rtl .imrad-card {
+  border-top: none;
+  border-right: 5px solid var(--primary-blue);
+}
+
+body.rtl .rec-list li {
+  padding-left: 0;
+  padding-right: 20px;
+}
+
+body.rtl .rec-list li::before {
+  left: auto;
+  right: 0;
+  transform: rotate(180deg);
+}

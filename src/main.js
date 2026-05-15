@@ -2,17 +2,92 @@ import Chart from 'chart.js/auto';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData, recommendations, methodology } from './data/communeData';
+import { translations } from './data/translations';
 
 // Fix Leaflet marker icon path issue with Vite
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 delete L.Icon.Default.prototype._getIconUrl;
+
 L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon,
   iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
   shadowUrl: markerShadow,
 });
+
+// ============================================================
+// I18N & LANGUAGE STATE
+// ============================================================
+let currentLang = localStorage.getItem('obs_lang') || 'fr';
+
+const t = (key) => {
+  return translations[currentLang][key] || key;
+};
+
+const updateLanguage = (lang) => {
+  currentLang = lang;
+  localStorage.setItem('obs_lang', lang);
+  document.documentElement.lang = lang;
+  
+  if (lang === 'ar') {
+    document.body.classList.add('rtl');
+  } else {
+    document.body.classList.remove('rtl');
+  }
+  
+  renderNav();
+  renderHome();
+  // If we are on a specific hash, we might need to re-render it, 
+  // but since our app is mostly a single-page home, renderHome is enough.
+};
+
+const renderNav = () => {
+  const nav = document.querySelector('nav');
+  if (!nav) return;
+  
+  const isElus = localStorage.getItem('isElus') === 'true';
+  const userName = localStorage.getItem('userName');
+
+  nav.innerHTML = `
+    <a href="#home">${t('nav_home')}</a>
+    <a href="#dashboard">${t('nav_dashboard')}</a>
+    <a href="#recherche">${t('nav_research')}</a>
+    <a href="#solutions">${t('nav_solutions')}</a>
+    ${isElus ? `
+      <div class="user-badge"><i class="fas fa-user-shield"></i> ${userName}</div>
+      <a href="#" class="nav-logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
+    ` : `
+      <a href="#" class="nav-elus-btn" id="login-trigger"><i class="fas fa-lock"></i> ${t('nav_elus')}</a>
+    `}
+    <div class="lang-switcher">
+      <button class="lang-btn ${currentLang === 'fr' ? 'active' : ''}" data-lang="fr">FR</button>
+      <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
+      <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" data-lang="ar">AR</button>
+    </div>
+  `;
+
+  // Re-attach listeners
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
+  });
+  
+  const loginTrigger = document.getElementById('login-trigger');
+  if (loginTrigger) {
+    loginTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      renderAuthModal();
+    });
+  }
+  
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleLogout();
+    });
+  }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
@@ -33,21 +108,38 @@ document.addEventListener('DOMContentLoaded', () => {
       <section id="home" class="hero">
         <div class="container">
           <div class="hero-content">
-            <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 5px 15px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: inline-block;">Plateforme Smart City Béjaïa</span>
-            <h1>Observatoire Territorial de la Wilaya de Béjaïa</h1>
-            <p>Plateforme technico-scientifique de pilotage stratégique et de territorialisation des Objectifs de Développement Durable (ODD).</p>
+            <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 5px 15px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: inline-block;">${t('hero_tagline')}</span>
+            <h1>${t('app_title')}</h1>
+            <p>${t('hero_desc')}</p>
             
             <div class="kpis" style="display: flex; justify-content: center; gap: 30px; margin: 30px 0;">
-              <div class="kpi-item"><h3>${regionalStats.communes}</h3><p>Communes</p></div>
+              <div class="kpi-item"><h3>${regionalStats.communes}</h3><p>${t('nav_dashboard')}</p></div>
               <div class="kpi-item"><h3>${regionalStats.dairas}</h3><p>Daïras</p></div>
               <div class="kpi-item"><h3>${(regionalStats.population / 1000000).toFixed(1)}M</h3><p>Habitants</p></div>
               <div class="kpi-item"><h3>${Math.round(regionalStats.area)}</h3><p>km²</p></div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div class="hero-btns" style="margin-top: 40px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-              <a href="#dashboard" class="btn btn-primary" style="padding: 12px 25px; font-weight: 700;">Dashboard Élus</a>
-              <a href="#collaborative" class="btn btn-outline" style="padding: 12px 25px; border-color: white; color: white;">Espace Citoyen</a>
-            </div>
+      <section id="portal" style="background: #f8fafc; padding: 60px 0;">
+        <div class="container">
+          <div class="pillar-grid">
+            <a href="#dashboard" class="pillar-card">
+              <div class="pillar-icon"><i class="fas fa-chart-pie"></i></div>
+              <h3>${t('pillar_obs_title')}</h3>
+              <p>${t('pillar_obs_desc')}</p>
+            </a>
+            <a href="#recherche" class="pillar-card">
+              <div class="pillar-icon"><i class="fas fa-microscope"></i></div>
+              <h3>${t('pillar_res_title')}</h3>
+              <p>${t('pillar_res_desc')}</p>
+            </a>
+            <a href="#solutions" class="pillar-card">
+              <div class="pillar-icon"><i class="fas fa-lightbulb"></i></div>
+              <h3>${t('pillar_sol_title')}</h3>
+              <p>${t('pillar_sol_desc')}</p>
+            </a>
           </div>
         </div>
       </section>
@@ -110,8 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <section id="dashboard">
         <div class="container">
-          <h2 class="section-title">Tableau de Bord des Élus</h2>
-          <p class="section-subtitle">Comparez la performance de votre commune par rapport à la moyenne de la Wilaya.</p>
+          <h2 class="section-title">${t('dashboard_title')}</h2>
+          <p class="section-subtitle">${t('dashboard_subtitle')}</p>
           
           <div class="dashboard">
             <div class="dashboard-tabs">
@@ -137,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   ${[...communeData].sort((a, b) => a.name.localeCompare(b.name)).map(c => `<option value="${c.id}" data-daira="${c.daira}">${c.name}</option>`).join('')}
                 </select>
               </div>
-              <button id="export-csv" class="export-btn"><i class="fas fa-file-csv"></i> Exporter (CSV)</button>
+              <button id="export-csv" class="export-btn"><i class="fas fa-file-csv"></i> ${t('export_csv')}</button>
             </div>
 
             <div class="dashboard-grid">
@@ -167,8 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div id="simulator-section" class="simulator-container">
-              <h3 style="color: var(--accent-neon-blue); margin-bottom: 10px;"><i class="fas fa-microchip"></i> Simulateur de Poids Décisionnel (v1.0)</h3>
-              <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px;">Ajustez les coefficients de pondération pour simuler différents scénarios de développement et calculer l'Indice de Performance Territoriale (IPT) personnalisé.</p>
+              <h3 style="color: var(--accent-neon-blue); margin-bottom: 10px;"><i class="fas fa-microchip"></i> ${t('simulator_title')} (v1.0)</h3>
+              <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px;">${t('simulator_desc')}</p>
               
               <div class="weight-slider-group">
                 ${dimensions.map(d => `
@@ -180,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
 
               <div class="simulator-result">
-                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);">Indice de Performance Territoriale (IPT) Calculé</p>
+                <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);">${t('ipt_label')}</p>
                 <div id="ipt-value" style="font-size: 3rem; font-weight: 800; color: var(--accent-neon-blue);">--</div>
                 <p id="ipt-comment" style="font-size: 0.85rem; font-style: italic; color: var(--text-dim); margin-top: 10px;"></p>
               </div>
@@ -470,34 +562,25 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </section>
 
-      <section id="recommendations">
+      <section id="solutions">
         <div class="container">
-          <h2 class="section-title">Recommandations & Gouvernance</h2>
-          <p class="section-subtitle">Actions prioritaires pour un développement territorial équilibré.</p>
+          <h2 class="section-title">${t('nav_solutions')}</h2>
+          <p class="section-subtitle">${t('pillar_sol_desc')}</p>
           <div class="card-grid" id="recommendations-grid">
             <div class="card recommendation-card" data-rec="decentral" style="cursor: pointer; transition: all 0.3s;">
               <div class="card-icon"><i class="fas fa-sitemap"></i></div>
-              <h3>Décentralisation</h3>
-              <p style="font-size: 0.85rem; color: var(--text-light);">Renforcer l'autonomie locale pour une meilleure réactivité aux besoins spécifiques.</p>
-              <div class="rec-detail" style="display: none; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); text-align: left; font-size: 0.82rem; color: var(--text-dark); animation: fadeIn 0.3s;">
-                <strong>Approche Scientifique :</strong> Vers une gouvernance territoriale multiniveaux — Autonomie financière et administrative pour optimiser les arbitrages au plus proche des réalités locales.
-              </div>
+              <h3>Audit Territorial</h3>
+              <p style="font-size: 0.85rem; color: var(--text-light);">Analyse approfondie des forces et faiblesses de votre territoire via nos algorithmes ASMC.</p>
             </div>
             <div class="card recommendation-card" data-rec="rural" style="cursor: pointer; transition: all 0.3s;">
               <div class="card-icon"><i class="fas fa-seedling"></i></div>
-              <h3>Zones Rurales</h3>
-              <p style="font-size: 0.85rem; color: var(--text-light);">Investissements ciblés dans les infrastructures de base (Eau, Routes, Santé).</p>
-              <div class="rec-detail" style="display: none; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); text-align: left; font-size: 0.82rem; color: var(--text-dark); animation: fadeIn 0.3s;">
-                <strong>Approche Scientifique :</strong> Aménagement compensatoire et équité spatiale — Consolidation systématique des pôles de services secondaires pour freiner l'exode rural.
-              </div>
+              <h3>Schémas Directeurs</h3>
+              <p style="font-size: 0.85rem; color: var(--text-light);">Accompagnement dans l'élaboration de plans d'aménagement résilients et durables.</p>
             </div>
             <div class="card recommendation-card" data-rec="data" style="cursor: pointer; transition: all 0.3s; border: 2px solid var(--primary-green);">
               <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
-              <h3>Innovation Data</h3>
-              <p style="font-size: 0.85rem; color: var(--text-light);">Mise en place d'une plateforme de données intégrée pour un suivi continu.</p>
-              <div class="rec-detail" style="display: none; margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.05); text-align: left; font-size: 0.82rem; color: var(--text-dark); animation: fadeIn 0.3s;">
-                <strong>Approche Scientifique :</strong> Plateforme 'Open-Wilaya' — Intégration en temps réel des flux de données SIG pour une supervision continue des indicateurs de développement humain.
-              </div>
+              <h3>Plateforme Dédiée</h3>
+              <p style="font-size: 0.85rem; color: var(--text-light);">Développement de tableaux de bord personnalisés pour votre collectivité ou entreprise.</p>
             </div>
           </div>
         </div>
@@ -983,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="cluster-badge" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-left: 5px solid ${clusterColors[commune.cluster]}; margin-top: 20px;">
           <p style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-dim); margin-bottom: 3px;">Typologie du Territoire</p>
-          <p style="font-weight: 700; color: white; margin-bottom: 3px;">${clusterInfo.name}</p>
+          <p style="font-weight: 700; color: white; margin-bottom: 3px;">${t('cluster_'+commune.cluster)}</p>
           <p style="font-size: 0.82rem; color: var(--text-dim); font-style: italic;">${clusterInfo.description}</p>
         </div>
 
@@ -1244,49 +1327,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const isAuthenticated = () => sessionStorage.getItem(SESSION_KEY) === 'true';
   const getLoggedInUser = () => JSON.parse(sessionStorage.getItem(USER_DATA_KEY) || '{}');
 
-  const updateNavForAuth = () => {
-    const nav = document.querySelector('nav');
-    if (!nav) return;
-
-    // Remove existing auth-related elements
-    nav.querySelectorAll('.nav-elus-btn, .nav-logout-btn, .user-badge, #nav-elus-access').forEach(el => el.remove());
-
-    const container = nav.querySelector('.container') || nav;
-
-    if (isAuthenticated()) {
-      const user = getLoggedInUser();
-      const displayName = user.role === 'commune' ? `Maire de ${user.name}` : 
-                          user.role === 'super-admin' ? 'Lotfi Bahloul' : 'Admin Wilaya';
-
-      const badge = document.createElement('span');
-      badge.className = 'user-badge';
-      badge.innerHTML = `<i class="fas fa-user-shield"></i> ${displayName}`;
-      container.appendChild(badge);
-
-      const logoutBtn = document.createElement('a');
-      logoutBtn.href = '#';
-      logoutBtn.className = 'nav-logout-btn';
-      logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
-      logoutBtn.title = 'Déconnexion';
-      logoutBtn.onclick = (e) => {
-        e.preventDefault();
-        sessionStorage.removeItem(SESSION_KEY);
-        sessionStorage.removeItem(USER_DATA_KEY);
-        location.reload();
-      };
-      container.appendChild(logoutBtn);
-    } else {
-      const loginBtn = document.createElement('a');
-      loginBtn.href = '#';
-      loginBtn.className = 'nav-elus-btn';
-      loginBtn.id = 'nav-elus-access';
-      loginBtn.innerHTML = '<i class="fas fa-lock"></i> Espace Élus';
-      loginBtn.onclick = (e) => {
-        e.preventDefault();
-        showLoginOverlay();
-      };
-      container.appendChild(loginBtn);
-    }
+  const handleLogout = () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(USER_DATA_KEY);
+    renderNav();
+    updateDashboardAccess();
+    renderHome();
   };
 
   const showPasswordChangeModal = (user) => {
@@ -1514,7 +1560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.style.opacity = '0';
         setTimeout(() => {
           overlay.remove();
-          updateNavForAuth();
+          renderNav();
           updateDashboardAccess();
           
           // Check for default password to prompt change
@@ -1546,12 +1592,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Initialize app
-  renderHome();
-
+  // Initialize app with correct language and state
+  updateLanguage(currentLang);
+  
   // Set up nav and dashboard access state after rendering
   setTimeout(() => {
-    updateNavForAuth();
     updateDashboardAccess();
   }, 100);
 
