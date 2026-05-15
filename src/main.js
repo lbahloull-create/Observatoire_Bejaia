@@ -1192,20 +1192,20 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
 
       financeRatiosDiv.innerHTML = `
-        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 15px;">
-          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;">Budget / Habitant</div>
-          <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-blue);">${Number(budgetPerHab).toLocaleString('fr-FR')} DA</div>
-          <div style="font-size: 0.7rem; color: #10b981; margin-top: 5px;"><i class="fas fa-arrow-up"></i> Performance locale</div>
+        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 18px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Budget par habitant :</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-blue);">${Number(budgetPerHab).toLocaleString('fr-FR')} DA</div>
+          <div style="font-size: 0.72rem; color: #10b981; margin-top: 6px; font-weight: 600;"><i class="fas fa-arrow-up"></i> Performance locale</div>
         </div>
-        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 15px;">
-          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;">Fiscalité / Habitant</div>
-          <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-blue);">${Number(fiscalitePerHab).toLocaleString('fr-FR')} DA</div>
-          <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 5px;">Richesse fiscale théorique</div>
+        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 18px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Fiscalité par habitant :</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-blue);">${Number(fiscalitePerHab).toLocaleString('fr-FR')} DA</div>
+          <div style="font-size: 0.72rem; color: #64748b; margin-top: 6px; font-weight: 600;"><i class="fas fa-info-circle"></i> Richesse fiscale locale</div>
         </div>
-        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 15px;">
-          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px;">Tendance 5 ans</div>
-          <div style="font-size: 1.2rem; font-weight: 800; color: #10b981;">+14.2%</div>
-          <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 5px;">Évolution recettes propres</div>
+        <div class="kpi-card" style="background: white; border: 1px solid #e2e8f0; padding: 18px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px;">Évolution sur 5 ans :</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: #10b981;">+14.2%</div>
+          <div style="font-size: 0.72rem; color: #64748b; margin-top: 6px; font-weight: 600;"><i class="fas fa-chart-line"></i> Croissance des ressources</div>
         </div>
       `;
 
