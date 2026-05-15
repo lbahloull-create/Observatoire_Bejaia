@@ -1260,27 +1260,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Decision Simulator Logic (Definition moved here to allow hoisting/early calls)
     const calculateIPT = () => {
       const select = document.getElementById('commune-select');
+      if (!select) return;
       const commune = communeData.find(c => c.id == select.value);
+      if (!commune) return;
+      
       const inputs = document.querySelectorAll('.weight-input');
       let totalWeightedScore = 0;
       let totalWeights = 0;
 
       inputs.forEach(input => {
         const dimId = input.dataset.dim;
-        const weight = parseInt(input.value);
+        const weight = parseFloat(input.value) || 0;
         const score = commune.scores[dimId] || 0;
         totalWeightedScore += (score * weight);
         totalWeights += weight;
       });
 
-      const ipt = totalWeights > 0 ? (totalWeightedScore / totalWeights).toFixed(1) : 0;
+      const iptRaw = totalWeights > 0 ? (totalWeightedScore / totalWeights) : 0;
+      const iptFormatted = iptRaw.toFixed(1);
       const iptDisplay = document.getElementById('ipt-value');
+      
       if (iptDisplay) {
-        iptDisplay.innerText = ipt;
+        iptDisplay.innerText = iptFormatted;
         const comment = document.getElementById('ipt-comment');
-        if (ipt > 75) comment.innerText = "Performance Excédentaire (Zone Résiliente)";
-        else if (ipt > 50) comment.innerText = "Performance Équilibrée (Zone stable)";
-        else comment.innerText = "Performance Déficitaire (Zone d'intervention prioritaire)";
+        if (comment) {
+          if (totalWeights === 0) {
+            comment.innerText = "Veuillez définir des pondérations";
+          } else {
+            if (iptRaw > 75) comment.innerText = t('ipt_high');
+            else if (iptRaw > 50) comment.innerText = t('ipt_med');
+            else comment.innerText = t('ipt_low');
+          }
+        }
       }
     };
 

@@ -36,7 +36,10 @@ export const translations = {
         cluster_3: "Forte identité locale",
         cluster_4: "Propreté et aménagement territorial soigné",
         cluster_5: "Sécurité et gestion des risques",
-        cluster_6: "Uniques et spécifiques"
+        cluster_6: "Uniques et spécifiques",
+        ipt_high: "Performance Excédentaire (Zone Résiliente)",
+        ipt_med: "Performance Équilibrée (Zone stable)",
+        ipt_low: "Performance Déficitaire (Zone d'intervention prioritaire)"
     },
     en: {
         app_title: "Béjaïa Territorial Observatory",
@@ -75,11 +78,14 @@ export const translations = {
         cluster_3: "Strong Local Identity",
         cluster_4: "Cleanliness and Careful Territorial Planning",
         cluster_5: "Safety and Risk Management",
-        cluster_6: "Unique and Specific"
+        cluster_6: "Unique and Specific",
+        ipt_high: "Excess Performance (Resilient Zone)",
+        ipt_med: "Balanced Performance (Stable Zone)",
+        ipt_low: "Deficient Performance (Priority Intervention Zone)"
     },
     ar: {
         app_title: "مرصد إقليم ولاية بجاية",
-        app_slogan: "منصة مرجعية للمدينة الذكية وتوجيه أهداف التنمية مستدامة",
+        app_slogan: "منصة مرجعية للمدينة الذكية وتوجيه أهداف التنمية المستدامة",
         pillar_obs_title: "المرصد الإقليمي",
         pillar_obs_desc: "البيانات، خرائط نظم المعلومات الجغرافية ومؤشرات الأداء.",
         pillar_res_title: "المنشورات والبحوث",
@@ -114,6 +120,9 @@ export const translations = {
         cluster_3: "هوية محلية قوية",
         cluster_4: "النظافة والتخطيط الإقليمي الدقيق",
         cluster_5: "الأمن وإدارة المخاطر",
-        cluster_6: "فريدة ومحددة"
+        cluster_6: "فريدة ومحددة",
+        ipt_high: "أداء فائض (منطقة مرنة)",
+        ipt_med: "أداء متوازن (منطقة مستقرة)",
+        ipt_low: "أداء ناقص (منطقة تدخل ذي أولوية)"
     }
 };
