@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
 
+            <!-- 
             <div id="dairas-section" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e8edf2;">
               <h3 class="section-subtitle" style="text-align: left; color: var(--primary-blue); margin-top: 0;">Répartition par Daïra</h3>
               <p style="text-align: left; margin-bottom: 20px; font-size: 0.9rem; color: var(--text-light);">Aperçu démographique et géographique des 19 Daïras de la Wilaya de Béjaïa.</p>
@@ -188,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </table>
               </div>
             </div>
+            -->
 
             <!-- Cartes SIG — Espace Élus uniquement -->
             <div id="elus-sig-maps" style="display: none; margin-top: 50px; border-top: 2px solid #e8edf2; padding-top: 40px;">
