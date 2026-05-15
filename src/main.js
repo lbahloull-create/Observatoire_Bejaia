@@ -16,81 +16,81 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-// ============================================================
-// I18N & LANGUAGE STATE
-// ============================================================
-let currentLang = localStorage.getItem('obs_lang') || 'fr';
 
-const t = (key) => {
-  return translations[currentLang][key] || key;
-};
-
-const updateLanguage = (lang) => {
-  currentLang = lang;
-  localStorage.setItem('obs_lang', lang);
-  document.documentElement.lang = lang;
-  
-  if (lang === 'ar') {
-    document.body.classList.add('rtl');
-  } else {
-    document.body.classList.remove('rtl');
-  }
-  
-  renderNav();
-  renderHome();
-  // If we are on a specific hash, we might need to re-render it, 
-  // but since our app is mostly a single-page home, renderHome is enough.
-};
-
-const renderNav = () => {
-  const nav = document.querySelector('nav');
-  if (!nav) return;
-  
-  const isElus = localStorage.getItem('isElus') === 'true';
-  const userName = localStorage.getItem('userName');
-
-  nav.innerHTML = `
-    <a href="#home">${t('nav_home')}</a>
-    <a href="#dashboard">${t('nav_dashboard')}</a>
-    <a href="#recherche">${t('nav_research')}</a>
-    <a href="#solutions">${t('nav_solutions')}</a>
-    ${isElus ? `
-      <div class="user-badge"><i class="fas fa-user-shield"></i> ${userName}</div>
-      <a href="#" class="nav-logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
-    ` : `
-      <a href="#" class="nav-elus-btn" id="login-trigger"><i class="fas fa-lock"></i> ${t('nav_elus')}</a>
-    `}
-    <div class="lang-switcher">
-      <button class="lang-btn ${currentLang === 'fr' ? 'active' : ''}" data-lang="fr">FR</button>
-      <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
-      <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" data-lang="ar">AR</button>
-    </div>
-  `;
-
-  // Re-attach listeners
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
-  });
-  
-  const loginTrigger = document.getElementById('login-trigger');
-  if (loginTrigger) {
-    loginTrigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      renderAuthModal();
-    });
-  }
-  
-  const logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      handleLogout();
-    });
-  }
-};
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
+
+  // ============================================================
+  // I18N & LANGUAGE STATE
+  // ============================================================
+  let currentLang = localStorage.getItem('obs_lang') || 'fr';
+
+  const t = (key) => {
+    return translations[currentLang][key] || key;
+  };
+
+  const updateLanguage = (lang) => {
+    currentLang = lang;
+    localStorage.setItem('obs_lang', lang);
+    document.documentElement.lang = lang;
+    
+    if (lang === 'ar') {
+      document.body.classList.add('rtl');
+    } else {
+      document.body.classList.remove('rtl');
+    }
+    
+    renderNav();
+    renderHome();
+  };
+
+  const renderNav = () => {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    
+    const isElus = localStorage.getItem('isElus') === 'true';
+    const userName = localStorage.getItem('userName');
+
+    nav.innerHTML = `
+      <a href="#home">${t('nav_home')}</a>
+      <a href="#dashboard">${t('nav_dashboard')}</a>
+      <a href="#recherche">${t('nav_research')}</a>
+      <a href="#solutions">${t('nav_solutions')}</a>
+      ${isElus ? `
+        <div class="user-badge"><i class="fas fa-user-shield"></i> ${userName}</div>
+        <a href="#" class="nav-logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
+      ` : `
+        <a href="#" class="nav-elus-btn" id="login-trigger"><i class="fas fa-lock"></i> ${t('nav_elus')}</a>
+      `}
+      <div class="lang-switcher">
+        <button class="lang-btn ${currentLang === 'fr' ? 'active' : ''}" data-lang="fr">FR</button>
+        <button class="lang-btn ${currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
+        <button class="lang-btn ${currentLang === 'ar' ? 'active' : ''}" data-lang="ar">AR</button>
+      </div>
+    `;
+
+    // Re-attach listeners
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
+    });
+    
+    const loginTrigger = document.getElementById('login-trigger');
+    if (loginTrigger) {
+      loginTrigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        showLoginOverlay();
+      });
+    }
+    
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleLogout();
+      });
+    }
+  };
 
   // Cluster color palette
   const clusterColors = {
