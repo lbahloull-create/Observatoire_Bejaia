@@ -273,6 +273,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="chart-panel" style="background: var(--card-dark); border: 1px solid rgba(255,255,255,0.1);">
                   <canvas id="radarChart"></canvas>
+                  <div id="radar-ipt-container" style="text-align: center; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                    <span style="color: var(--text-dim); font-size: 0.9rem; font-weight: 600;">IPT = </span>
+                    <span id="radar-ipt-value" style="color: var(--accent-neon-blue); font-size: 1.4rem; font-weight: 800;">--</span>
+                  </div>
                 </div>
               </div>
               <div class="kpi-sidebar" id="kpi-sidebar">
@@ -1288,6 +1292,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (iptDisplay) {
         iptDisplay.innerText = iptFormatted;
+        const radarIptDisplay = document.getElementById('radar-ipt-value');
+        if (radarIptDisplay) radarIptDisplay.innerText = iptFormatted;
+
         const comment = document.getElementById('ipt-comment');
         if (comment) {
           if (totalWeights === 0) {
