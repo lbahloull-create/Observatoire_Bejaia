@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="card dimension-card" data-dim-id="${d.id}" style="cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; padding: 30px; border-radius: 16px;">
                 <div class="card-icon" style="background: #f8fafc; color: var(--primary-blue);"><i class="fas fa-${d.icon}"></i></div>
                 <h3 style="margin: 15px 0;">${d.name}</h3>
-                <div class="odd-container" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                <div class="odd-container" style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;">
                   ${(d.odd || []).map(oddId => `<span class="odd-badge odd-${oddId}" style="font-size: 0.65rem; padding: 3px 8px; border-radius: 10px;">ODD ${oddId}</span>`).join('')}
                 </div>
                 <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 15px;"><em>En savoir plus...</em></p>
