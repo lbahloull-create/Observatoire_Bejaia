@@ -144,54 +144,88 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </section>
 
-      <section id="diagnostic">
+      <section id="diagnostic" style="background: #f8fafc; padding: 100px 0;">
         <div class="container">
-          <h2 class="section-title">Diagnostic des Disparités</h2>
-          <p class="section-subtitle">Les inégalités territoriales sont structurellement influencées par le contexte spatial et les dynamiques socio-économiques.</p>
-          <div class="dashboard-grid">
-            <div class="card">
-              <h3>Facteurs de Disparités</h3>
-              <p>Analyse multicritère basée sur le Revenu, l'Éducation, l'Emploi et les Politiques Publiques.</p>
-              <div style="margin-top: 20px; text-align: left;">
-                <p><i class="fas fa-check-circle" style="color: var(--primary-green); margin-right: 8px;"></i> <strong>Hypothèse I:</strong> L'accessibilité spatiale est le moteur principal de la résilience territoriale des zones rurales de Béjaïa.</p>
-                <p><i class="fas fa-check-circle" style="color: var(--primary-green); margin-right: 8px;"></i> <strong>Hypothèse II:</strong> Le raccordement aux réseaux (AEP/Énergie) agit comme un catalyseur structurel de la réduction de la pauvreté multidimensionnelle.</p>
-                <p><i class="fas fa-check-circle" style="color: var(--primary-green); margin-right: 8px;"></i> <strong>Hypothèse III:</strong> La performance fiscale des communes (recettes propres) est inversement proportionnelle à la distance aux pôles urbains majeurs (Bejaia/Akbou).</p>
-                <p><i class="fas fa-check-circle" style="color: var(--primary-green); margin-right: 8px;"></i> <strong>Hypothèse IV:</strong> Le développement du capital humain est freiné par l'enclavement topographique, malgré les politiques de rattrapage.</p>
+          <h2 class="section-title">${t('diag_title')}</h2>
+          <p class="section-subtitle">${t('diag_subtitle')}</p>
+          
+          <div class="diagnostic-container">
+            <!-- Left: Hypotheses Roadmap -->
+            <div class="hypothesis-panel">
+              <h3 style="color: var(--primary-blue); display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-microscope"></i> ${t('hyp_title')}
+              </h3>
+              <div class="hypothesis-list">
+                <div class="hypothesis-item">
+                  <div class="hyp-icon">I</div>
+                  <div class="hyp-content">
+                    <h4>L'accessibilité spatiale</h4>
+                    <p>Moteur principal de la résilience territoriale des zones rurales de Béjaïa.</p>
+                  </div>
+                </div>
+                <div class="hypothesis-item">
+                  <div class="hyp-icon">II</div>
+                  <div class="hyp-content">
+                    <h4>Raccordement aux réseaux</h4>
+                    <p>Catalyseur structurel de la réduction de la pauvreté multidimensionnelle (AEP/Énergie).</p>
+                  </div>
+                </div>
+                <div class="hypothesis-item">
+                  <div class="hyp-icon">III</div>
+                  <div class="hyp-content">
+                    <h4>Performance fiscale</h4>
+                    <p>Inversement proportionnelle à la distance aux pôles urbains majeurs (Bejaia/Akbou).</p>
+                  </div>
+                </div>
+                <div class="hypothesis-item">
+                  <div class="hyp-icon">IV</div>
+                  <div class="hyp-content">
+                    <h4>Capital humain</h4>
+                    <p>Freiné par l'enclavement topographique malgré les politiques de rattrapage.</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="card" id="cluster-card">
-              <h3>Typologie des Communes</h3>
-              <p>6 clusters identifiés par des techniques de clustering avancées. <em>Cliquez pour plus de détails.</em></p>
-              <div class="cluster-list" style="margin-top: 15px; text-align: left;">
+
+            <!-- Right: Typology Clusters -->
+            <div class="typology-panel">
+              <h3 style="color: white; display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                <i class="fas fa-layer-group"></i> ${t('cluster_title')}
+              </h3>
+              <p style="font-size: 0.85rem; color: #94a3b8;">${t('cluster_subtitle')}</p>
+              
+              <div class="cluster-grid-mini">
                 ${clusters.map(c => `
-                  <div class="cluster-item clickable" data-cluster-id="${c.id}" style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; padding: 8px; border-radius: 6px; cursor: pointer; transition: background 0.2s;">
-                    <span style="width: 14px; height: 14px; border-radius: 50%; background: ${clusterColors[c.id]}; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1);"></span>
-                    <strong>${c.name}</strong>
-                  </div>`).join('')}
+                  <div class="cluster-mini-card clickable" data-cluster-id="${c.id}">
+                    <div class="cluster-dot" style="background: ${clusterColors[c.id]}"></div>
+                    <h5>${t('cluster_'+c.id)}</h5>
+                  </div>
+                `).join('')}
               </div>
-              <div id="cluster-detail" style="margin-top: 20px; padding: 15px; background: var(--light-blue); border-radius: 8px; display: none; text-align: left; border-left: 4px solid var(--primary-blue);">
-                <h4 id="cluster-detail-title" style="margin: 0 0 5px; color: var(--primary-blue);"></h4>
-                <p id="cluster-detail-text" style="font-size: 0.85rem; margin: 0;"></p>
+
+              <div id="cluster-detail" style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; display: none; border-left: 4px solid var(--accent-neon-blue); animation: fadeIn 0.4s;">
+                <h4 id="cluster-detail-title" style="margin: 0 0 8px; color: var(--accent-neon-blue); font-size: 1rem;"></h4>
+                <p id="cluster-detail-text" style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.6;"></p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="dimensions" style="background: white;">
+      <section id="dimensions" style="background: white; padding: 100px 0;">
         <div class="container">
           <h2 class="section-title">Les 8 Dimensions & ODD</h2>
           <p class="section-subtitle">Chaque dimension territorialise les Objectifs de Développement Durable pour la région de Béjaïa.</p>
           <div class="card-grid" id="dimension-grid">
             ${dimensions.map(d => `
-              <div class="card dimension-card" data-dim-id="${d.id}" style="cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;">
-                <div class="card-icon"><i class="fas fa-${d.icon}"></i></div>
-                <h3>${d.name}</h3>
-                <div class="odd-container">
-                  ${(d.odd || []).map(oddId => `<span class="odd-badge odd-${oddId}">ODD ${oddId}</span>`).join('')}
+              <div class="card dimension-card" data-dim-id="${d.id}" style="cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; padding: 30px; border-radius: 16px;">
+                <div class="card-icon" style="background: #f8fafc; color: var(--primary-blue);"><i class="fas fa-${d.icon}"></i></div>
+                <h3 style="margin: 15px 0;">${d.name}</h3>
+                <div class="odd-container" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                  ${(d.odd || []).map(oddId => `<span class="odd-badge odd-${oddId}" style="font-size: 0.65rem; padding: 3px 8px; border-radius: 10px;">ODD ${oddId}</span>`).join('')}
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 10px;"><em>Cliquez pour le diagnostic scientifique.</em></p>
-                <div class="dim-desc" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; text-align: left; font-size: 0.82rem; color: var(--text-dark); animation: fadeIn 0.3s;">
+                <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 15px;"><em>En savoir plus...</em></p>
+                <div class="dim-desc" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f5f9; text-align: left; font-size: 0.82rem; color: var(--text-dark); line-height: 1.5; animation: fadeIn 0.3s;">
                   ${d.description}
                 </div>
               </div>
@@ -889,7 +923,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-      const items = document.querySelectorAll('.cluster-item.clickable');
+      // Add interactivity for clusters
+      const clusterCards = document.querySelectorAll('.cluster-mini-card.clickable');
+      const clusterDetail = document.getElementById('cluster-detail');
+      const clusterDetailTitle = document.getElementById('cluster-detail-title');
+      const clusterDetailText = document.getElementById('cluster-detail-text');
+
+      clusterCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const clusterId = parseInt(card.dataset.clusterId);
+          const cluster = clusters.find(c => c.id === clusterId);
+          
+          if (cluster) {
+            clusterDetailTitle.innerText = t('cluster_' + clusterId);
+            clusterDetailText.innerText = cluster.description;
+            clusterDetail.style.display = 'block';
+            
+            // Highlight selected
+            clusterCards.forEach(c => c.style.borderColor = 'rgba(255,255,255,0.1)');
+            card.style.borderColor = 'var(--accent-neon-blue)';
+          }
+        });
+      });
     }, 500); // Delay to ensure elements are rendered
 
     const updateLegend = (metric) => {
