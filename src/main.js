@@ -1154,10 +1154,27 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="font-size: 0.95rem; color: var(--text-dark);">
           <p><strong>Budget Total:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.budgetTotal} M DA</span></p>
           <p><strong>Recettes Fiscales:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.recettesFiscales} M DA</span></p>
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
-            <p style="margin-bottom: 8px;"><strong>Taux de Recouvrement:</strong></p>
-            <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 8px;">
-              <div style="width: ${commune.finances.tauxRecouvrement}%; background: var(--primary-blue); height: 100%; border-radius: 20px;"></div>
+          
+          <div style="margin-top: 20px; display: grid; gap: 15px;">
+            <div>
+              <p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Taux d'Autonomie Financière:</strong> <span style="float: right; color: var(--primary-blue);">${data.finances.budgetTotal > 0 ? ((data.finances.recettesFiscales / data.finances.budgetTotal) * 100).toFixed(1) : 0}%</span></p>
+              <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 6px;">
+                <div style="width: ${data.finances.budgetTotal > 0 ? (data.finances.recettesFiscales / data.finances.budgetTotal) * 100 : 0}%; background: var(--primary-green); height: 100%; border-radius: 20px;"></div>
+              </div>
+            </div>
+
+            <div>
+              <p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Effort d'Investissement:</strong> <span style="float: right; color: var(--primary-blue);">${data.finances.budgetTotal > 0 ? ((data.finances.depensesEquipement / data.finances.budgetTotal) * 100).toFixed(1) : 0}%</span></p>
+              <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 6px;">
+                <div style="width: ${data.finances.budgetTotal > 0 ? (data.finances.depensesEquipement / data.finances.budgetTotal) * 100 : 0}%; background: #fbbf24; height: 100%; border-radius: 20px;"></div>
+              </div>
+            </div>
+
+            <div style="padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.1);">
+              <p style="margin-bottom: 5px; font-size: 0.85rem;"><strong>Taux de Recouvrement:</strong> <span style="float: right; color: var(--primary-blue);">${commune.finances.tauxRecouvrement}%</span></p>
+              <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 6px;">
+                <div style="width: ${commune.finances.tauxRecouvrement}%; background: var(--primary-blue); height: 100%; border-radius: 20px;"></div>
+              </div>
             </div>
           </div>
         </div>
