@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div id="simulator-section" class="simulator-container">
-              <h3 style="color: var(--accent-neon-blue); margin-bottom: 10px;"><i class="fas fa-microchip"></i> Simulateur de Poids Décisionnel (Outil INAPI v1.0)</h3>
+              <h3 style="color: var(--accent-neon-blue); margin-bottom: 10px;"><i class="fas fa-microchip"></i> Simulateur de Poids Décisionnel (v1.0)</h3>
               <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px;">Ajustez les coefficients de pondération pour simuler différents scénarios de développement et calculer l'Indice de Performance Territoriale (IPT) personnalisé.</p>
               
               <div class="weight-slider-group">
@@ -1119,11 +1119,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    updateUI(select.value, 'Global');
-    calculateIPT();
-
-    // Decision Simulator Logic
+    // Decision Simulator Logic (Definition moved here to allow hoisting/early calls)
     const calculateIPT = () => {
+      const select = document.getElementById('commune-select');
       const commune = communeData.find(c => c.id == select.value);
       const inputs = document.querySelectorAll('.weight-input');
       let totalWeightedScore = 0;
@@ -1147,6 +1145,9 @@ document.addEventListener('DOMContentLoaded', () => {
         else comment.innerText = "Performance Déficitaire (Zone d'intervention prioritaire)";
       }
     };
+
+    updateUI(select.value, 'Global');
+    calculateIPT();
 
     document.querySelectorAll('.weight-input').forEach(input => {
       input.addEventListener('input', calculateIPT);
