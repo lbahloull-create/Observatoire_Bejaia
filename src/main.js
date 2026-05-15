@@ -1151,13 +1151,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
           <h3 style="color: var(--accent-neon-blue); margin: 0;">💰 Finances Locales</h3>
         </div>
-        <div style="font-size: 0.95rem; color: white;">
-          <p><strong>Budget Total:</strong> <span style="color: var(--accent-neon-blue); float: right;">${data.finances.budgetTotal} M DA</span></p>
-          <p><strong>Recettes Fiscales:</strong> <span style="color: var(--accent-neon-blue); float: right;">${data.finances.recettesFiscales} M DA</span></p>
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div style="font-size: 0.95rem; color: var(--text-dark);">
+          <p><strong>Budget Total:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.budgetTotal} M DA</span></p>
+          <p><strong>Recettes Fiscales:</strong> <span style="color: var(--primary-blue); float: right;">${data.finances.recettesFiscales} M DA</span></p>
+          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
             <p style="margin-bottom: 8px;"><strong>Taux de Recouvrement:</strong></p>
-            <div style="width: 100%; background: rgba(255,255,255,0.1); border-radius: 20px; height: 8px;">
-              <div style="width: ${commune.finances.tauxRecouvrement}%; background: var(--accent-neon-blue); height: 100%; border-radius: 20px; box-shadow: 0 0 10px var(--accent-neon-blue);"></div>
+            <div style="width: 100%; background: rgba(0,0,0,0.05); border-radius: 20px; height: 8px;">
+              <div style="width: ${commune.finances.tauxRecouvrement}%; background: var(--primary-blue); height: 100%; border-radius: 20px;"></div>
             </div>
           </div>
         </div>
