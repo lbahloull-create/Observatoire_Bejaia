@@ -1086,12 +1086,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateUI = (communeId, year = 'Global') => {
       const commune = communeData.find(c => c.id == communeId);
-      const clusterInfo = clusters.find(cl => cl.id === commune.cluster);
+      if (!commune) return;
+
+      const clusterInfo = clusters.find(cl => cl.id === commune.cluster) || { name: 'N/A', description: '' };
       
-      const data = (year === 'Global') ? commune : commune.history[year];
+      const data = (year === 'Global') ? commune : (commune.history ? commune.history[year] : commune);
+      if (!data || !data.finances) return;
+
       const avg = (year === 'Global' || !regionalAverageHistory) ? regionalAverage : {
-        scores: regionalAverageHistory[year] ? regionalAverageHistory[year].scores : regionalAverage.scores,
-        finances: regionalAverageHistory[year] ? {
+        scores: (regionalAverageHistory[year] && regionalAverageHistory[year].scores) ? regionalAverageHistory[year].scores : regionalAverage.scores,
+        finances: (regionalAverageHistory[year]) ? {
           budgetTotal: Math.round(regionalAverageHistory[year].total * 1000 / 52),
           recettesFiscales: Math.round(regionalAverageHistory[year].total * 1000 / 52 * 0.65),
           depensesFonctionnement: Math.round(regionalAverageHistory[year].total * 1000 / 52 * 0.70),
@@ -1476,7 +1480,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="font-size: 2.5rem; margin-bottom: 12px;">🔒</div>
         <h4>Accès Réservé aux Élus</h4>
         <p>Ce volet contient des données financières confidentielles réservées aux élus et responsables territoriaux.</p>
-        <button onclick="document.getElementById('nav-elus-access').click()" 
+        <button id="lock-login-btn"
           style="background: linear-gradient(135deg, #d4af37, #b8960c); color: #1a1a1a; border: none; padding: 12px 28px; border-radius: 25px; font-weight: 700; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 20px rgba(212,175,55,0.35); transition: all 0.3s;"
           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(212,175,55,0.5)'"
           onmouseout="this.style.transform=''; this.style.boxShadow='0 4px 20px rgba(212,175,55,0.35)'">
@@ -1484,6 +1488,11 @@ document.addEventListener('DOMContentLoaded', () => {
         </button>
       `;
       financesSection.appendChild(lockNotice);
+      
+      document.getElementById('lock-login-btn').addEventListener('click', () => {
+        const trigger = document.getElementById('login-trigger');
+        if (trigger) trigger.click();
+      });
     }
 
     // Show/hide the élus map metric selector bar (above the map) and the thesis SIG maps
