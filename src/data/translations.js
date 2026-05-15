@@ -39,7 +39,9 @@ export const translations = {
         cluster_6: "Uniques et spécifiques",
         ipt_high: "Performance Excédentaire (Zone Résiliente)",
         ipt_med: "Performance Équilibrée (Zone stable)",
-        ipt_low: "Performance Déficitaire (Zone d'intervention prioritaire)"
+        ipt_low: "Performance Déficitaire (Zone d'intervention prioritaire)",
+        sim_help_title: "Comment ça marche ?",
+        sim_help_text: "L'IPT est un score de 0 à 100. Chaque curseur représente l'importance que vous donnez à un domaine. Si vous priorisez l'Éducation, augmentez son poids. L'algorithme calcule alors un score personnalisé reflétant vos priorités politiques ou scientifiques."
     },
     en: {
         app_title: "Béjaïa Territorial Observatory",
@@ -81,7 +83,9 @@ export const translations = {
         cluster_6: "Unique and Specific",
         ipt_high: "Excess Performance (Resilient Zone)",
         ipt_med: "Balanced Performance (Stable Zone)",
-        ipt_low: "Deficient Performance (Priority Intervention Zone)"
+        ipt_low: "Deficient Performance (Priority Intervention Zone)",
+        sim_help_title: "How does it work?",
+        sim_help_text: "The TPI is a score from 0 to 100. Each slider represents the importance you assign to a field. If you prioritize Education, increase its weight. The algorithm then calculates a custom score reflecting your political or scientific priorities."
     },
     ar: {
         app_title: "مرصد إقليم ولاية بجاية",
@@ -123,6 +127,8 @@ export const translations = {
         cluster_6: "فريدة ومحددة",
         ipt_high: "أداء فائض (منطقة مرنة)",
         ipt_med: "أداء متوازن (منطقة مستقرة)",
-        ipt_low: "أداء ناقص (منطقة تدخل ذي أولوية)"
+        ipt_low: "أداء ناقص (منطقة تدخل ذي أولوية)",
+        sim_help_title: "كيف يعمل؟",
+        sim_help_text: "مؤشر الأداء الإقليمي هو درجة من 0 إلى 100. يمثل كل شريط تمرير الأهمية التي توليها لمجال ما. إذا كنت تعطي الأولوية للتعليم، فقم بزيادة وزنه. تقوم الخوارزمية بعد ذلك بحساب درجة مخصصة تعكس أولوياتك السياسية أو العلمية."
     }
 };

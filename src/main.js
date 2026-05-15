@@ -294,7 +294,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div id="simulator-section" class="simulator-container">
               <h3 style="color: var(--accent-neon-blue); margin-bottom: 10px;"><i class="fas fa-microchip"></i> ${t('simulator_title')} (v1.0)</h3>
-              <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px;">${t('simulator_desc')}</p>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 25px;">${t('simulator_desc')}</p>
+                <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); padding: 12px; border-radius: 8px; max-width: 300px;">
+                  <h4 style="color: #38bdf8; font-size: 0.8rem; margin: 0 0 5px;"><i class="fas fa-info-circle"></i> ${t('sim_help_title')}</h4>
+                  <p style="color: #cbd5e1; font-size: 0.72rem; line-height: 1.4; margin: 0;">${t('sim_help_text')}</p>
+                </div>
+              </div>
               
               <div class="weight-slider-group">
                 ${dimensions.map(d => `
