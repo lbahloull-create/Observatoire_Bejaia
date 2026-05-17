@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData, recommendations, methodology } from './data/communeData';
 import { translations } from './data/translations';
 import { auth } from './firebase.js';
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
 // Fix Leaflet marker icon path issue with Vite
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -47,17 +47,38 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     
     // Surveiller l'état de l'authentification Firebase
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Utilisateur connecté, on affiche la plateforme
-        if (document.getElementById('global-lock-overlay')) {
-          lockOverlay.style.opacity = '0';
-          setTimeout(() => lockOverlay.remove(), 400);
+        try {
+          const idTokenResult = await user.getIdTokenResult();
+          const isApproved = idTokenResult.claims.approved === true || user.email === 'lotfi@bahloul-rd.com';
+          
+          if (isApproved) {
+            // Utilisateur connecté et validé, on affiche la plateforme
+            if (document.getElementById('global-lock-overlay')) {
+              lockOverlay.style.opacity = '0';
+              setTimeout(() => lockOverlay.remove(), 400);
+            }
+            if (header) header.style.display = '';
+            if (footer) footer.style.display = '';
+            app.style.display = '';
+            document.body.style.overflow = '';
+          } else {
+            // Utilisateur connecté mais NON validé
+            await signOut(auth);
+            renderLoginForm(lockOverlay, "Votre inscription a bien été enregistrée. Cependant, votre compte est toujours en attente de validation par le Dr. Bahloul. Veuillez patienter ou le contacter.");
+            if (!document.getElementById('global-lock-overlay')) {
+              document.body.appendChild(lockOverlay);
+            }
+          }
+        } catch (error) {
+          console.error("Erreur d'authentification :", error);
+          await signOut(auth);
+          renderLoginForm(lockOverlay, "Une erreur s'est produite lors de la connexion. Veuillez réessayer.");
+          if (!document.getElementById('global-lock-overlay')) {
+            document.body.appendChild(lockOverlay);
+          }
         }
-        if (header) header.style.display = '';
-        if (footer) footer.style.display = '';
-        app.style.display = '';
-        document.body.style.overflow = '';
       } else {
         // Utilisateur non connecté, on affiche le formulaire de connexion
         renderLoginForm(lockOverlay);
@@ -68,71 +89,148 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  const renderLoginForm = (lockOverlay) => {
-    lockOverlay.innerHTML = `
-      <div style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
-        <div style="margin-bottom: 30px;">
-          <i class="fas fa-shield-alt" style="font-size: 3.5rem; color: #38bdf8; margin-bottom: 20px;"></i>
-          <h2 style="margin: 0 0 10px; font-size: 1.8rem; color: white;">Accès Restreint</h2>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin: 0; line-height: 1.5;">Connectez-vous pour accéder à l'Observatoire Territorial.</p>
-        </div>
-        
-        <form id="global-login-form" style="margin-bottom: 25px; text-align: left;">
-          <div style="margin-bottom: 15px;">
-            <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Email institutionnel</label>
-            <input type="email" id="global-email" required style="width: 100%; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 1rem; box-sizing: border-box;" placeholder="votre@email.com" autocomplete="email">
-          </div>
-          <div style="margin-bottom: 5px;">
-            <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Mot de passe</label>
-            <input type="password" id="global-password" required style="width: 100%; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 1rem; box-sizing: border-box;" placeholder="••••••••" autocomplete="current-password">
-          </div>
-          <p id="global-error-msg" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none; text-align: center;"><i class="fas fa-exclamation-circle"></i> Identifiants incorrects</p>
+  const renderLoginForm = (lockOverlay, feedbackMessage = "") => {
+    // Mode initial: 'login' (Connexion) ou 'register' (Inscription)
+    let currentMode = 'login'; 
+
+    const renderContent = () => {
+      lockOverlay.innerHTML = `
+        <div style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
           
-          <button type="submit" id="global-submit-btn" style="width: 100%; padding: 16px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.3s; margin-top: 20px;">
-            Se connecter
-          </button>
-        </form>
-        
-        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; margin-top: 15px;">
-          <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px;">Vous n'avez pas de compte ?</p>
-          <a href="https://wa.me/213770292526?text=Bonjour%20Dr.%20Bahloul%2C%0AJe%20souhaite%20obtenir%20un%20compte%20d%27acc%C3%A8s%20pour%20consulter%20la%20plateforme%20de%20l%27Observatoire%20Territorial.%0A%0ANom%20%3A%20%0AInstitution%2FEntreprise%20%3A%20%0AEmail%20%3A%20%0AMotif%20%3A%20" target="_blank" style="display: inline-block; padding: 10px 20px; background: rgba(37, 211, 102, 0.1); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.3); transition: all 0.2s;"><i class="fab fa-whatsapp" style="margin-right: 8px; color: #25D366; font-size: 1.1rem;"></i> Demander un compte via WhatsApp</a>
+          <div style="margin-bottom: 25px;">
+            <i class="fas fa-shield-alt" style="font-size: 3rem; color: #38bdf8; margin-bottom: 15px;"></i>
+            <h2 style="margin: 0 0 10px; font-size: 1.6rem; color: white;">Observatoire Territorial</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+              ${currentMode === 'login' ? 'Connectez-vous pour accéder à la plateforme privée.' : 'Inscrivez-vous pour demander un compte d\'accès.'}
+            </p>
+          </div>
+
+          ${feedbackMessage ? `
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); padding: 12px; border-radius: 8px; color: #38bdf8; font-size: 0.85rem; margin-bottom: 20px; line-height: 1.4; text-align: left;">
+              <i class="fas fa-info-circle" style="margin-right: 6px;"></i> ${feedbackMessage}
+            </div>
+          ` : ''}
+
+          <!-- Onglets de Navigation -->
+          <div style="display: flex; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 8px; margin-bottom: 20px;">
+            <button id="tab-login" style="flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; background: ${currentMode === 'login' ? '#38bdf8' : 'transparent'}; color: ${currentMode === 'login' ? '#0f172a' : '#94a3b8'};">
+              Se connecter
+            </button>
+            <button id="tab-register" style="flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; background: ${currentMode === 'register' ? '#38bdf8' : 'transparent'}; color: ${currentMode === 'register' ? '#0f172a' : '#94a3b8'};">
+              Créer un compte
+            </button>
+          </div>
+          
+          <form id="global-auth-form" style="margin-bottom: 20px; text-align: left;">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Email institutionnel</label>
+              <input type="email" id="global-email" required style="width: 100%; padding: 14px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: white; font-size: 0.95rem; box-sizing: border-box;" placeholder="nom@institution.com" autocomplete="email">
+            </div>
+            
+            <div style="margin-bottom: 5px;">
+              <label style="display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Mot de passe</label>
+              <input type="password" id="global-password" required minlength="6" style="width: 100%; padding: 14px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: white; font-size: 0.95rem; box-sizing: border-box;" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            
+            <p id="global-error-msg" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none; text-align: center;"><i class="fas fa-exclamation-circle"></i></p>
+            
+            <button type="submit" id="global-submit-btn" style="width: 100%; padding: 15px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s; margin-top: 20px;">
+              ${currentMode === 'login' ? 'Se connecter' : 'Demander l\'accès'}
+            </button>
+          </form>
+          
+          <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; margin-top: 15px;">
+            <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 12px;">Des questions ?</p>
+            <a href="https://wa.me/213770292526?text=Bonjour%20Dr.%20Bahloul%2C%0AJe%20souhaite%20obtenir%20un%20compte%20d%27acc%C3%A8s%20pour%20consulter%20la%20plateforme%20de%20l%27Observatoire%20Territorial.%0A%0ANom%20%3A%20%0AInstitution%2FEntreprise%20%3A%20%0AEmail%20%3A%20%0AMotif%20%3A%20" target="_blank" style="display: inline-block; padding: 8px 16px; background: rgba(37, 211, 102, 0.1); color: white; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.2); transition: all 0.2s;"><i class="fab fa-whatsapp" style="margin-right: 6px; color: #25D366; font-size: 1rem;"></i> Contacter via WhatsApp</a>
+          </div>
         </div>
-      </div>
-    `;
+      `;
 
-    setTimeout(() => {
-      const emailInput = lockOverlay.querySelector('#global-email');
-      if(emailInput) emailInput.focus();
-    }, 100);
+      // Focus email input
+      setTimeout(() => {
+        const emailInput = lockOverlay.querySelector('#global-email');
+        if (emailInput) emailInput.focus();
+      }, 100);
 
-    const form = lockOverlay.querySelector('#global-login-form');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = lockOverlay.querySelector('#global-email').value.trim();
-      const password = lockOverlay.querySelector('#global-password').value;
-      const btn = lockOverlay.querySelector('#global-submit-btn');
-      const errorMsg = lockOverlay.querySelector('#global-error-msg');
-      
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
-      btn.disabled = true;
-      errorMsg.style.display = 'none';
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        // onAuthStateChanged prendra le relais pour masquer le formulaire
-      } catch (error) {
-        errorMsg.style.display = 'block';
-        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-          errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Email ou mot de passe incorrect.';
-        } else {
-          errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erreur de connexion au serveur.';
+      // Event listener for tab toggle
+      lockOverlay.querySelector('#tab-login').addEventListener('click', () => {
+        if (currentMode !== 'login') {
+          currentMode = 'login';
+          feedbackMessage = ''; // Clear feedback when switching tabs
+          renderContent();
         }
-        btn.innerHTML = 'Se connecter';
-        btn.disabled = false;
-        const pwdInput = lockOverlay.querySelector('#global-password');
-        if (pwdInput) pwdInput.value = '';
-      }
-    });
+      });
+
+      lockOverlay.querySelector('#tab-register').addEventListener('click', () => {
+        if (currentMode !== 'register') {
+          currentMode = 'register';
+          feedbackMessage = ''; // Clear feedback when switching tabs
+          renderContent();
+        }
+      });
+
+      // Submit Form
+      const form = lockOverlay.querySelector('#global-auth-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = lockOverlay.querySelector('#global-email').value.trim();
+        const password = lockOverlay.querySelector('#global-password').value;
+        const btn = lockOverlay.querySelector('#global-submit-btn');
+        const errorMsg = lockOverlay.querySelector('#global-error-msg');
+        
+        btn.innerHTML = currentMode === 'login' 
+          ? '<i class="fas fa-spinner fa-spin"></i> Connexion...' 
+          : '<i class="fas fa-spinner fa-spin"></i> Création du compte...';
+        btn.disabled = true;
+        errorMsg.style.display = 'none';
+
+        if (currentMode === 'login') {
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+            // onAuthStateChanged se charge du reste
+          } catch (error) {
+            errorMsg.style.display = 'block';
+            if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+              errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Email ou mot de passe incorrect.';
+            } else {
+              errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erreur de connexion au serveur.';
+            }
+            btn.innerHTML = 'Se connecter';
+            btn.disabled = false;
+            const pwdInput = lockOverlay.querySelector('#global-password');
+            if (pwdInput) pwdInput.value = '';
+          }
+        } else {
+          // Mode RÈGISTRATION / INSCRIPTION
+          try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            // Utilisateur inscrit avec succès !
+            // Pour éviter l'auto-connexion non validée, on le déconnecte tout de suite
+            await signOut(auth);
+            
+            // On affiche le message de confirmation
+            feedbackMessage = "Votre compte a été créé avec succès ! Votre demande d'accès est en attente de validation par le Dr. Bahloul. Vous pourrez vous connecter dès validation.";
+            currentMode = 'login'; // Switch de tab vers login
+            renderContent();
+          } catch (error) {
+            errorMsg.style.display = 'block';
+            if (error.code === 'auth/email-already-in-use') {
+              errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Cet e-mail est déjà utilisé par un autre compte.';
+            } else if (error.code === 'auth/weak-password') {
+              errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Le mot de passe doit faire au moins 6 caractères.';
+            } else {
+              errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Impossible de créer le compte. Réessayez.';
+            }
+            btn.innerHTML = "Demander l'accès";
+            btn.disabled = false;
+            const pwdInput = lockOverlay.querySelector('#global-password');
+            if (pwdInput) pwdInput.value = '';
+          }
+        }
+      });
+    };
+
+    renderContent();
   };
 
   checkGlobalAccess();

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "firebase-admin": "^13.10.0",
     "puppeteer": "^24.39.1",
     "vite": "^7.3.1"
   },
