@@ -3,6 +3,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData, recommendations, methodology } from './data/communeData';
 import { translations } from './data/translations';
+import { auth } from './firebase.js';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 // Fix Leaflet marker icon path issue with Vite
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -25,9 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // GLOBAL PLATFORM ACCESS LOCK
   // ============================================================
   const checkGlobalAccess = () => {
-    if (localStorage.getItem('global_access_granted') === 'true') return;
-    
-    // Hide main UI elements
+    // Masquer l'interface principale par défaut
     const header = document.querySelector('header');
     const footer = document.querySelector('footer');
     if (header) header.style.display = 'none';
@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     app.style.display = 'none';
     document.body.style.overflow = 'hidden';
     
+    // Créer le conteneur de verrouillage
     const lockOverlay = document.createElement('div');
     lockOverlay.id = 'global-lock-overlay';
     lockOverlay.style.cssText = `
@@ -42,62 +43,94 @@ document.addEventListener('DOMContentLoaded', () => {
       background: #0f172a; /* Deep dark background */
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       font-family: 'Inter', sans-serif;
+      transition: opacity 0.4s ease;
     `;
     
+    // Surveiller l'état de l'authentification Firebase
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Utilisateur connecté, on affiche la plateforme
+        if (document.getElementById('global-lock-overlay')) {
+          lockOverlay.style.opacity = '0';
+          setTimeout(() => lockOverlay.remove(), 400);
+        }
+        if (header) header.style.display = '';
+        if (footer) footer.style.display = '';
+        app.style.display = '';
+        document.body.style.overflow = '';
+      } else {
+        // Utilisateur non connecté, on affiche le formulaire de connexion
+        renderLoginForm(lockOverlay);
+        if (!document.getElementById('global-lock-overlay')) {
+          document.body.appendChild(lockOverlay);
+        }
+      }
+    });
+  };
+
+  const renderLoginForm = (lockOverlay) => {
     lockOverlay.innerHTML = `
       <div style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
         <div style="margin-bottom: 30px;">
           <i class="fas fa-shield-alt" style="font-size: 3.5rem; color: #38bdf8; margin-bottom: 20px;"></i>
           <h2 style="margin: 0 0 10px; font-size: 1.8rem; color: white;">Accès Restreint</h2>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin: 0; line-height: 1.5;">La plateforme de l'Observatoire Territorial est strictement privée. Veuillez entrer votre code d'accès pour continuer.</p>
+          <p style="color: #94a3b8; font-size: 0.95rem; margin: 0; line-height: 1.5;">Connectez-vous pour accéder à l'Observatoire Territorial.</p>
         </div>
         
-        <div style="margin-bottom: 25px; text-align: left;">
-          <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Code d'accès</label>
-          <input type="password" id="global-access-code" style="width: 100%; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 1.2rem; text-align: center; letter-spacing: 3px; box-sizing: border-box;" placeholder="••••••••" autocomplete="off">
-          <p id="global-error-msg" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none; text-align: center;"><i class="fas fa-exclamation-circle"></i> Code d'accès invalide</p>
-        </div>
-        
-        <button id="global-submit-btn" style="width: 100%; padding: 16px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.3s; margin-bottom: 20px;">
-          Déverrouiller
-        </button>
+        <form id="global-login-form" style="margin-bottom: 25px; text-align: left;">
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Email institutionnel</label>
+            <input type="email" id="global-email" required style="width: 100%; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 1rem; box-sizing: border-box;" placeholder="votre@email.com" autocomplete="email">
+          </div>
+          <div style="margin-bottom: 5px;">
+            <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Mot de passe</label>
+            <input type="password" id="global-password" required style="width: 100%; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 1rem; box-sizing: border-box;" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <p id="global-error-msg" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none; text-align: center;"><i class="fas fa-exclamation-circle"></i> Identifiants incorrects</p>
+          
+          <button type="submit" id="global-submit-btn" style="width: 100%; padding: 16px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.3s; margin-top: 20px;">
+            Se connecter
+          </button>
+        </form>
         
         <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; margin-top: 15px;">
-          <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px;">Vous n'avez pas de code ?</p>
-          <a href="https://wa.me/213770292526?text=Bonjour%20Dr.%20Bahloul%2C%0AJe%20souhaite%20obtenir%20un%20code%20d%27acc%C3%A8s%20pour%20consulter%20la%20plateforme%20de%20l%27Observatoire%20Territorial.%0A%0ANom%20%3A%20%0AInstitution%2FEntreprise%20%3A%20%0AEmail%20%3A%20%0AMotif%20%3A%20" target="_blank" style="display: inline-block; padding: 10px 20px; background: rgba(37, 211, 102, 0.1); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.3); transition: all 0.2s;"><i class="fab fa-whatsapp" style="margin-right: 8px; color: #25D366; font-size: 1.1rem;"></i> Demander l'accès via WhatsApp</a>
+          <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px;">Vous n'avez pas de compte ?</p>
+          <a href="https://wa.me/213770292526?text=Bonjour%20Dr.%20Bahloul%2C%0AJe%20souhaite%20obtenir%20un%20compte%20d%27acc%C3%A8s%20pour%20consulter%20la%20plateforme%20de%20l%27Observatoire%20Territorial.%0A%0ANom%20%3A%20%0AInstitution%2FEntreprise%20%3A%20%0AEmail%20%3A%20%0AMotif%20%3A%20" target="_blank" style="display: inline-block; padding: 10px 20px; background: rgba(37, 211, 102, 0.1); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.3); transition: all 0.2s;"><i class="fab fa-whatsapp" style="margin-right: 8px; color: #25D366; font-size: 1.1rem;"></i> Demander un compte via WhatsApp</a>
         </div>
       </div>
     `;
-    
-    document.body.appendChild(lockOverlay);
-    setTimeout(() => document.getElementById('global-access-code').focus(), 100);
-    
-    const verifyGlobalCode = () => {
-      const code = document.getElementById('global-access-code').value.trim().toUpperCase();
-      // Valid access codes that you can give to your users
-      const validCodes = ['BEJAIA2026', 'ADMIN', 'LOTFI26']; 
+
+    setTimeout(() => {
+      const emailInput = document.getElementById('global-email');
+      if(emailInput) emailInput.focus();
+    }, 100);
+
+    const form = document.getElementById('global-login-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('global-email').value.trim();
+      const password = document.getElementById('global-password').value;
+      const btn = document.getElementById('global-submit-btn');
+      const errorMsg = document.getElementById('global-error-msg');
       
-      if (validCodes.includes(code)) {
-        localStorage.setItem('global_access_granted', 'true');
-        lockOverlay.style.opacity = '0';
-        lockOverlay.style.transition = 'opacity 0.4s ease';
-        setTimeout(() => {
-          lockOverlay.remove();
-          if (header) header.style.display = '';
-          if (footer) footer.style.display = '';
-          app.style.display = '';
-          document.body.style.overflow = '';
-        }, 400);
-      } else {
-        document.getElementById('global-error-msg').style.display = 'block';
-        document.getElementById('global-access-code').style.borderColor = '#ef4444';
-        document.getElementById('global-access-code').value = '';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+      btn.disabled = true;
+      errorMsg.style.display = 'none';
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        // onAuthStateChanged prendra le relais pour masquer le formulaire
+      } catch (error) {
+        errorMsg.style.display = 'block';
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Email ou mot de passe incorrect.';
+        } else {
+          errorMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erreur de connexion au serveur.';
+        }
+        btn.innerHTML = 'Se connecter';
+        btn.disabled = false;
+        document.getElementById('global-password').value = '';
       }
-    };
-    
-    document.getElementById('global-submit-btn').addEventListener('click', verifyGlobalCode);
-    document.getElementById('global-access-code').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') verifyGlobalCode();
     });
   };
 
