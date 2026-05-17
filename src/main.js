@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; margin-top: 15px;">
           <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px;">Vous n'avez pas de code ?</p>
-          <a href="mailto:lotfi@bahloul-rd.com?subject=Demande d'accès - Observatoire Béjaïa&body=Bonjour Dr. Bahloul,%0D%0A%0D%0AJe souhaite obtenir un code d'accès pour consulter la plateforme de l'Observatoire Territorial.%0D%0A%0D%0ANom : %0D%0AInstitution/Entreprise : %0D%0AMotif : " style="display: inline-block; padding: 10px 20px; background: rgba(255,255,255,0.05); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;"><i class="fas fa-envelope" style="margin-right: 8px; color: #38bdf8;"></i> Demander l'accès</a>
+          <a href="mailto:lotfi@bahloul-rd.com?subject=Demande d'accès - Observatoire Béjaïa&body=Bonjour Dr. Bahloul,%0D%0A%0D%0AJe souhaite obtenir un code d'accès pour consulter la plateforme de l'Observatoire Territorial.%0D%0A%0D%0ANom : %0D%0AInstitution/Entreprise : %0D%0AEmail : %0D%0ATéléphone : %0D%0AMotif : " style="display: inline-block; padding: 10px 20px; background: rgba(255,255,255,0.05); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;"><i class="fas fa-envelope" style="margin-right: 8px; color: #38bdf8;"></i> Demander l'accès</a>
         </div>
       </div>
     `;
