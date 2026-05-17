@@ -22,6 +22,88 @@ document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
 
   // ============================================================
+  // GLOBAL PLATFORM ACCESS LOCK
+  // ============================================================
+  const checkGlobalAccess = () => {
+    if (localStorage.getItem('global_access_granted') === 'true') return;
+    
+    // Hide main UI elements
+    const header = document.querySelector('header');
+    const footer = document.querySelector('footer');
+    if (header) header.style.display = 'none';
+    if (footer) footer.style.display = 'none';
+    app.style.display = 'none';
+    document.body.style.overflow = 'hidden';
+    
+    const lockOverlay = document.createElement('div');
+    lockOverlay.id = 'global-lock-overlay';
+    lockOverlay.style.cssText = `
+      position: fixed; inset: 0; z-index: 999999;
+      background: #0f172a; /* Deep dark background */
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: 'Inter', sans-serif;
+    `;
+    
+    lockOverlay.innerHTML = `
+      <div style="background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); padding: 40px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+        <div style="margin-bottom: 30px;">
+          <i class="fas fa-shield-alt" style="font-size: 3.5rem; color: #38bdf8; margin-bottom: 20px;"></i>
+          <h2 style="margin: 0 0 10px; font-size: 1.8rem; color: white;">Accès Restreint</h2>
+          <p style="color: #94a3b8; font-size: 0.95rem; margin: 0; line-height: 1.5;">La plateforme de l'Observatoire Territorial est strictement privée. Veuillez entrer votre code d'accès pour continuer.</p>
+        </div>
+        
+        <div style="margin-bottom: 25px; text-align: left;">
+          <label style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Code d'accès</label>
+          <input type="password" id="global-access-code" style="width: 100%; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 1.2rem; text-align: center; letter-spacing: 3px; box-sizing: border-box;" placeholder="••••••••" autocomplete="off">
+          <p id="global-error-msg" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none; text-align: center;"><i class="fas fa-exclamation-circle"></i> Code d'accès invalide</p>
+        </div>
+        
+        <button id="global-submit-btn" style="width: 100%; padding: 16px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.3s; margin-bottom: 20px;">
+          Déverrouiller
+        </button>
+        
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; margin-top: 15px;">
+          <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px;">Vous n'avez pas de code ?</p>
+          <a href="mailto:lotfi@bahloul-rd.com?subject=Demande d'accès - Observatoire Béjaïa&body=Bonjour Dr. Bahloul,%0D%0A%0D%0AJe souhaite obtenir un code d'accès pour consulter la plateforme de l'Observatoire Territorial.%0D%0A%0D%0ANom : %0D%0AInstitution/Entreprise : %0D%0AMotif : " style="display: inline-block; padding: 10px 20px; background: rgba(255,255,255,0.05); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;"><i class="fas fa-envelope" style="margin-right: 8px; color: #38bdf8;"></i> Demander l'accès</a>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(lockOverlay);
+    setTimeout(() => document.getElementById('global-access-code').focus(), 100);
+    
+    const verifyGlobalCode = () => {
+      const code = document.getElementById('global-access-code').value.trim().toUpperCase();
+      // Valid access codes that you can give to your users
+      const validCodes = ['BEJAIA2026', 'ADMIN', 'LOTFI26']; 
+      
+      if (validCodes.includes(code)) {
+        localStorage.setItem('global_access_granted', 'true');
+        lockOverlay.style.opacity = '0';
+        lockOverlay.style.transition = 'opacity 0.4s ease';
+        setTimeout(() => {
+          lockOverlay.remove();
+          if (header) header.style.display = '';
+          if (footer) footer.style.display = '';
+          app.style.display = '';
+          document.body.style.overflow = '';
+        }, 400);
+      } else {
+        document.getElementById('global-error-msg').style.display = 'block';
+        document.getElementById('global-access-code').style.borderColor = '#ef4444';
+        document.getElementById('global-access-code').value = '';
+      }
+    };
+    
+    document.getElementById('global-submit-btn').addEventListener('click', verifyGlobalCode);
+    document.getElementById('global-access-code').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') verifyGlobalCode();
+    });
+  };
+
+  checkGlobalAccess();
+
+  // ============================================================
   // I18N & LANGUAGE STATE
   // ============================================================
   let currentLang = localStorage.getItem('obs_lang') || 'fr';
