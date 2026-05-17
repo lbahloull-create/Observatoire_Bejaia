@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; margin-top: 15px;">
           <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px;">Vous n'avez pas de code ?</p>
-          <a href="https://wa.me/213000000000?text=Bonjour%20Dr.%20Bahloul%2C%0AJe%20souhaite%20obtenir%20un%20code%20d%27acc%C3%A8s%20pour%20consulter%20la%20plateforme%20de%20l%27Observatoire%20Territorial.%0A%0ANom%20%3A%20%0AInstitution%2FEntreprise%20%3A%20%0AEmail%20%3A%20%0AMotif%20%3A%20" target="_blank" style="display: inline-block; padding: 10px 20px; background: rgba(37, 211, 102, 0.1); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.3); transition: all 0.2s;"><i class="fab fa-whatsapp" style="margin-right: 8px; color: #25D366; font-size: 1.1rem;"></i> Demander l'accès via WhatsApp</a>
+          <a href="https://wa.me/213770292526?text=Bonjour%20Dr.%20Bahloul%2C%0AJe%20souhaite%20obtenir%20un%20code%20d%27acc%C3%A8s%20pour%20consulter%20la%20plateforme%20de%20l%27Observatoire%20Territorial.%0A%0ANom%20%3A%20%0AInstitution%2FEntreprise%20%3A%20%0AEmail%20%3A%20%0AMotif%20%3A%20" target="_blank" style="display: inline-block; padding: 10px 20px; background: rgba(37, 211, 102, 0.1); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 20px; border: 1px solid rgba(37, 211, 102, 0.3); transition: all 0.2s;"><i class="fab fa-whatsapp" style="margin-right: 8px; color: #25D366; font-size: 1.1rem;"></i> Demander l'accès via WhatsApp</a>
         </div>
       </div>
     `;
