@@ -101,17 +101,17 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     setTimeout(() => {
-      const emailInput = document.getElementById('global-email');
+      const emailInput = lockOverlay.querySelector('#global-email');
       if(emailInput) emailInput.focus();
     }, 100);
 
-    const form = document.getElementById('global-login-form');
+    const form = lockOverlay.querySelector('#global-login-form');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('global-email').value.trim();
-      const password = document.getElementById('global-password').value;
-      const btn = document.getElementById('global-submit-btn');
-      const errorMsg = document.getElementById('global-error-msg');
+      const email = lockOverlay.querySelector('#global-email').value.trim();
+      const password = lockOverlay.querySelector('#global-password').value;
+      const btn = lockOverlay.querySelector('#global-submit-btn');
+      const errorMsg = lockOverlay.querySelector('#global-error-msg');
       
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
       btn.disabled = true;
@@ -129,7 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         btn.innerHTML = 'Se connecter';
         btn.disabled = false;
-        document.getElementById('global-password').value = '';
+        const pwdInput = lockOverlay.querySelector('#global-password');
+        if (pwdInput) pwdInput.value = '';
       }
     });
   };
