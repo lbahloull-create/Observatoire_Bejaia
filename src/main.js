@@ -54,7 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
           const isApproved = idTokenResult.claims.approved === true || user.email === 'lotfi@bahloul-rd.com';
           
           if (isApproved) {
-            // Utilisateur connecté et validé, on affiche la plateforme
+            // Utilisateur connecté et validé, on active la session de l'Espace Élus automatiquement
+            sessionStorage.setItem('elus_authenticated', 'true');
+            sessionStorage.setItem('elus_user_data', JSON.stringify({ 
+              username: user.email, 
+              role: 'admin', 
+              name: user.displayName || user.email.split('@')[0] 
+            }));
+
+            // On affiche la plateforme
             if (document.getElementById('global-lock-overlay')) {
               lockOverlay.style.opacity = '0';
               setTimeout(() => lockOverlay.remove(), 400);
@@ -63,28 +71,44 @@ document.addEventListener('DOMContentLoaded', () => {
             if (footer) footer.style.display = '';
             app.style.display = '';
             document.body.style.overflow = '';
+
+            // Mettre à jour l'interface
+            renderNav();
+            updateDashboardAccess();
           } else {
             // Utilisateur connecté mais NON validé
+            sessionStorage.removeItem('elus_authenticated');
+            sessionStorage.removeItem('elus_user_data');
             await signOut(auth);
             renderLoginForm(lockOverlay, "Votre inscription a bien été enregistrée. Cependant, votre compte est toujours en attente de validation par le Dr. Bahloul. Veuillez patienter ou le contacter.");
             if (!document.getElementById('global-lock-overlay')) {
               document.body.appendChild(lockOverlay);
             }
+            renderNav();
+            updateDashboardAccess();
           }
         } catch (error) {
           console.error("Erreur d'authentification :", error);
+          sessionStorage.removeItem('elus_authenticated');
+          sessionStorage.removeItem('elus_user_data');
           await signOut(auth);
           renderLoginForm(lockOverlay, "Une erreur s'est produite lors de la connexion. Veuillez réessayer.");
           if (!document.getElementById('global-lock-overlay')) {
             document.body.appendChild(lockOverlay);
           }
+          renderNav();
+          updateDashboardAccess();
         }
       } else {
-        // Utilisateur non connecté, on affiche le formulaire de connexion
+        // Utilisateur non connecté, on nettoie la session et on affiche le formulaire de connexion
+        sessionStorage.removeItem('elus_authenticated');
+        sessionStorage.removeItem('elus_user_data');
         renderLoginForm(lockOverlay);
         if (!document.getElementById('global-lock-overlay')) {
           document.body.appendChild(lockOverlay);
         }
+        renderNav();
+        updateDashboardAccess();
       }
     });
   };
@@ -263,16 +287,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const nav = document.querySelector('nav');
     if (!nav) return;
     
-    const isElus = localStorage.getItem('isElus') === 'true';
-    const userName = localStorage.getItem('userName');
+    const isAuthed = isAuthenticated();
+    const loggedInUser = getLoggedInUser();
+    const displayUserName = loggedInUser.name || loggedInUser.username || '';
 
     nav.innerHTML = `
       <a href="#home">${t('nav_home')}</a>
       <a href="#dashboard">${t('nav_dashboard')}</a>
       <a href="#recherche">${t('nav_research')}</a>
       <a href="#solutions">${t('nav_solutions')}</a>
-      ${isElus ? `
-        <div class="user-badge"><i class="fas fa-user-shield"></i> ${userName}</div>
+      ${isAuthed ? `
+        <div class="user-badge"><i class="fas fa-user-shield"></i> ${displayUserName}</div>
         <a href="#" class="nav-logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
       ` : `
         <a href="#" class="nav-elus-btn" id="login-trigger"><i class="fas fa-lock"></i> ${t('nav_elus')}</a>
@@ -1690,9 +1715,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const isAuthenticated = () => sessionStorage.getItem(SESSION_KEY) === 'true';
   const getLoggedInUser = () => JSON.parse(sessionStorage.getItem(USER_DATA_KEY) || '{}');
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     sessionStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(USER_DATA_KEY);
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.error("Erreur lors de la déconnexion Firebase:", e);
+    }
     renderNav();
     updateDashboardAccess();
     renderHome();

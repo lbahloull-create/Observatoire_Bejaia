@@ -26,3 +26,7 @@ tmp_*/
 *.pptx
 *.pdf
 *.docx
+
+# Firebase Admin Private Key
+firebase-admin.json
+
