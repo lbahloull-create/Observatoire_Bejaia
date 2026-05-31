@@ -75,6 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mettre à jour l'interface
             renderNav();
             updateDashboardAccess();
+
+            // Rétablir la taille correcte de la carte une fois le conteneur visible
+            if (leafletMap) {
+              setTimeout(() => {
+                leafletMap.invalidateSize();
+              }, 400);
+            }
           } else {
             // Utilisateur connecté mais NON validé
             sessionStorage.removeItem('elus_authenticated');
