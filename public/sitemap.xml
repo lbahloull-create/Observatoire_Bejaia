@@ -1,8 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Page principale -->
   <url>
-    <loc>https://bahloul-rd.com/disparites-eco/</loc>
+    <loc>https://www.bahloul-rd.com/disparites-eco/</loc>
+    <lastmod>2026-09-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.bahloul-rd.com/disparites-eco/bejaia_observatory_hero.png</image:loc>
+      <image:title>Observatoire Territorial de la Wilaya de Béjaïa — Vue d'ensemble</image:title>
+      <image:caption>Tableau de bord interactif des disparités socio-économiques des communes de la Wilaya de Béjaïa</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.bahloul-rd.com/disparites-eco/fig3_cartographie_disparites.png</image:loc>
+      <image:title>Cartographie des disparités socio-économiques — Wilaya de Béjaïa</image:title>
+      <image:caption>Carte thématique des disparités entre communes établie par le Dr. Lotfi Bahloul</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.bahloul-rd.com/disparites-eco/sig_map_water.png</image:loc>
+      <image:title>Carte SIG — Accès à l'eau potable dans la Wilaya de Béjaïa</image:title>
+      <image:caption>Taux d'accès à l'eau potable par commune — Source : Dr. Lotfi Bahloul, Thèse Université de Béjaïa</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.bahloul-rd.com/disparites-eco/sig_map_sanitation.png</image:loc>
+      <image:title>Carte SIG — Assainissement dans la Wilaya de Béjaïa</image:title>
+      <image:caption>Taux d'assainissement par commune — Wilaya de Béjaïa</image:caption>
+    </image:image>
   </url>
+
+  <!-- Articles scientifiques -->
+  <url>
+    <loc>https://www.bahloul-rd.com/disparites-eco/articles/elaboration-d%27un-tableau-de-bord-pour-l%27%C3%A9valuation-et-le-suivi-des-disparit%C3%A9s-de-qualit%C3%A9-de-vie-dans-les-quartiers.-enqu%C3%AAte-aupr%C3%A8s-des-habitants-de-la-ville-de-bejaia.pdf</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.bahloul-rd.com/disparites-eco/articles/intelligence-territoriale%20-syst%C3%A8mes-d%27informations-locaux-et-d%C3%A9veloppement-durable-des-territoires.-cas-des-communes-de-la-wilaya-de-bejaia.pdf</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.bahloul-rd.com/disparites-eco/articles/solidarit%C3%A9-financi%C3%A8re-des-collectivit%C3%A9s-locales-_-les-enjeux-de-la-p%C3%A9r%C3%A9quation-au-niveau-de-la-wilaya-de-bejaia.pdf</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>

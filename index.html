@@ -1,18 +1,236 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Observatoire Territorial - Wilaya de Béjaïa</title>
-    <meta name="description" content="Observatoire Territorial des disparités socio-économiques et du cadre de vie de la Wilaya de Béjaïa. Un outil scientifique d'aide à la décision développé par le Dr. Lotfi Bahloul." />
-    <meta name="keywords" content="Observatoire, Béjaïa, Bejaia, Algérie, disparités, socio-économique, cadre de vie, SIG, aménagement du territoire, Lotfi Bahloul" />
-    <meta name="author" content="Dr. Lotfi Bahloul" />
-    <meta property="og:title" content="Observatoire Territorial - Wilaya de Béjaïa" />
-    <meta property="og:description" content="Outil interactif d'aide à la décision analysant les disparités socio-économiques des communes de la Wilaya de Béjaïa." />
+
+    <!-- ═══════════════════════════════════════════════════
+         TITRE & META DESCRIPTION (signaux SEO principaux)
+    ═══════════════════════════════════════════════════ -->
+    <title>Observatoire Territorial de Béjaïa | Disparités Socio-économiques & Cadre de Vie — Dr. Lotfi Bahloul</title>
+    <meta name="description" content="Plateforme scientifique interactive d'analyse des disparités socio-économiques des 52 communes de la Wilaya de Béjaïa (Algérie). Cartographie SIG, dashboard élus, indicateurs multidimensionnels. Travaux du Dr. Lotfi Bahloul, Université de Béjaïa." />
+    <meta name="keywords" content="observatoire territorial Béjaïa, disparités socio-économiques Algérie, Wilaya Béjaïa communes, SIG cartographie Béjaïa, développement local Algérie, Dr Lotfi Bahloul, cadre de vie Béjaïa, dashboard élus, indicateurs socioéconomiques, aménagement territoire Béjaïa, intelligence territoriale, péréquation financière communes, inclusion financière Algérie" />
+    <meta name="author" content="Dr. Lotfi Bahloul — Université de Béjaïa / BCONSULT" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="language" content="French" />
+    <meta name="geo.region" content="DZ-06" />
+    <meta name="geo.placename" content="Béjaïa, Algérie" />
+    <meta name="geo.position" content="36.7509;5.0564" />
+    <meta name="ICBM" content="36.7509, 5.0564" />
+
+    <!-- ═══════════════════════════════════════════════════
+         CANONICAL & HREFLANG
+    ═══════════════════════════════════════════════════ -->
+    <link rel="canonical" href="https://www.bahloul-rd.com/disparites-eco/" />
+    <link rel="alternate" hreflang="fr" href="https://www.bahloul-rd.com/disparites-eco/" />
+    <link rel="alternate" hreflang="ar" href="https://www.bahloul-rd.com/disparites-eco/" />
+    <link rel="alternate" hreflang="en" href="https://www.bahloul-rd.com/disparites-eco/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.bahloul-rd.com/disparites-eco/" />
+
+    <!-- ═══════════════════════════════════════════════════
+         OPEN GRAPH (Facebook, LinkedIn, WhatsApp…)
+    ═══════════════════════════════════════════════════ -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://bahloul-rd.com/disparites-eco/" />
-    <meta name="robots" content="index, follow" />
+    <meta property="og:site_name" content="Observatoire Territorial de Béjaïa" />
+    <meta property="og:title" content="Observatoire Territorial de Béjaïa | Disparités Socio-économiques & Cadre de Vie" />
+    <meta property="og:description" content="Plateforme scientifique interactive analysant les disparités socio-économiques des 52 communes de la Wilaya de Béjaïa. Cartographie SIG, dashboard élus, indicateurs multidimensionnels — Dr. Lotfi Bahloul." />
+    <meta property="og:url" content="https://www.bahloul-rd.com/disparites-eco/" />
+    <meta property="og:image" content="https://www.bahloul-rd.com/disparites-eco/bejaia_observatory_hero.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Observatoire Territorial de la Wilaya de Béjaïa — Cartographie des disparités socio-économiques" />
+    <meta property="og:locale" content="fr_DZ" />
+    <meta property="og:locale:alternate" content="ar_DZ" />
+
+    <!-- ═══════════════════════════════════════════════════
+         TWITTER / X CARDS
+    ═══════════════════════════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Observatoire Territorial de Béjaïa | Dr. Lotfi Bahloul" />
+    <meta name="twitter:description" content="Plateforme interactive d'analyse des disparités socio-économiques des 52 communes de la Wilaya de Béjaïa. SIG, dashboard élus, indicateurs multidimensionnels." />
+    <meta name="twitter:image" content="https://www.bahloul-rd.com/disparites-eco/bejaia_observatory_hero.png" />
+    <meta name="twitter:image:alt" content="Carte des disparités socio-économiques de la Wilaya de Béjaïa" />
+
+    <!-- ═══════════════════════════════════════════════════
+         DONNÉES STRUCTURÉES JSON-LD (Schema.org)
+         Google utilise ces données pour enrichir les résultats
+    ═══════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://www.bahloul-rd.com/disparites-eco/#webapp",
+          "name": "Observatoire Territorial de la Wilaya de Béjaïa",
+          "alternateName": "Observatoire des Disparités Socio-économiques de Béjaïa",
+          "description": "Plateforme scientifique interactive d'analyse des disparités socio-économiques et du cadre de vie des 52 communes de la Wilaya de Béjaïa (Algérie). Intègre une cartographie SIG interactive, un dashboard réservé aux élus et des indicateurs multidimensionnels.",
+          "url": "https://www.bahloul-rd.com/disparites-eco/",
+          "applicationCategory": "ScienceApplication",
+          "operatingSystem": "Any",
+          "browserRequirements": "Requires JavaScript",
+          "inLanguage": ["fr", "ar", "en"],
+          "author": {
+            "@type": "Person",
+            "@id": "https://www.bahloul-rd.com/#lotfi-bahloul",
+            "name": "Dr. Lotfi Bahloul",
+            "jobTitle": "Maître de Conférences, Économiste territorial",
+            "affiliation": {
+              "@type": "EducationalOrganization",
+              "name": "Université de Béjaïa",
+              "url": "https://www.univ-bejaia.dz"
+            },
+            "worksFor": {
+              "@type": "Organization",
+              "name": "BCONSULT / Bahloul-RD",
+              "url": "https://www.bahloul-rd.com"
+            },
+            "email": "lotfi@bahloul-rd.com"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "BCONSULT / Bahloul-RD",
+            "url": "https://www.bahloul-rd.com",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.bahloul-rd.com/disparites-eco/logo_bconsult.png"
+            }
+          },
+          "about": {
+            "@type": "Place",
+            "name": "Wilaya de Béjaïa",
+            "containedInPlace": {
+              "@type": "Country",
+              "name": "Algérie",
+              "identifier": "DZ"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 36.7509,
+              "longitude": 5.0564
+            }
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "DZD"
+          },
+          "screenshot": {
+            "@type": "ImageObject",
+            "url": "https://www.bahloul-rd.com/disparites-eco/fig5_interface_dashboard.png",
+            "caption": "Interface du tableau de bord de l'Observatoire Territorial de Béjaïa"
+          },
+          "keywords": "disparités socio-économiques, Béjaïa, Algérie, SIG, cartographie, développement local, communes, wilaya, indicateurs, tableau de bord élus"
+        },
+        {
+          "@type": "Person",
+          "@id": "https://www.bahloul-rd.com/#lotfi-bahloul",
+          "name": "Dr. Lotfi Bahloul",
+          "givenName": "Lotfi",
+          "familyName": "Bahloul",
+          "honorificPrefix": "Dr.",
+          "jobTitle": "Maître de Conférences — Économiste territorial",
+          "description": "Chercheur spécialisé en intelligence territoriale, disparités socio-économiques et développement local en Algérie. Auteur de travaux sur la Wilaya de Béjaïa.",
+          "url": "https://www.bahloul-rd.com",
+          "email": "lotfi@bahloul-rd.com",
+          "affiliation": [
+            {
+              "@type": "EducationalOrganization",
+              "name": "Université de Béjaïa",
+              "url": "https://www.univ-bejaia.dz",
+              "department": "Laboratoire LED"
+            },
+            {
+              "@type": "Organization",
+              "name": "BCONSULT",
+              "url": "https://www.bahloul-rd.com"
+            }
+          ],
+          "knowsAbout": [
+            "Économie territoriale",
+            "Développement local",
+            "Disparités socio-économiques",
+            "Intelligence territoriale",
+            "Systèmes d'Information Géographique",
+            "Collectivités locales algériennes",
+            "Inclusion financière",
+            "Aménagement du territoire"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.bahloul-rd.com/disparites-eco/#website",
+          "url": "https://www.bahloul-rd.com/disparites-eco/",
+          "name": "Observatoire Territorial de Béjaïa",
+          "description": "Outil scientifique interactif d'aide à la décision pour les élus et chercheurs travaillant sur la Wilaya de Béjaïa",
+          "publisher": {
+            "@id": "https://www.bahloul-rd.com/#lotfi-bahloul"
+          },
+          "inLanguage": "fr",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.bahloul-rd.com/disparites-eco/#diagnostic"
+            },
+            "query-input": "required name=commune"
+          }
+        },
+        {
+          "@type": "ResearchProject",
+          "name": "Analyse des disparités socio-économiques et du cadre de vie des communes de la Wilaya de Béjaïa",
+          "description": "Projet de recherche fondé sur une analyse multicritère des 52 communes de la Wilaya de Béjaïa selon 8 dimensions : eau potable, assainissement, santé, éducation, transport, finances locales, emploi et développement urbain.",
+          "url": "https://www.bahloul-rd.com/disparites-eco/",
+          "author": {
+            "@id": "https://www.bahloul-rd.com/#lotfi-bahloul"
+          },
+          "funder": {
+            "@type": "EducationalOrganization",
+            "name": "Université de Béjaïa"
+          },
+          "subjectOf": [
+            {
+              "@type": "ScholarlyArticle",
+              "name": "Élaboration d'un tableau de bord pour l'évaluation et le suivi des disparités de qualité de vie dans les quartiers",
+              "url": "https://www.bahloul-rd.com/disparites-eco/articles/elaboration-d%27un-tableau-de-bord-pour-l%27%C3%A9valuation-et-le-suivi-des-disparit%C3%A9s-de-qualit%C3%A9-de-vie-dans-les-quartiers.-enqu%C3%AAte-aupr%C3%A8s-des-habitants-de-la-ville-de-bejaia.pdf",
+              "author": { "@id": "https://www.bahloul-rd.com/#lotfi-bahloul" }
+            },
+            {
+              "@type": "ScholarlyArticle",
+              "name": "Intelligence territoriale, systèmes d'informations locaux et développement durable des territoires — Cas des communes de la Wilaya de Béjaïa",
+              "url": "https://www.bahloul-rd.com/disparites-eco/articles/intelligence-territoriale%20-syst%C3%A8mes-d%27informations-locaux-et-d%C3%A9veloppement-durable-des-territoires.-cas-des-communes-de-la-wilaya-de-bejaia.pdf",
+              "author": { "@id": "https://www.bahloul-rd.com/#lotfi-bahloul" }
+            },
+            {
+              "@type": "ScholarlyArticle",
+              "name": "Solidarité financière des collectivités locales — Les enjeux de la péréquation au niveau de la Wilaya de Béjaïa",
+              "url": "https://www.bahloul-rd.com/disparites-eco/articles/solidarit%C3%A9-financi%C3%A8re-des-collectivit%C3%A9s-locales-_-les-enjeux-de-la-p%C3%A9r%C3%A9quation-au-niveau-de-la-wilaya-de-bejaia.pdf",
+              "author": { "@id": "https://www.bahloul-rd.com/#lotfi-bahloul" }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════
+         PERFORMANCE & PRECONNECT
+    ═══════════════════════════════════════════════════ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link rel="preconnect" href="https://tile.openstreetmap.org" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+    <!-- ═══════════════════════════════════════════════════
+         FAVICON & ICÔNES
+    ═══════════════════════════════════════════════════ -->
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <link rel="apple-touch-icon" href="./logo_bconsult.png" />
+
+    <!-- ═══════════════════════════════════════════════════
+         STYLES
+    ═══════════════════════════════════════════════════ -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="./src/style.css" />
   </head>
@@ -33,12 +251,12 @@
             </div>
             <div style="border-left: 1px solid rgba(255,255,255,0.3); height: 40px; margin: 0 10px;"></div>
             <div>
-              <h2 style="font-size: 1.1rem; margin: 0; line-height: 1.2;">Observatoire des Disparités et du Cadre de Vie</h2>
+              <h1 style="font-size: 1.1rem; margin: 0; line-height: 1.2; font-weight: 700;">Observatoire des Disparités et du Cadre de Vie</h1>
               <p style="font-size: 0.8rem; opacity: 0.9; margin: 0;">Wilaya de Béjaïa — Travaux du Dr. Lotfi Bahloul</p>
             </div>
           </div>
         </div>
-        <nav>
+        <nav aria-label="Navigation principale">
           <a href="#home" class="active">Accueil</a>
           <a href="#diagnostic">Diagnostic</a>
           <a href="#dimensions">8 Dimensions</a>
@@ -49,7 +267,7 @@
       </div>
     </header>
 
-    <main id="app">
+    <main id="app" aria-label="Contenu principal de l'Observatoire Territorial de Béjaïa">
       <!-- Content will be injected by main.js -->
     </main>
 

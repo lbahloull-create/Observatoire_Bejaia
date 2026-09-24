@@ -1,3 +1,11 @@
 User-agent: *
 Allow: /
-Sitemap: https://bahloul-rd.com/disparites-eco/sitemap.xml
+Disallow: /dist/
+Disallow: /node_modules/
+Disallow: /src/
+
+# Sitemap
+Sitemap: https://www.bahloul-rd.com/disparites-eco/sitemap.xml
+
+# Crawl delay (optionnel, pour ne pas surcharger le serveur)
+Crawl-delay: 1
