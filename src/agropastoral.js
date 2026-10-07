@@ -169,53 +169,8 @@ export const renderAgropastoralSection = (t) => {
         <div id="agro-kpis-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
         </div>
 
-        <!-- Main Workspace (Map + Charts) -->
-        <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; margin-bottom: 40px;">
-          
-          <!-- Map Panel -->
-          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column; min-height: 580px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-shrink: 0;">
-              <h4 id="map-panel-title" style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">
-                <i class="fas fa-map-marked-alt" style="color: #0284c7; margin-right: 6px;"></i> Cartographie Spatiale — Wilaya de Béjaïa
-              </h4>
-              <span id="map-scale-badge" style="font-size: 0.75rem; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-weight: 700; color: #475569;">Échelle : Communes</span>
-            </div>
-            
-            <!-- Agro Map container: explicit height so Leaflet can measure it -->
-            <div id="agro-map" style="flex: 1; min-height: 480px; width: 100%; border-radius: 12px; border: 1px solid #e2e8f0; position: relative; overflow: hidden;"></div>
-            
-            <div id="agro-map-legend" style="flex-shrink: 0; margin-top: 14px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-            </div>
-          </div>
-
-          <!-- Charts Panel -->
-          <div style="display: flex; flex-direction: column; gap: 24px;">
-            
-            <!-- Top 10 Bar Chart -->
-            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); flex: 1; display: flex; flex-direction: column;">
-              <h4 id="bar-chart-title" style="margin: 0 0 14px; font-size: 1rem; font-weight: 700; color: #0f172a;">
-                <i class="fas fa-chart-bar" style="color: #16a34a; margin-right: 6px;"></i> Classement des Territoires Leaders
-              </h4>
-              <div style="position: relative; flex: 1; min-height: 220px;">
-                <canvas id="agroBarChart"></canvas>
-              </div>
-            </div>
-
-            <!-- Structure Breakdown Chart -->
-            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); flex: 1; display: flex; flex-direction: column;">
-              <h4 id="pie-chart-title" style="margin: 0 0 14px; font-size: 1rem; font-weight: 700; color: #0f172a;">
-                <i class="fas fa-chart-pie" style="color: #d97706; margin-right: 6px;"></i> Répartition &amp; Structure Globale
-              </h4>
-              <div style="position: relative; flex: 1; min-height: 220px;">
-                <canvas id="agroPieChart"></canvas>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Full Interactive Datatable -->
-        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+        <!-- ① TABLEAU — full width, before the map -->
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 24px;">
           <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 20px;">
             <div>
               <h3 style="margin: 0 0 4px; font-size: 1.15rem; font-weight: 800; color: #0f172a;">
@@ -223,21 +178,56 @@ export const renderAgropastoralSection = (t) => {
               </h3>
               <p style="margin: 0; font-size: 0.85rem; color: #64748b;">Consultez et recherchez parmi l'ensemble des indicateurs par commune ou daïra.</p>
             </div>
-            
             <div style="position: relative; min-width: 260px;">
               <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem;"></i>
               <input id="agro-table-search" type="text" placeholder="Rechercher une commune ou daïra..." style="width: 100%; padding: 8px 12px 8px 34px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; outline: none;">
             </div>
           </div>
-
-          <div style="overflow-x: auto; max-height: 480px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px;">
+          <div style="overflow-x: auto; max-height: 420px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px;">
             <table id="agro-datatable" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
-              <thead style="background: #f1f5f9; position: sticky; top: 0; z-index: 2; color: #334155; font-weight: 700;">
-              </thead>
-              <tbody style="color: #334155;">
-              </tbody>
+              <thead style="background: #f1f5f9; position: sticky; top: 0; z-index: 2; color: #334155; font-weight: 700;"></thead>
+              <tbody style="color: #334155;"></tbody>
             </table>
           </div>
+        </div>
+
+        <!-- ② CARTE — full width, alone on its row -->
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+            <h4 id="map-panel-title" style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">
+              <i class="fas fa-map-marked-alt" style="color: #0284c7; margin-right: 6px;"></i> Cartographie Spatiale — Wilaya de Béjaïa
+            </h4>
+            <span id="map-scale-badge" style="font-size: 0.75rem; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-weight: 700; color: #475569;">Échelle : Communes</span>
+          </div>
+          <!-- Map container: taller now that it has full width -->
+          <div id="agro-map" style="height: 560px; width: 100%; border-radius: 12px; border: 1px solid #e2e8f0; position: relative; overflow: hidden;"></div>
+          <div id="agro-map-legend" style="margin-top: 14px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          </div>
+        </div>
+
+        <!-- ③ GRAPHIQUES — two charts side by side below the map -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px;">
+
+          <!-- Top 10 Bar Chart -->
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
+            <h4 id="bar-chart-title" style="margin: 0 0 14px; font-size: 1rem; font-weight: 700; color: #0f172a;">
+              <i class="fas fa-chart-bar" style="color: #16a34a; margin-right: 6px;"></i> Classement des Territoires Leaders
+            </h4>
+            <div style="position: relative; flex: 1; min-height: 280px;">
+              <canvas id="agroBarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Structure Breakdown Doughnut -->
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
+            <h4 id="pie-chart-title" style="margin: 0 0 14px; font-size: 1rem; font-weight: 700; color: #0f172a;">
+              <i class="fas fa-chart-pie" style="color: #d97706; margin-right: 6px;"></i> Répartition &amp; Structure Globale
+            </h4>
+            <div style="position: relative; flex: 1; min-height: 280px;">
+              <canvas id="agroPieChart"></canvas>
+            </div>
+          </div>
+
         </div>
 
       </div>
