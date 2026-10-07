@@ -3,8 +3,7 @@ import L from 'leaflet';
 import { 
   AGRO_INDICATORS, 
   getUnifiedAgroCommunes, 
-  getUnifiedAgroDairas, 
-  agropastoralWilaya 
+  getUnifiedAgroDairas 
 } from './data/agropastoralData';
 import { communeData } from './data/communeData';
 
@@ -17,7 +16,12 @@ let activeCategory = 'foncier'; // 'foncier' | 'cheptel' | 'prod_animale' | 'pro
 let activeIndicatorId = 'sau';
 
 let agroMapInstance = null;
-let geoLayer = null;
+let communePolygonsLayer = null;
+let wilayaBoundaryLayer = null;
+
+let geojsonPolygonsData = null;
+let geojsonWilayaData = null;
+
 let topBarChartInstance = null;
 let pieChartInstance = null;
 
@@ -69,7 +73,7 @@ export const renderAgropastoralSection = (t) => {
             <!-- Category Selector Tabs -->
             <div style="flex: 1; min-width: 300px;">
               <label style="display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
-                <i class="fas fa-th-list"></i> Domaine :
+                <i class="fas fa-th-list"></i> Domaine Agropastoral :
               </label>
               <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                 <button class="cat-tab active" data-cat="foncier" style="padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;">
@@ -106,13 +110,13 @@ export const renderAgropastoralSection = (t) => {
         </div>
 
         <!-- Main Workspace (Map + Charts) -->
-        <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 24px; margin-bottom: 40px;">
+        <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; margin-bottom: 40px;">
           
           <!-- Map Panel -->
           <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: flex; flex-direction: column;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
               <h4 id="map-panel-title" style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a;">
-                <i class="fas fa-map-marked-alt" style="color: #0284c7; margin-right: 6px;"></i> Cartographie
+                <i class="fas fa-map-marked-alt" style="color: #0284c7; margin-right: 6px;"></i> Cartographie Spatiale de la Wilaya de Béjaïa
               </h4>
               <span id="map-scale-badge" style="font-size: 0.75rem; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-weight: 700; color: #475569;">Échelle : Communes</span>
             </div>
@@ -184,7 +188,7 @@ export const renderAgropastoralSection = (t) => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// INITIALIZATION AND REACTION CONTROLLER
+// INITIALIZATION AND MAP CONTROLLER
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const initAgropastoral = () => {
@@ -235,7 +239,6 @@ export const initAgropastoral = () => {
       </option>
     `).join('');
 
-    // If activeIndicatorId is not in the filtered category, reset to first in category
     if (!filtered.some(ind => ind.id === activeIndicatorId)) {
       activeIndicatorId = filtered[0].id;
       select.value = activeIndicatorId;
@@ -255,11 +258,9 @@ export const initAgropastoral = () => {
     const total = values.reduce((a, b) => a + b, 0);
     const avg = values.length > 0 ? total / values.length : 0;
 
-    // Leader entity
     const sorted = [...dataset].sort((a, b) => (b[activeIndicatorId] || 0) - (a[activeIndicatorId] || 0));
     const leader = sorted[0] || { [entityKey]: 'N/A', [activeIndicatorId]: 0 };
 
-    // Share of Top 3
     const top3Sum = sorted.slice(0, 3).reduce((acc, d) => acc + (d[activeIndicatorId] || 0), 0);
     const top3Share = total > 0 ? (top3Sum / total) * 100 : 0;
 
@@ -298,32 +299,98 @@ export const initAgropastoral = () => {
     `;
   };
 
-  // Choropleth Map Render
-  const updateMap = () => {
+  // Setup Leaflet map and GeoJSON layers
+  const setupAgroMap = () => {
     const mapEl = document.getElementById('agro-map');
     if (!mapEl) return;
 
     if (!agroMapInstance) {
-      agroMapInstance = L.map('agro-map').setView([36.6, 4.8], 9);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap contributors © CARTO'
-      }).addTo(agroMapInstance);
+      // Tile layers
+      const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18,
+      });
+
+      const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '© Esri',
+        maxZoom: 18,
+      });
+
+      const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenTopoMap',
+        maxZoom: 17,
+      });
+
+      agroMapInstance = L.map('agro-map', {
+        center: [36.65, 4.85],
+        zoom: 9.5,
+        layers: [osmLayer]
+      });
+
+      communePolygonsLayer = L.layerGroup().addTo(agroMapInstance);
+      wilayaBoundaryLayer = L.layerGroup().addTo(agroMapInstance);
+
+      // Layer control
+      const baseMaps = { 
+        "🗺️ OpenStreetMap": osmLayer, 
+        "🛰️ Satellite": satelliteLayer, 
+        "🏔️ Topographique": topoLayer 
+      };
+      const overlays = {
+        "📐 Polygones Communes": communePolygonsLayer,
+        "🔷 Limite Wilaya": wilayaBoundaryLayer
+      };
+      L.control.layers(baseMaps, overlays, { position: 'topright' }).addTo(agroMapInstance);
     }
 
-    if (geoLayer) {
-      agroMapInstance.removeLayer(geoLayer);
-    }
+    // Load GeoJSON files if not loaded yet
+    const base = import.meta.env.BASE_URL || '/';
+    const fetchPolygons = geojsonPolygonsData ? Promise.resolve(geojsonPolygonsData) : fetch(`${base}bejaia_communes_polygons.json`).then(r => r.json());
+    const fetchWilaya = geojsonWilayaData ? Promise.resolve(geojsonWilayaData) : fetch(`${base}bejaia_wilaya.json`).then(r => r.json());
+
+    Promise.all([fetchPolygons, fetchWilaya]).then(([polygonsData, wilayaData]) => {
+      geojsonPolygonsData = polygonsData;
+      geojsonWilayaData = wilayaData;
+
+      // Draw Wilaya outer boundary line
+      wilayaBoundaryLayer.clearLayers();
+      if (geojsonWilayaData) {
+        L.geoJSON(geojsonWilayaData, {
+          style: {
+            color: '#0f172a',
+            weight: 3.5,
+            opacity: 1,
+            fillColor: 'transparent'
+          }
+        }).addTo(wilayaBoundaryLayer);
+      }
+
+      // Render choropleth commune polygons
+      drawChoroplethMap();
+      
+      // Ensure Leaflet resizes correctly
+      setTimeout(() => {
+        if (agroMapInstance) agroMapInstance.invalidateSize();
+      }, 300);
+    }).catch(err => {
+      console.error('Erreur de chargement des GeoJSON de Béjaïa :', err);
+    });
+  };
+
+  // Draw choropleth map layers
+  const drawChoroplethMap = () => {
+    if (!agroMapInstance || !communePolygonsLayer || !geojsonPolygonsData) return;
+
+    communePolygonsLayer.clearLayers();
 
     const indicatorObj = AGRO_INDICATORS.find(i => i.id === activeIndicatorId) || AGRO_INDICATORS[0];
     const palette = COLOR_PALETTES[activeCategory] || COLOR_PALETTES.foncier;
-
     const dataset = activeScale === 'commune' ? getUnifiedAgroCommunes() : getUnifiedAgroDairas();
+
     const values = dataset.map(d => d[activeIndicatorId] || 0).filter(v => v > 0);
-    
     const maxVal = values.length > 0 ? Math.max(...values) : 1;
     const minVal = values.length > 0 ? Math.min(...values) : 0;
 
-    // Helper color chooser
     const getColor = (val) => {
       if (val <= 0) return palette[0];
       const ratio = (val - minVal) / (maxVal - minVal || 1);
@@ -334,91 +401,115 @@ export const initAgropastoral = () => {
       return palette[0];
     };
 
-    // Build map polygons
-    const features = communeData.map(commune => {
-      // Find data based on active scale
-      const cNorm = norm(commune.name);
-      const dNorm = norm(commune.daira);
+    const unifiedCommunes = getUnifiedAgroCommunes();
 
+    geojsonPolygonsData.features.forEach(feature => {
+      const geoName = feature.properties.name || '';
+      const geoNorm = norm(geoName);
+
+      // Find commune details
+      const communeMeta = communeData.find(c => {
+        const cNorm = norm(c.name);
+        return cNorm === geoNorm || cNorm.includes(geoNorm) || geoNorm.includes(cNorm);
+      });
+
+      const communeName = communeMeta ? communeMeta.name : geoName;
+      const dairaName = communeMeta ? communeMeta.daira : '';
+
+      // Match entity data based on active scale
       let entityData = null;
       if (activeScale === 'commune') {
-        entityData = dataset.find(d => norm(d.commune) === cNorm || norm(d.commune).includes(cNorm));
+        entityData = dataset.find(d => norm(d.commune) === geoNorm || norm(d.commune).includes(geoNorm) || geoNorm.includes(norm(d.commune)));
       } else {
-        entityData = dataset.find(d => norm(d.daira) === dNorm || norm(d.daira).includes(dNorm));
+        const dNorm = norm(dairaName);
+        entityData = dataset.find(d => norm(d.daira) === dNorm || norm(d.daira).includes(dNorm) || dNorm.includes(norm(d.daira)));
       }
 
       const val = entityData ? (entityData[activeIndicatorId] || 0) : 0;
+      const fillColor = getColor(val);
+      const fillOpacity = activeScale === 'daira' ? 0.85 : 0.75;
 
-      return {
-        communeObj: commune,
-        entityData: entityData,
-        val: val,
-        color: getColor(val)
-      };
-    });
+      const polygon = L.geoJSON(feature, {
+        style: {
+          color: activeScale === 'daira' ? '#1e293b' : '#1a3a5f',
+          weight: activeScale === 'daira' ? 2 : 1.5,
+          opacity: 0.9,
+          fillColor: fillColor,
+          fillOpacity: fillOpacity
+        }
+      });
 
-    const polygons = [];
-    features.forEach(f => {
-      if (f.communeObj.polygon && f.communeObj.polygon.length > 0) {
-        const poly = L.polygon(f.communeObj.polygon, {
-          color: activeScale === 'daira' ? '#334155' : '#ffffff',
-          weight: activeScale === 'daira' ? 1.5 : 1,
-          fillColor: f.color,
-          fillOpacity: 0.8
+      // Permanent Commune Name Tooltip
+      polygon.bindTooltip(communeName, {
+        permanent: true,
+        direction: 'center',
+        className: 'commune-label',
+        offset: [0, 0]
+      });
+
+      // Interactive Hover effects
+      polygon.on('mouseover', function () {
+        this.setStyle({ weight: 3.5, color: '#ffffff', fillOpacity: 0.95 });
+      });
+      polygon.on('mouseout', function () {
+        this.setStyle({ 
+          weight: activeScale === 'daira' ? 2 : 1.5, 
+          color: activeScale === 'daira' ? '#1e293b' : '#1a3a5f', 
+          fillOpacity: fillOpacity 
         });
+      });
 
-        // Popup content
-        const entityName = activeScale === 'commune' ? f.communeObj.name : `Daïra de ${f.communeObj.daira}`;
-        const d = f.entityData || {};
+      // Detailed Popup Card
+      const commAgro = unifiedCommunes.find(c => norm(c.commune) === geoNorm || norm(c.commune).includes(geoNorm)) || {};
+      const d = entityData || commAgro;
 
-        const popupContent = `
-          <div style="font-family: 'Inter', sans-serif; padding: 4px; min-width: 220px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: #0f172a;">${entityName}</h4>
-              <span style="font-size: 0.7rem; background: #e0f2fe; color: #0284c7; padding: 2px 6px; border-radius: 4px; font-weight: 700;">
-                ${f.communeObj.daira}
-              </span>
-            </div>
-            
-            <div style="background: #f8fafc; border-left: 3px solid #0284c7; padding: 8px 10px; border-radius: 4px; margin-bottom: 10px;">
-              <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; text-transform: uppercase;">${indicatorObj.name}</span>
-              <div style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin-top: 2px;">
-                ${indicatorObj.format(f.val)}
-              </div>
-            </div>
+      const popupTitle = activeScale === 'commune' ? communeName : `Daïra de ${dairaName}`;
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.75rem; color: #334155;">
-              <div><b>SAU :</b> ${(d.sau || 0).toLocaleString('fr-FR')} ha</div>
-              <div><b>Taux SAU :</b> ${(d.tauxMiseEnValeur || 0).toFixed(1)}%</div>
-              <div><b>Bovins :</b> ${(d.bovines || 0).toLocaleString('fr-FR')}</div>
-              <div><b>Ovins :</b> ${(d.ovines || 0).toLocaleString('fr-FR')}</div>
-              <div><b>Lait :</b> ${(d.lait || 0).toLocaleString('fr-FR')} kL</div>
-              <div><b>Olivier :</b> ${(d.olivier || 0).toLocaleString('fr-FR')} Qx</div>
+      const popupHTML = `
+        <div style="font-family: 'Inter', sans-serif; padding: 4px; min-width: 230px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <h4 style="margin: 0; font-size: 0.98rem; font-weight: 800; color: #0f172a;">${popupTitle}</h4>
+            <span style="font-size: 0.7rem; background: #e0f2fe; color: #0284c7; padding: 2px 8px; border-radius: 4px; font-weight: 700;">
+              ${dairaName}
+            </span>
+          </div>
+          
+          <div style="background: #f8fafc; border-left: 3px solid #0284c7; padding: 8px 10px; border-radius: 4px; margin-bottom: 10px;">
+            <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; text-transform: uppercase;">${indicatorObj.name}</span>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-top: 2px;">
+              ${indicatorObj.format(val)}
             </div>
           </div>
-        `;
 
-        poly.bindPopup(popupContent);
-        polygons.push(poly);
-      }
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.75rem; color: #334155;">
+            <div><b>SAU :</b> ${(d.sau || 0).toLocaleString('fr-FR')} ha</div>
+            <div><b>Taux SAU :</b> ${(d.tauxMiseEnValeur || 0).toFixed(1)}%</div>
+            <div><b>Bovins :</b> ${(d.bovines || 0).toLocaleString('fr-FR')}</div>
+            <div><b>Ovins :</b> ${(d.ovines || 0).toLocaleString('fr-FR')}</div>
+            <div><b>Lait :</b> ${(d.lait || 0).toLocaleString('fr-FR')} kL</div>
+            <div><b>Olivier :</b> ${(d.olivier || 0).toLocaleString('fr-FR')} Qx</div>
+          </div>
+        </div>
+      `;
+
+      polygon.bindPopup(popupHTML, { maxWidth: 280 });
+      communePolygonsLayer.addLayer(polygon);
     });
 
-    geoLayer = L.featureGroup(polygons).addTo(agroMapInstance);
-
-    // Update legend
+    // Update legend UI
     const legendEl = document.getElementById('agro-map-legend');
     if (legendEl) {
       const step = (maxVal - minVal) / 5;
       const breaks = [minVal, minVal + step, minVal + 2*step, minVal + 3*step, minVal + 4*step, maxVal];
 
       let legendHTML = `<span style="font-weight: 700; color: #475569;">Légende (${indicatorObj.unit}) :</span>`;
-      legendHTML += `<div style="display: flex; align-items: center; gap: 4px;">`;
+      legendHTML += `<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">`;
       for (let i = 0; i < 5; i++) {
         const from = Math.round(breaks[i]);
         const to = Math.round(breaks[i + 1]);
         legendHTML += `
           <div style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem; color: #475569;">
-            <span style="display: inline-block; width: 14px; height: 14px; background: ${palette[i]}; border-radius: 3px;"></span>
+            <span style="display: inline-block; width: 14px; height: 14px; background: ${palette[i]}; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1);"></span>
             ${from} - ${to}
           </div>
         `;
@@ -585,7 +676,7 @@ export const initAgropastoral = () => {
     updateCatTabs();
     populateIndicatorSelect();
     updateKPIs();
-    updateMap();
+    setupAgroMap();
     updateCharts();
     updateDatatable();
   };
@@ -611,7 +702,6 @@ export const initAgropastoral = () => {
   document.querySelectorAll('.cat-tab').forEach(tab => {
     tab.onclick = () => {
       activeCategory = tab.dataset.cat;
-      // Auto-select first indicator of this category
       const firstInd = AGRO_INDICATORS.find(i => i.category === activeCategory);
       if (firstInd) activeIndicatorId = firstInd.id;
       refreshAll();
