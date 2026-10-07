@@ -61,7 +61,7 @@ export const renderAgropastoralSection = (t) => {
         </div>
 
         <!-- Controls Bar -->
-        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 30px;">
+        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px;">
           <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
             
             <!-- Scale Selector -->
@@ -109,6 +109,59 @@ export const renderAgropastoralSection = (t) => {
               </select>
             </div>
 
+          </div>
+        </div>
+
+        <!-- ── ENTITY SELECTION PANEL ────────────────────────────────────────── -->
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 8px 30px rgba(15,23,42,0.18);">
+          <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px;">
+
+            <!-- Icon + title -->
+            <div style="flex-shrink: 0; margin-right: 4px;">
+              <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-crosshairs" style="color: #f59e0b; font-size: 1.2rem;"></i>
+              </div>
+            </div>
+            <div style="flex-shrink: 0; min-width: 140px;">
+              <span style="display: block; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px;">Sélection rapide</span>
+              <span style="font-size: 0.92rem; font-weight: 800; color: #ffffff;">Voir les résultats d'une entité</span>
+            </div>
+
+            <!-- Commune selector -->
+            <div style="flex: 1; min-width: 200px;">
+              <label style="display: block; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                <i class="fas fa-city" style="color: #38bdf8;"></i> Choisir une Commune
+              </label>
+              <select id="agro-select-commune" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.08); color: #ffffff; font-size: 0.88rem; font-weight: 600; outline: none; cursor: pointer; backdrop-filter: blur(4px);">
+                <option value="" style="background:#1e293b; color:#fff;">-- Toutes les communes --</option>
+              </select>
+            </div>
+
+            <!-- Separator -->
+            <div style="flex-shrink: 0; font-size: 0.85rem; color: rgba(255,255,255,0.3); font-weight: 700; padding-bottom: 10px;">ou</div>
+
+            <!-- Daïra selector -->
+            <div style="flex: 1; min-width: 200px;">
+              <label style="display: block; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                <i class="fas fa-map-marked" style="color: #a78bfa;"></i> Choisir une Daïra
+              </label>
+              <select id="agro-select-daira" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.08); color: #ffffff; font-size: 0.88rem; font-weight: 600; outline: none; cursor: pointer; backdrop-filter: blur(4px);">
+                <option value="" style="background:#1e293b; color:#fff;">-- Toutes les daïras --</option>
+              </select>
+            </div>
+
+            <!-- Reset button -->
+            <div style="flex-shrink: 0;">
+              <button id="agro-reset-selection" style="padding: 10px 18px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.18); background: transparent; color: rgba(255,255,255,0.7); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='transparent'">
+                <i class="fas fa-times-circle"></i> Réinitialiser
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Score Detail Card (visible only when entity selected) -->
+          <div id="agro-score-card" style="display: none; margin-top: 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 18px; backdrop-filter: blur(8px);">
+            <!-- Populated dynamically -->
           </div>
         </div>
 
@@ -713,9 +766,149 @@ export const initAgropastoral = () => {
 
   // Expose select callback for table row clicks
   window._agroSelect = (name) => {
+    activeSelectedId = name || null;
+    // Sync dropdowns
+    if (activeScale === 'commune') {
+      const sel = document.getElementById('agro-select-commune');
+      if (sel) sel.value = name || '';
+      const sd = document.getElementById('agro-select-daira');
+      if (sd) sd.value = '';
+    } else {
+      const sd = document.getElementById('agro-select-daira');
+      if (sd) sd.value = name || '';
+      const sc = document.getElementById('agro-select-commune');
+      if (sc) sc.value = '';
+    }
     selectEntityOnMap(name);
+    updateScoreCard();
     updateCharts();
     updateDatatable();
+  };
+
+  // ── ENTITY SELECT DROPDOWNS ───────────────────────────────────────────────
+
+  /**
+   * Populate both commune and daira dropdowns.
+   */
+  const populateEntitySelects = () => {
+    const communes = getUnifiedAgroCommunes();
+    const dairas   = getUnifiedAgroDairas();
+
+    const selCommune = document.getElementById('agro-select-commune');
+    const selDaira   = document.getElementById('agro-select-daira');
+    if (!selCommune || !selDaira) return;
+
+    // Group communes by daira for better UX
+    const byDaira = {};
+    communes.forEach(c => {
+      if (!byDaira[c.daira]) byDaira[c.daira] = [];
+      byDaira[c.daira].push(c.commune);
+    });
+
+    // Communes dropdown: grouped by daira
+    let communeOptions = `<option value="" style="background:#1e293b;color:#fff;">-- Toutes les communes --</option>`;
+    Object.entries(byDaira).sort(([a],[b]) => a.localeCompare(b)).forEach(([dairaName, communeNames]) => {
+      communeOptions += `<optgroup label="Daïra de ${dairaName}" style="background:#1e293b;color:#94a3b8;">`;
+      communeNames.sort().forEach(name => {
+        const sel = activeScale === 'commune' && activeSelectedId === name ? 'selected' : '';
+        communeOptions += `<option value="${name}" ${sel} style="background:#1e293b;color:#fff;">${name}</option>`;
+      });
+      communeOptions += `</optgroup>`;
+    });
+    selCommune.innerHTML = communeOptions;
+
+    // Dairas dropdown: flat list sorted alphabetically
+    let dairaOptions = `<option value="" style="background:#1e293b;color:#fff;">-- Toutes les daïras --</option>`;
+    [...dairas].sort((a,b) => a.daira.localeCompare(b.daira)).forEach(d => {
+      const sel = activeScale === 'daira' && activeSelectedId === d.daira ? 'selected' : '';
+      dairaOptions += `<option value="${d.daira}" ${sel} style="background:#1e293b;color:#fff;">Daïra de ${d.daira} (${d.communesCount} communes)</option>`;
+    });
+    selDaira.innerHTML = dairaOptions;
+
+    // Sync dropdown visual state with current selection
+    if (activeScale === 'commune') {
+      selCommune.value = activeSelectedId || '';
+      selDaira.value   = '';
+    } else {
+      selDaira.value   = activeSelectedId || '';
+      selCommune.value = '';
+    }
+  };
+
+  /**
+   * Render the score detail card for the currently selected entity.
+   */
+  const updateScoreCard = () => {
+    const card = document.getElementById('agro-score-card');
+    if (!card) return;
+
+    if (!activeSelectedId) {
+      card.style.display = 'none';
+      return;
+    }
+
+    const dataset    = activeScale === 'commune' ? getUnifiedAgroCommunes() : getUnifiedAgroDairas();
+    const entityKey  = activeScale === 'commune' ? 'commune' : 'daira';
+    const entityData = dataset.find(d => norm(d[entityKey]) === norm(activeSelectedId));
+
+    if (!entityData) {
+      card.style.display = 'none';
+      return;
+    }
+
+    // Compute rank for active indicator
+    const sorted = [...dataset].sort((a,b) => (b[activeIndicatorId]||0) - (a[activeIndicatorId]||0));
+    const rank   = sorted.findIndex(d => norm(d[entityKey]) === norm(activeSelectedId)) + 1;
+    const total  = sorted.length;
+    const wilayaTotal = sorted.reduce((acc, d) => acc + (d[activeIndicatorId]||0), 0);
+    const share  = wilayaTotal > 0 ? ((entityData[activeIndicatorId]||0) / wilayaTotal * 100) : 0;
+
+    const indicatorObj = AGRO_INDICATORS.find(i => i.id === activeIndicatorId) || AGRO_INDICATORS[0];
+    const catIndicators = AGRO_INDICATORS.filter(i => i.category === activeCategory);
+
+    const entityLabel = activeScale === 'commune'
+      ? `Commune de <strong>${entityData.commune}</strong> — Daïra de ${entityData.daira}`
+      : `Daïra de <strong>${entityData.daira}</strong> — ${entityData.communesCount} communes`;
+
+    card.style.display = 'block';
+    card.innerHTML = `
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px;">
+        <div>
+          <div style="font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">Entité sélectionnée</div>
+          <div style="font-size: 1rem; font-weight: 800; color: #fff;">${entityLabel}</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="text-align: center; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 10px; padding: 8px 16px;">
+            <div style="font-size: 1.3rem; font-weight: 900; color: #f59e0b;">#${rank}</div>
+            <div style="font-size: 0.68rem; color: rgba(255,255,255,0.5); font-weight: 600;">sur ${total}</div>
+          </div>
+          <div style="text-align: center; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.3); border-radius: 10px; padding: 8px 16px;">
+            <div style="font-size: 1.3rem; font-weight: 900; color: #38bdf8;">${share.toFixed(1)}%</div>
+            <div style="font-size: 0.68rem; color: rgba(255,255,255,0.5); font-weight: 600;">part wilaya</div>
+          </div>
+          <div style="text-align: center; background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3); border-radius: 10px; padding: 8px 16px;">
+            <div style="font-size: 1.1rem; font-weight: 900; color: #34d399;">${indicatorObj.format(entityData[activeIndicatorId]||0)}</div>
+            <div style="font-size: 0.68rem; color: rgba(255,255,255,0.5); font-weight: 600;">${indicatorObj.unit}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All indicators in this category -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
+        ${catIndicators.map(ind => {
+          const val = entityData[ind.id] || 0;
+          const isActive = ind.id === activeIndicatorId;
+          const catRank = [...dataset].sort((a,b)=>(b[ind.id]||0)-(a[ind.id]||0)).findIndex(d=>norm(d[entityKey])===norm(activeSelectedId))+1;
+          return `
+            <div style="background: ${isActive ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.05)'}; border: 1px solid ${isActive ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.08)'}; border-radius: 10px; padding: 12px; cursor: pointer;" onclick="document.getElementById('select-indicator').value='${ind.id}'; document.getElementById('select-indicator').dispatchEvent(new Event('change'));">
+              <div style="font-size: 0.68rem; font-weight: 700; color: ${isActive ? '#f59e0b' : 'rgba(255,255,255,0.45)'}; text-transform: uppercase; margin-bottom: 4px;">${ind.name}</div>
+              <div style="font-size: 1rem; font-weight: 800; color: ${isActive ? '#fff' : 'rgba(255,255,255,0.8)'}">${ind.format(val)}</div>
+              <div style="font-size: 0.65rem; color: rgba(255,255,255,0.35); margin-top: 2px;">#${catRank} dans la wilaya</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
   };
 
   // ── FULL REFRESH ──────────────────────────────────────────────────────────
@@ -723,9 +916,11 @@ export const initAgropastoral = () => {
     updateScaleButtons();
     updateCatTabs();
     populateIndicatorSelect();
+    populateEntitySelects();
     updateKPIs();
     updateCharts();
     updateDatatable();
+    updateScoreCard();
     // Only redraw choropleth if map is already initialized
     if (agroMapInstance && geojsonPolygonsData) {
       drawChoroplethMap();
@@ -752,11 +947,78 @@ export const initAgropastoral = () => {
 
   document.getElementById('select-indicator')?.addEventListener('change', (e) => {
     activeIndicatorId = e.target.value;
-    refreshAll();
+    updateKPIs();
+    updateCharts();
+    updateDatatable();
+    updateScoreCard();
+    if (agroMapInstance && geojsonPolygonsData) drawChoroplethMap();
   });
 
   document.getElementById('agro-table-search')?.addEventListener('input', () => {
     updateDatatable();
+  });
+
+  // Commune dropdown → switch scale to commune if needed, then select
+  document.getElementById('agro-select-commune')?.addEventListener('change', (e) => {
+    const val = e.target.value;
+    if (!val) {
+      activeSelectedId = null;
+      document.getElementById('agro-select-daira').value = '';
+      updateScoreCard();
+      updateCharts();
+      updateDatatable();
+      if (agroMapInstance && geojsonPolygonsData) drawChoroplethMap();
+      return;
+    }
+    // Switch to commune scale if needed
+    if (activeScale !== 'commune') {
+      activeScale = 'commune';
+      updateScaleButtons();
+      updateKPIs();
+    }
+    document.getElementById('agro-select-daira').value = '';
+    activeSelectedId = val;
+    selectEntityOnMap(val);
+    updateScoreCard();
+    updateCharts();
+    updateDatatable();
+  });
+
+  // Daïra dropdown → switch scale to daira if needed, then select
+  document.getElementById('agro-select-daira')?.addEventListener('change', (e) => {
+    const val = e.target.value;
+    if (!val) {
+      activeSelectedId = null;
+      document.getElementById('agro-select-commune').value = '';
+      updateScoreCard();
+      updateCharts();
+      updateDatatable();
+      if (agroMapInstance && geojsonPolygonsData) drawChoroplethMap();
+      return;
+    }
+    // Switch to daira scale if needed
+    if (activeScale !== 'daira') {
+      activeScale = 'daira';
+      updateScaleButtons();
+      updateKPIs();
+    }
+    document.getElementById('agro-select-commune').value = '';
+    activeSelectedId = val;
+    selectEntityOnMap(val);
+    updateScoreCard();
+    updateCharts();
+    updateDatatable();
+  });
+
+  // Reset button
+  document.getElementById('agro-reset-selection')?.addEventListener('click', () => {
+    activeSelectedId = null;
+    document.getElementById('agro-select-commune').value = '';
+    document.getElementById('agro-select-daira').value = '';
+    updateScoreCard();
+    updateCharts();
+    updateDatatable();
+    if (agroMapInstance && geojsonPolygonsData) drawChoroplethMap();
   });
 
   // ── INITIAL RENDER (non-map) ───────────────────────────────────────────────
@@ -764,9 +1026,11 @@ export const initAgropastoral = () => {
   updateScaleButtons();
   updateCatTabs();
   populateIndicatorSelect();
+  populateEntitySelects();
   updateKPIs();
   updateCharts();
   updateDatatable();
+  updateScoreCard();
 
   // ── MAP: use IntersectionObserver so Leaflet gets the real container size ──
   const mapContainer = document.getElementById('agro-map');
