@@ -156,7 +156,7 @@ export const initAgropastoral = () => {
         const agroCommune = agropastoralCommunes.find(c => normName(c.commune) === searchName || normName(c.commune).includes(searchName));
         
         let fillColor = '#e2e8f0';
-        let popupContent = \`<b>\${commune.name}</b><br>Données agropastorales non disponibles\`;
+        let popupContent = `<b>${commune.name}</b><br>Données agropastorales non disponibles`;
         let fillOpacity = 0.5;
         
         if (agroCommune) {
@@ -168,18 +168,18 @@ export const initAgropastoral = () => {
                       sauRatio > 0.05 ? '#bbf7d0' : '#f0fdf4';
           fillOpacity = 0.8;
           
-          popupContent = \`
+          popupContent = `
             <div style="font-family: 'Inter', sans-serif;">
-              <h4 style="margin: 0 0 5px; color: #1a3a5f;">\${commune.name}</h4>
+              <h4 style="margin: 0 0 5px; color: #1a3a5f;">${commune.name}</h4>
               <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 5px 0;">
               <div style="font-size: 0.85rem; line-height: 1.5; color: #334155;">
-                <b>SAU:</b> \${agroCommune.sau.toLocaleString('fr-FR')} ha<br>
-                <b>Forêts:</b> \${agroCommune.superfForest.toLocaleString('fr-FR')} ha<br>
-                <b>Pacages:</b> \${agroCommune.pacages.toLocaleString('fr-FR')} ha<br>
-                <b>Taux de mise en valeur:</b> \${((sauRatio)*100).toFixed(1)}%
+                <b>SAU:</b> ${agroCommune.sau.toLocaleString('fr-FR')} ha<br>
+                <b>Forêts:</b> ${agroCommune.superfForest.toLocaleString('fr-FR')} ha<br>
+                <b>Pacages:</b> ${agroCommune.pacages.toLocaleString('fr-FR')} ha<br>
+                <b>Taux de mise en valeur:</b> ${((sauRatio)*100).toFixed(1)}%
               </div>
             </div>
-          \`;
+          `;
         }
 
         const polygon = L.polygon(commune.polygon, {
