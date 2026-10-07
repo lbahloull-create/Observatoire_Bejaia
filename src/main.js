@@ -3,6 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { communeData, regionalAverage, regionalAverageHistory, dimensions, regionalStats, clusters, dairaData, recommendations, methodology } from './data/communeData';
 import { translations } from './data/translations';
+import { renderAgropastoralSection, initAgropastoral } from './agropastoral.js';
 import { auth } from './firebase.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
@@ -301,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     nav.innerHTML = `
       <a href="#home">${t('nav_home')}</a>
       <a href="#dashboard">${t('nav_dashboard')}</a>
+      <a href="#agropastoral">Agropastorale</a>
       <a href="#recherche">${t('nav_research')}</a>
       <a href="#solutions">${t('nav_solutions')}</a>
       ${isAuthed ? `
@@ -893,10 +895,13 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       </section>
+      
+      ${renderAgropastoralSection(t)}
     `;
 
     initializeDashboard();
     initializeMap();
+    initAgropastoral();
   };
 
   let radarChart = null;
