@@ -1188,3 +1188,164 @@ export const agropastoralProdAnimalesWilaya = {
   oeufs: 284047, miel: 133234, laine: 1052,
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CATALOGUE DES INDICATEURS ET FONCTIONS D'AGRÉGATION
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const AGRO_INDICATORS = [
+  // Foncier
+  { id: 'sau', name: 'SAU (Superficie Agricole Utile)', unit: 'ha', category: 'foncier', categoryName: 'Foncier & SAU', icon: 'fa-vector-square', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} ha` },
+  { id: 'tauxMiseEnValeur', name: 'Taux de Mise en Valeur (SAU/Superficie)', unit: '%', category: 'foncier', categoryName: 'Foncier & SAU', icon: 'fa-chart-pie', format: (v) => `${v.toFixed(1)}%` },
+  { id: 'superfForest', name: 'Superficie Forestière', unit: 'ha', category: 'foncier', categoryName: 'Foncier & SAU', icon: 'fa-tree', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} ha` },
+  { id: 'couvertureForestiere', name: 'Taux de Couverture Forestière', unit: '%', category: 'foncier', categoryName: 'Foncier & SAU', icon: 'fa-leaf', format: (v) => `${v.toFixed(1)}%` },
+  { id: 'pacages', name: 'Pacages & Parcours', unit: 'ha', category: 'foncier', categoryName: 'Foncier & SAU', icon: 'fa-mountain', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} ha` },
+  { id: 'sauIrrigue', name: 'SAU Irriguée', unit: 'ha', category: 'foncier', categoryName: 'Foncier & SAU', icon: 'fa-water', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} ha` },
+  { id: 'arboFruitier', name: 'Arboriculture Fruitière', unit: 'ha', category: 'foncier', categoryName: 'Foncier & SAU', icon: 'fa-apple-alt', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} ha` },
+
+  // Cheptel
+  { id: 'bovines', name: 'Cheptel Bovin', unit: 'têtes', category: 'cheptel', categoryName: 'Cheptels & Élevage', icon: 'fa-hippo', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} têtes` },
+  { id: 'ovines', name: 'Cheptel Ovin', unit: 'têtes', category: 'cheptel', categoryName: 'Cheptels & Élevage', icon: 'fa-ghost', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} têtes` },
+  { id: 'caprines', name: 'Cheptel Caprin', unit: 'têtes', category: 'cheptel', categoryName: 'Cheptels & Élevage', icon: 'fa-horse', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} têtes` },
+  { id: 'totalCheptel', name: 'Total Cheptel (Bovin+Ovin+Caprin)', unit: 'têtes', category: 'cheptel', categoryName: 'Cheptels & Élevage', icon: 'fa-draw-polygon', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} têtes` },
+
+  // Prod Animale
+  { id: 'lait', name: 'Production de Lait', unit: '10³ L', category: 'prod_animale', categoryName: 'Productions Animales', icon: 'fa-glass-whiskey', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} x10³ L` },
+  { id: 'viandeRouge', name: 'Viande Rouge', unit: 'Qx', category: 'prod_animale', categoryName: 'Productions Animales', icon: 'fa-drumstick-bite', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'viandeBlanche', name: 'Viande Blanche', unit: 'Qx', category: 'prod_animale', categoryName: 'Productions Animales', icon: 'fa-egg', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'miel', name: 'Production de Miel', unit: 'Qx', category: 'prod_animale', categoryName: 'Productions Animales', icon: 'fa-archive', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'oeufs', name: 'Production d\'Œufs', unit: '10³ U', category: 'prod_animale', categoryName: 'Productions Animales', icon: 'fa-certificate', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} x10³ U` },
+
+  // Prod Végétale
+  { id: 'olivier', name: 'Production Oléicole (Olivier)', unit: 'Qx', category: 'prod_vegetale', categoryName: 'Productions Végétales', icon: 'fa-seedling', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'figuier', name: 'Production de Figues', unit: 'Qx', category: 'prod_vegetale', categoryName: 'Productions Végétales', icon: 'fa-tree', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'maraicher', name: 'Cultures Maraîchères', unit: 'Qx', category: 'prod_vegetale', categoryName: 'Productions Végétales', icon: 'fa-carrot', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'agrumes', name: 'Production d\'Agrumes', unit: 'Qx', category: 'prod_vegetale', categoryName: 'Productions Végétales', icon: 'fa-lemon', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'cereales', name: 'Production Céréalière', unit: 'Qx', category: 'prod_vegetale', categoryName: 'Productions Végétales', icon: 'fa-wheat-awn', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+  { id: 'fourrages', name: 'Production de Fourrages', unit: 'Qx', category: 'prod_vegetale', categoryName: 'Productions Végétales', icon: 'fa-boxes', format: (v) => `${Math.round(v).toLocaleString('fr-FR')} Qx` },
+];
+
+export const getUnifiedAgroCommunes = () => {
+  const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+
+  return agropastoralCommunes.map(c => {
+    const key = norm(c.commune);
+    const sauItem = agropastoralSAU.find(x => norm(x.commune) === key) || {};
+    const chepItem = agropastoralCheptels.find(x => norm(x.commune) === key) || {};
+    const prodAnim = agropastoralProdAnimales.find(x => norm(x.commune) === key) || {};
+    const prodVeg = agropastoralProductions.find(x => norm(x.commune) === key) || {};
+
+    const bovines = chepItem.bovines || 0;
+    const ovines = chepItem.ovines || 0;
+    const caprines = chepItem.caprines || 0;
+    const totalCheptel = bovines + ovines + caprines;
+
+    const sau = c.sau || 0;
+    const totalSuperficie = c.totalSuperficie || 1;
+    const superfForest = c.superfForest || 0;
+
+    return {
+      commune: c.commune,
+      daira: c.daira,
+      // Foncier
+      sau: sau,
+      totalSuperficie: totalSuperficie,
+      tauxMiseEnValeur: (sau / totalSuperficie) * 100,
+      superfForest: superfForest,
+      couvertureForestiere: (superfForest / totalSuperficie) * 100,
+      pacages: c.pacages || 0,
+      sauIrrigue: sauItem.sauIrrigué || 0,
+      arboFruitier: sauItem.arboFruitier || 0,
+      
+      // Cheptel
+      bovines: bovines,
+      ovines: ovines,
+      caprines: caprines,
+      totalCheptel: totalCheptel,
+
+      // Prod Animale
+      lait: prodAnim.lait || 0,
+      viandeRouge: prodAnim.viandeRouge || 0,
+      viandeBlanche: prodAnim.viandeBlanche || 0,
+      miel: prodAnim.miel || 0,
+      oeufs: prodAnim.oeufs || 0,
+
+      // Prod Vegetale
+      olivier: prodVeg.olivier || 0,
+      figuier: prodVeg.figuier || 0,
+      maraicher: prodVeg.maraicher || 0,
+      agrumes: prodVeg.agrumes || 0,
+      cereales: prodVeg.cereales || 0,
+      fourrages: prodVeg.fourrages || 0,
+    };
+  });
+};
+
+export const getUnifiedAgroDairas = () => {
+  const communes = getUnifiedAgroCommunes();
+  const dairaMap = {};
+
+  communes.forEach(c => {
+    if (!dairaMap[c.daira]) {
+      dairaMap[c.daira] = {
+        daira: c.daira,
+        communesCount: 0,
+        communesList: [],
+        sau: 0,
+        totalSuperficie: 0,
+        superfForest: 0,
+        pacages: 0,
+        sauIrrigue: 0,
+        arboFruitier: 0,
+        bovines: 0,
+        ovines: 0,
+        caprines: 0,
+        totalCheptel: 0,
+        lait: 0,
+        viandeRouge: 0,
+        viandeBlanche: 0,
+        miel: 0,
+        oeufs: 0,
+        olivier: 0,
+        figuier: 0,
+        maraicher: 0,
+        agrumes: 0,
+        cereales: 0,
+        fourrages: 0,
+      };
+    }
+
+    const d = dairaMap[c.daira];
+    d.communesCount += 1;
+    d.communesList.push(c.commune);
+
+    d.sau += c.sau;
+    d.totalSuperficie += c.totalSuperficie;
+    d.superfForest += c.superfForest;
+    d.pacages += c.pacages;
+    d.sauIrrigue += c.sauIrrigue;
+    d.arboFruitier += c.arboFruitier;
+    d.bovines += c.bovines;
+    d.ovines += c.ovines;
+    d.caprines += c.caprines;
+    d.totalCheptel += c.totalCheptel;
+    d.lait += c.lait;
+    d.viandeRouge += c.viandeRouge;
+    d.viandeBlanche += c.viandeBlanche;
+    d.miel += c.miel;
+    d.oeufs += c.oeufs;
+    d.olivier += c.olivier;
+    d.figuier += c.figuier;
+    d.maraicher += c.maraicher;
+    d.agrumes += c.agrumes;
+    d.cereales += c.cereales;
+    d.fourrages += c.fourrages;
+  });
+
+  return Object.values(dairaMap).map(d => ({
+    ...d,
+    tauxMiseEnValeur: d.totalSuperficie > 0 ? (d.sau / d.totalSuperficie) * 100 : 0,
+    couvertureForestiere: d.totalSuperficie > 0 ? (d.superfForest / d.totalSuperficie) * 100 : 0,
+  }));
+};
+
+
